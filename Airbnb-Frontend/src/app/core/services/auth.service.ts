@@ -4,7 +4,7 @@ import { loginUser } from './../models/loginUser';
 import { RegisterUser } from '../models/registerUser';
 import { ResponseUser } from '../models/responseUser';
 import { User } from '../models/user';
-import { catchError, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthStatusService } from './auth-status-service.service';
 
@@ -14,6 +14,8 @@ import { AuthStatusService } from './auth-status-service.service';
 export class AuthService {
   apiUrl = 'https://localhost:7200/api';
   currentUserSignal = signal<undefined | null | ResponseUser | User>(undefined);
+  isLoggedIn = false;
+  public isLoggedInSubject = new BehaviorSubject(this.isLoggedIn);
   constructor(private http: HttpClient, private router: Router , private authStatusService:AuthStatusService) {
     this.checkAuthStatus();
     // Setup effect to monitor token expiration
@@ -28,6 +30,7 @@ export class AuthService {
 
   login(user: loginUser) {
      // this.authStatusService.setLoggedIn()
+
     return this.http.post<any>(`${this.apiUrl}/Authentication/login`, user);
   }
 

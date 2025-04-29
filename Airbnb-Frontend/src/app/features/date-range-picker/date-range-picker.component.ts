@@ -10,6 +10,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AvailabilityCalendarService } from '../../core/services/availability-calendar.service';
 import { DateRangeService } from '../../core/services/date-range.service';
 import { AvailabilityCalendar } from '../../core/models/AvailabilityCalendar';
+import { startWith } from 'rxjs';
 
 @Component({
   selector: 'app-date-range-picker',
@@ -78,6 +79,11 @@ export class DateRangePickerComponent implements OnInit {
         endDate: this.selectedRange.endDate
       }, { emitEvent: false });
     }
+  }
+
+  clearDateRange(){
+    this.dateRange.reset();
+    this.formErrors = {};
   }
 
   private setupFormSubscription() {

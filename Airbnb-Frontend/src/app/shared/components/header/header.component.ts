@@ -14,6 +14,9 @@ import { SearchComponent } from "../../../features/search/search.component";
  import { ImagesService } from '../../../core/services/images.service';
  import { ResponseUser } from '../../../core/models/responseUser';
  import { ScrollService } from '../../../core/services/scroll-service.service';
+import { DateRangePickerComponent } from '../../../features/date-range-picker/date-range-picker.component';
+import { HomeComponent } from '../../../features/home/home.component';
+import { AppComponent } from '../../../app.component';
 
 
 interface GuestCount {
@@ -47,7 +50,7 @@ interface SearchParams {
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  constructor(private modalService: ModalService, private registerModalService: RegisterModalService, public authService: AuthService , private router:Router , private searchService: SearchService , public _PersonalInfoService:PersonalInfoService , public _ImagesService:ImagesService , private _ScrollService:ScrollService) {}
+  constructor(private modalService: ModalService, private registerModalService: RegisterModalService, public authService: AuthService , private router:Router , private searchService: SearchService , public _PersonalInfoService:PersonalInfoService , public _ImagesService:ImagesService , private _ScrollService:ScrollService , public _AppComponent:AppComponent) {}
   isUserMenuOpen = false;
   isGuestMenuOpen = false;
   isMobileSearchOpen = false;
@@ -80,11 +83,16 @@ export class HeaderComponent {
   profilePictureUrl: string | null = null; 
   currentUser: User | ResponseUser | null | undefined = undefined
 
+
   @ViewChild(SearchComponent) SearchComponent!:SearchComponent;
   clearSearch() {
     if (this.SearchComponent) {
       this.SearchComponent.clearInputs();
     } 
+  }
+
+  isProfilePictureAvailable() : any {
+    return localStorage.getItem("accessToken") 
   }
 
   isHomeUrl():boolean{
@@ -95,6 +103,12 @@ export class HeaderComponent {
     // const user= this.authService.currentUserSignal();
     // this.currentUser=user
 
+    this.authService.isLoggedInSubject.subscribe((isLoggedIn) => {
+if(isLoggedIn){
+      this.getProfilePicture();
+}
+    })
+
     this.getProfilePicture();
   }
 
@@ -103,7 +117,7 @@ export class HeaderComponent {
   // }
 
 
-  getProfilePicture() {
+  public getProfilePicture() {
     this._PersonalInfoService.getMyPersonalInfo().subscribe(
       (response) => {
         // لو فيه صورة موجودة
@@ -143,8 +157,15 @@ export class HeaderComponent {
     this.isUserMenuOpen = false;
   }
   logout() {
-    this.router.navigateByUrl('/home');
+
+    this.router.navigateByUrl('/Account', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/home']);
+    });
     this.authService.logout();
+    this._AppComponent.homeComponent.wishList = [];
+    this.authService.isLoggedIn = false;
+    this.authService.isLoggedInSubject.next(false);
+
   }
   becomeAHost() {
     this.isLoading = true;
@@ -326,7 +347,11 @@ export class HeaderComponent {
    modifiedEndDate: string ="";
    modifiedGuests: number = 0;
   goHome() {
+
     this.clearSearch();
+    if(this.SearchComponent){
+    this.SearchComponent.dateRangePicker.clearDateRange();
+    }
     this._ScrollService.startScroll()
     this.router.navigateByUrl('/Account', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/home']);

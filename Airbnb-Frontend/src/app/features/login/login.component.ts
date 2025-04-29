@@ -5,6 +5,8 @@ import { ModalService } from '../../core/services/modal.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { ResponseUser } from '../../core/models/responseUser';
+import { AppComponent } from '../../app.component';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 
 
 @Component({
@@ -19,7 +21,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   isModalOpen = false;
   subscription: Subscription = new Subscription();
   loginError: string | null = null;
-  constructor(private fb: FormBuilder, private router: Router, private modalService: ModalService, private authService: AuthService) {}
+  
+  constructor(private fb: FormBuilder, private router: Router, private modalService: ModalService, private authService: AuthService  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -57,10 +60,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
+          
           console.log(response);
           localStorage.setItem('accessToken', (response.accessToken));
           localStorage.setItem('refreshToken', (response.refreshToken));
+          this.authService.isLoggedIn = true;
+          this.authService.isLoggedInSubject.next(true);
           this.isLoading = false;
+
+          // this._HeaderComponent._AppComponent.homeComponent.loadWishlist();
 
           console.log("token data: ",this.authService.getAccessTokenData());
           console.log(this.authService.getAccessTokenClaim('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'));
@@ -74,7 +82,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           this.isLoading = false;
           this.closeModal();
-          this.router.navigate(['/home']);
+          // this.router.navigate(['/home']);
+          this.router.navigateByUrl('/Account', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['/home']);
+          });
         },
         error: (error) => {
           this.loginError = error.error.message;

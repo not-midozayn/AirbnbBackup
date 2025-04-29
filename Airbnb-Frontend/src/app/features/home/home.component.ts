@@ -1,11 +1,11 @@
-import { Component,effect,  EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component,effect,  EventEmitter, inject, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
 import { ListingCardComponent } from '../listing-card/listing-card.component';
 import { Listing } from './../../core/models/Listing';
-import { Subscription } from 'rxjs';
+import { filter, Subject, Subscription, takeUntil } from 'rxjs';
 import { ListingsService } from '../../core/services/listings.service';
 import { PropertyTypeService } from '../../core/services/property-type.service';
 import { CarouselBasicDemo } from "../property-type/property-type.component";
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { ChatBotComponent } from '../chat-bot/chat-bot.component';
 // import { ToastModule } from 'primeng/toast';
@@ -25,17 +25,9 @@ import { ToastModule } from 'primeng/toast';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
   })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy  {
   constructor(private listingsService: ListingsService , private router:Router ,  private searchService: SearchService , private _ScrollService:ScrollService , private authStatusService:AuthStatusService) {
  
-    // effect(() => {
-    //   const isLoggedIn = this.authStatusService.isLoggedInSignal();
-    //   if (isLoggedIn) {
-    //     // لو حصل login
-    //     // this.reloadToken();  // أو أي فانكشن انت عايزها
-    //     window.location.reload();
-    //   }
-    // });
 
   }
   private readonly _propertyTypeService = inject(PropertyTypeService);
@@ -53,21 +45,42 @@ export class HomeComponent {
   itemsPerPage=10;
   paginationParams: { [key: string]: any } = {};
   propertyTypeParams: { [key: string]: any } = {};
+  public destroyed = new Subject<any>();
 
 
+  public loadWishlist(){
+    this._wishListService.getAllWishlists().subscribe({
+      next:(wishes)=>{
+        console.log(wishes);
+        this.wishList =  wishes.wishlistItems.map((item: any) => item.listingId);
+      },
+      error:(err)=>{
+        console.error(err);
+      }
+    });
+  }
 
 
   ngOnInit() {
     this.loading = true;
+    this.router.events
+    .pipe(
+      filter((event: any) => event instanceof NavigationEnd),
+      takeUntil(this.destroyed)
+    )
+    .subscribe(() => {
+      // this.display = false;
+      
+    });
 
-this._propertyTypeService.getAllPropertyTypes().subscribe({
-  next:(p)=>{
-    console.log(p);
-  },
-  error:(err)=>{
-    console.error(err);
-  }
-});
+    this._propertyTypeService.getAllPropertyTypes().subscribe({
+      next:(p)=>{
+        console.log(p);
+      },
+      error:(err)=>{
+        console.error(err);
+      }
+    });
 
 
     // this.subscription = this.listingsService.getListings().subscribe({
@@ -83,17 +96,17 @@ this._propertyTypeService.getAllPropertyTypes().subscribe({
     // });
 
 
-    this._wishListService.getAllWishlists().subscribe({
-      next:(wishes)=>{
-        console.log(wishes);
-        this.wishList =  wishes.wishlistItems.map((item: any) => item.listingId);
-      },
-      error:(err)=>{
-        console.error(err);
-      }
-    });
+    // this._wishListService.getAllWishlists().subscribe({
+    //   next:(wishes)=>{
+    //     console.log(wishes);
+    //     this.wishList =  wishes.wishlistItems.map((item: any) => item.listingId);
+    //   },
+    //   error:(err)=>{
+    //     console.error(err);
+    //   }
+    // });
 
-
+    this.loadWishlist();
 
     this.searchService.searchParams$.subscribe(params =>{
       this.loadListings(params);
@@ -107,6 +120,9 @@ this._propertyTypeService.getAllPropertyTypes().subscribe({
 
   ngOnDestroy() {
     this.subscription?.unsubscribe();
+   
+      this.destroyed.next(1);
+      this.destroyed.complete();
   }
 
 
@@ -164,6 +180,14 @@ this._propertyTypeService.getAllPropertyTypes().subscribe({
   }
 }
 
+// filterListings(propertyTypeId: string) {
+//   this._ScrollService.stopScroll();
+//   this.listingItems = this.filteredListings.filter(
+//     (listing) => listing.propertyTypeId === propertyTypeId && listing.verificationStatusId==3
+//   );
+//   console.log(this.filteredListings); 
+//   console.log(this.listingItems,"from filteration");
+// }
 
 filterListings(propertyTypeId: string) {
   this._ScrollService.stopScroll();

@@ -60,9 +60,9 @@
             class="flex items-center gap-4 border border-[var(--border-color)] rounded-full px-4 py-2 shadow-sm hover:shadow-md cursor-pointer transition-shadow"
             (click)="toggleUserMenu($event)">
             <i class="fa-solid fa-bars text-black"></i>
-            <!-- <i class="fa-regular fa-circle-user text-2xl text-black"  ></i> -->
+            <i *ngIf="!isProfilePictureAvailable()" class="fa-regular fa-circle-user text-2xl text-black"  ></i>
             <!-- <img [src]="" class="fa-regular fa-circle-user text-2xl text-black"  /> -->
-            <img *ngIf="authService.currentUserSignal()!=null" [src]="profilePictureUrl"  alt="Profile Picture" class="w-8 h-8 rounded-full object-cover" />
+            <img *ngIf="isProfilePictureAvailable()" [src]="profilePictureUrl"  alt="Profile Picture" class="w-8 h-8 rounded-full object-cover" />
           </button>
 
           <!-- User dropdown menu -->

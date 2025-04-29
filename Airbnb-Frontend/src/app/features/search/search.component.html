@@ -38,20 +38,27 @@
         <span class="h-7 border-r border-[var(--border-color)]"></span>
 
         <!-- Check-in Section -->
-        <div
+        <!-- <div
           class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
           <label for="check-in" class="block truncate">Check in</label>
           <input type="date"  id="check-in" class="bg-transparent"  name="checkIn" [(ngModel)]="startDate" >
         </div>
-        <span class="h-7 border-r border-[var(--border-color)]"></span>
+        <span class="h-7 border-r border-[var(--border-color)]"></span> -->
 
         <!-- Check-out Section -->
-        <div
+        <!-- <div
           class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
           <label for="check-out" class="block truncate">Check out</label>
           <input type="date" id="check-out" class="bg-transparent" 
             name="checkOut"  [(ngModel)]="endDate" >
-        </div>
+        </div> -->
+
+
+
+        <app-date-range-picker
+        (rangeSelected)="onDateRangeSelected($event)"
+        [selectedRange]="{ startDate: startDate, endDate: endDate }"
+      ></app-date-range-picker>
         <span class="h-7 border-r border-[var(--border-color)]"></span>
 
         <!-- Guests Section -->

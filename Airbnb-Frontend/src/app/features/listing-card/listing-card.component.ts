@@ -1,13 +1,15 @@
+import { AuthService } from './../../core/services/auth.service';
 
 
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Listing } from './../../core/models/Listing';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { ImagesService } from '../../core/services/images.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
  import { AuthStatusService } from '../../core/services/auth-status-service.service';
 import { AvailabilityCalendarService } from '../../core/services/availability-calendar.service';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -17,19 +19,46 @@ import { AvailabilityCalendarService } from '../../core/services/availability-ca
   templateUrl: './listing-card.component.html',
   styleUrls: ['./listing-card.component.css']
 })
-export class ListingCardComponent {
-  constructor(public imgsService: ImagesService , public router:Router , private _ToastrService:ToastrService , private authStatusService:AuthStatusService , public _AvailabilityCalendarService:AvailabilityCalendarService) { 
+export class ListingCardComponent implements OnInit, OnDestroy {
+
+  public destroyed = new Subject<any>();
+  constructor(public imgsService: ImagesService , public router:Router , private _ToastrService:ToastrService , private authStatusService:AuthStatusService , public _AvailabilityCalendarService:AvailabilityCalendarService , public _AuthService:AuthService) { 
  
-    effect(() => {
-      const isLoggedIn = this.authStatusService.isLoggedInSignal();
+    // effect(() => {
+    //   const isLoggedIn = this.authStatusService.isLoggedInSignal();
+    //   if (isLoggedIn) {
+
+    //     this.token=localStorage.getItem("accessToken")
+    //   }
+    // });
+  }
+  ngOnInit(): void {
+    this.router.events
+    .pipe(
+      filter((event: any) => event instanceof NavigationEnd),
+      takeUntil(this.destroyed)
+    )
+    .subscribe(() => {
+      // this.display = false;
+      
+    });
+    this._AuthService.isLoggedInSubject.asObservable().subscribe((isLoggedIn) => {
       if (isLoggedIn) {
-        // لو حصل login
-        // this.reloadToken();  // أو أي فانكشن انت عايزها
-        this.token=localStorage.getItem("accessToken")
+        this.token = localStorage.getItem("accessToken");
+        console.log(this.token)
+      } else {
+        this.token = null; // أو أي قيمة افتراضية أخرى
       }
     });
   }
+
+
+  ngOnDestroy(): void {
+    this.destroyed.next(1);
+    this.destroyed.complete();
+  }
   
+
   token : any
   @Input() listingItem: Listing = {} as Listing;
   hover: boolean = false;
@@ -83,29 +112,18 @@ export class ListingCardComponent {
     }
   }
 
-  // Format the date as "jun 14-17"
+
   getFormattedDate(): string {
     // console.log(this.listingItem.createdAt)
-
-    let startDate = new Date(); // June 14
-    const endDate = new Date(); // June 17
-
-    this._AvailabilityCalendarService.getAvailabilityCalendarOfListing(this.listingItem.id).subscribe(
-      (data) => {
-      startDate=data.filter((item) => item.isAvailable === true)[0].date
-    })
-
-    // startDate= new Date(startDate); // June 14
-    const apiDate=startDate;
+    const apiDate=this.listingItem.createdAt;
     const dateObj = new Date(apiDate);
 
     const year=dateObj.getFullYear();
     const month=dateObj.getMonth();
     const day=dateObj.getDate();
 
-
-
-
+    const startDate = new Date(year, month, day); // June 14
+    const endDate = new Date(year, month, day); // June 17
 
     const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
 
@@ -114,6 +132,40 @@ export class ListingCardComponent {
 
     return `${startDateStr}-${endDateStr}`;
   }
+
+  
+
+  // Format the date as "jun 14-17"
+  // getFormattedDate(): string {
+  //   // console.log(this.listingItem.createdAt)
+
+  //   let startDate = new Date(); // June 14
+  //   const endDate = new Date(); // June 17
+
+  //   this._AvailabilityCalendarService.getAvailabilityCalendarOfListing(this.listingItem.id).subscribe(
+  //     (data) => {
+  //     startDate=data.filter((item) => item.isAvailable === true)[0].date
+  //   })
+
+  //   // startDate= new Date(startDate); // June 14
+  //   const apiDate=startDate;
+  //   const dateObj = new Date(apiDate);
+
+  //   const year=dateObj.getFullYear();
+  //   const month=dateObj.getMonth();
+  //   const day=dateObj.getDate();
+
+
+
+
+
+  //   const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
+
+  //   const startDateStr = startDate.toLocaleDateString('en-US', options);
+  //   const endDateStr = endDate.toLocaleDateString('en-US', options);
+
+  //   return `${startDateStr}-${endDateStr}`;
+  // }
 
 
 
