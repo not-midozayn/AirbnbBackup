@@ -14,9 +14,9 @@ namespace WebApplication1.Controllers
 
         private readonly IWishListRepository wishlistRepo;
         private readonly IUserRepository irepo;
-        private HttpContextAccessor _httpContextAccessor;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public WishlistsController(IWishListRepository _wishlistRepo, IUserRepository _irepo, HttpContextAccessor httpContextAccessor)
+        public WishlistsController(IWishListRepository _wishlistRepo, IUserRepository _irepo, IHttpContextAccessor httpContextAccessor)
         {
             wishlistRepo = _wishlistRepo;
             irepo = _irepo;

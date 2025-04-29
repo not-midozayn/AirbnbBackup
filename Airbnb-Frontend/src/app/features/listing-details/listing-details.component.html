@@ -34,19 +34,10 @@
       <div class="listing-photos">
         <div class="photos-grid" *ngIf="!showAllPhotos">
           <div class="main-photo">
-        <img
-          [src]="listing.imageUrls[0]"
-          alt="invalid"
-          (click)="togglePhotos()"
-        />
+            <img [src]= "imgsService.getImageUrl(listing.imageUrls[0])" alt="invalid" (click)="togglePhotos()">
           </div>
           <div class="side-photos">
-        <img
-          *ngFor="let image of listing.imageUrls; let i = index"
-          [src]="image"
-          alt="invaliddd"
-          (click)="togglePhotos(i)"
-        />
+            <img *ngFor="let image of listing.imageUrls; let i =index" [src]="imgsService.getImageUrl(image)" alt="invaliddd" (click)="togglePhotos(i)">
           </div>
           <button class="show-all-photos" (click)="togglePhotos()">
             <i class="pi pi-images"></i> Show all photos
@@ -64,11 +55,11 @@
       *ngIf="showAllPhotos"
     >
           <ng-template pTemplate="item" let-url>
-        <img [src]="url" style="width: 100%; display: block" />
+            <img [src]="imgsService.getImageUrl(url)"  style="width: 100%; display: block;" >
           </ng-template>
           <ng-template pTemplate="thumbnail" let-url>
             <div class="p-grid p-nogutter p-justify-center">
-          <img [src]="url" style="width: 100px; display: block" />
+               <img [src]="imgsService.getImageUrl(url)"  style="width: 100px; display: block;">
             </div>
           </ng-template>
         </p-galleria>
@@ -186,7 +177,7 @@
             <div class="reviews-grid">
               <div class="review-card" *ngFor="let review of visibleReviews">
                 <div class="review-header">
-              <img [src]="review.reviewer.profilePictureUrl" alt="" />
+                  <img [src]="imgsService.getImageUrl(review.reviewer.profilePictureUrl)" alt="">
                   <div>
                 <h4>
                   {{ review.reviewer.firstName }} {{ review.reviewer.lastName }}
@@ -219,16 +210,10 @@
           <div class="listing-location">
             <h3>Where you'll be</h3>
         <p>{{ listing.city }} , {{ listing.country }}</p>
-            <div class="map-placeholder">
-              <div id="map" class="map-container"></div>
-                <!-- <img [src]="listing.latitude" alt="Map"> -->
-          <button
-            pButton
-            type="button"
-            label="Show more"
-            class="p-button-outlined map-button"
-          ></button>
-            </div>
+        <app-leaflet-map  
+        [latitude]="listing.latitude" 
+        [longitude]="listing.longitude"
+        [markerImageUrl]="imgsService.getImageUrl(listing.previewImageUrl)"></app-leaflet-map>
           </div>
         </div>
 

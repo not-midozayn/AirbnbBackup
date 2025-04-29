@@ -11,62 +11,10 @@
       </a>
 
       <!-- Search Bar -->
-      <form class="hidden md:flex flex-1 justify-center mx-8">
-        <div class="relative max-w-4xl w-full">
-          <div
-            class="flex items-center justify-between h-16 bg-[var(--light-gray)] border border-[var(--border-color)] rounded-full shadow-sm hover:shadow-md transition-shadow duration-200">
-            <!-- Location Section -->
-            <div
-              class="h-full py-3 pl-5 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
-              <label for="location" class="block truncate">Anywhere</label>
-              <input type="text" id="location" class="w-36 outline-none p-1 bg-transparent"
-                placeholder="Search destination" [(ngModel)]="searchParams.location" name="location">
-            </div>
-            <span class="h-7 border-r border-[var(--border-color)]"></span>
-
-            <!-- Check-in Section -->
-            <div
-              class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
-              <label for="check-in" class="block truncate">Check in</label>
-              <input type="date" id="check-in" class="bg-transparent" [(ngModel)]="searchParams.checkIn" name="checkIn">
-            </div>
-            <span class="h-7 border-r border-[var(--border-color)]"></span>
-
-            <!-- Check-out Section -->
-            <div
-              class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
-              <label for="check-out" class="block truncate">Check out</label>
-              <input type="date" id="check-out" class="bg-transparent" [(ngModel)]="searchParams.checkOut"
-                name="checkOut">
-            </div>
-            <span class="h-7 border-r border-[var(--border-color)]"></span>
-
-            <!-- Guests Section -->
-            <div class="relative flex-1 h-full">
-              <div
-                class="py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 flex items-center justify-between w-full h-full rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
-                <button type="button" (click)="toggleGuestMenu($event)">
-                  <div>
-                    <h3 class="block truncate">Guests</h3>
-                    <span class="block truncate text-gray-500">{{ guestText }}</span>
-                  </div>
-                </button>
-                <button type="button" (click)="performSearch()"
-                  class="ml-2 p-2 bg-[var(--primary-color)] rounded-full text-[var(--light-gray)] w-10 h-10 flex items-center justify-center hover:shadow-md hover:bg-red-500 hover:transition-shadow duration-200">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-              </div>
-
-              <!-- Guest Selection Menu -->
-              <!-- <ng-container *ngTemplateOutlet="guestMenuTemplate"></ng-container> -->
-              <div *ngIf="isGuestMenuOpen && !isMobileSearchOpen"
-                class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-4 z-20">
-                <ng-container *ngTemplateOutlet="guestMenuTemplate"></ng-container>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+      @if(isHomeUrl()) {
+        <app-search    [Location]="modifiedLoc"
+        [startDate]="modifiedStartDate" [endDate]="modifiedEndDate" [Capacity]="modifiedGuests"  (searchChanged)="onSearch($event)"></app-search>
+         }
 
       <!-- User Menu -->
       <div class="flex items-center space-x-2 sm:space-x-4">
@@ -112,8 +60,9 @@
             class="flex items-center gap-4 border border-[var(--border-color)] rounded-full px-4 py-2 shadow-sm hover:shadow-md cursor-pointer transition-shadow"
             (click)="toggleUserMenu($event)">
             <i class="fa-solid fa-bars text-black"></i>
-            <i class="fa-regular fa-circle-user text-2xl text-black"  ></i>
+            <!-- <i class="fa-regular fa-circle-user text-2xl text-black"  ></i> -->
             <!-- <img [src]="" class="fa-regular fa-circle-user text-2xl text-black"  /> -->
+            <img *ngIf="authService.currentUserSignal()!=null" [src]="profilePictureUrl"  alt="Profile Picture" class="w-8 h-8 rounded-full object-cover" />
           </button>
 
           <!-- User dropdown menu -->
@@ -129,6 +78,8 @@
             @else {
             <div class="py-2">
               <a (click)="logout()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log Out</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/wishlist">WishList</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/Account">Account</a>
             </div>
             }
             <hr>
@@ -169,8 +120,6 @@
                 }
                 </button>
               }
-              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/wishlist">WishList</a>
-              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/Account">Account</a>
               <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Help</a>
             </div>
           </div>
@@ -250,7 +199,7 @@
     </div>
 
     <!-- Guest Menu for Mobile (Only shown when showMobileGuestMenu is true) -->
-    <!-- <div *ngIf="showMobileGuestMenu" class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto"> -->
+    <div *ngIf="showMobileGuestMenu" class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto">
     <div *ngIf="isGuestMenuOpen && isMobileSearchOpen" class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto">
       <div class="flex justify-between items-center mb-4">
         <button class="p-2 rounded-full hover:bg-gray-100" (click)="hideGuestMenuInMobile()">
@@ -303,4 +252,4 @@
     </div>
   </ng-template>
 
-</header>
+<!-- </header> -->

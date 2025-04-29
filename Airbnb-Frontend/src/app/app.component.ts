@@ -7,13 +7,14 @@ import { RegisterComponent } from "./features/register/register.component";
 import { AuthService } from './core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { CarouselBasicDemo } from "./features/property-type/property-type.component";
+import { LeafletMapComponent } from "./features/leaflet-map/leaflet-map.component";
 
 
 
 @Component({
   selector: 'app-root',
   standalone:true,
-  imports: [RouterOutlet, FooterComponent, HeaderComponent, LoginComponent, RegisterComponent , CarouselBasicDemo],
+  imports: [RouterOutlet, FooterComponent, HeaderComponent, LoginComponent, RegisterComponent , CarouselBasicDemo, LeafletMapComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

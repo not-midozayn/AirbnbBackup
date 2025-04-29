@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,inject, OnInit } from '@angular/core';
 import { ListingCardComponent } from '../listing-card/listing-card.component';
 import { Listing } from '../../core/models/Listing';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { ListingsService } from '../../core/services/listings.service';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
   selector: 'app-wishlist',
-  imports: [CommonModule,ListingCardComponent],
+  imports: [CommonModule,ListingCardComponent ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.css'
 })
@@ -20,6 +21,7 @@ wishlistListings:Listing[]=[];
 constructor(private _WishlistService:WishlistService , private _ListingsService:ListingsService ){
 
 }
+private readonly _ToastrService = inject(ToastrService);
   ngOnInit(): void {
     this.fetchWishlist();
   }
@@ -61,6 +63,7 @@ constructor(private _WishlistService:WishlistService , private _ListingsService:
         this.wishlistIds=this.wishlistIds.filter(x => x !== id);
         this.wishlistListings=this.wishlistListings.filter(x => x.id !== id)
         console.log("Removed from wishlist:", id);
+        this._ToastrService.error("Removed from wishlist" , "Delete" , {timeOut: 2000});
       }
       )}
   }
