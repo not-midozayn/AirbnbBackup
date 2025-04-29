@@ -1,4 +1,4 @@
-<h1 class="text-3xl font-semibold mb-8">
+<h1 class="text-3xl font-bold m-3 p-2 text-center">
   Welcome back, {{ authService.currentUserSignal()?.firstName }}
 </h1>
 
@@ -6,9 +6,7 @@
   <!-- Search and Filter Section -->
   <div class="flex flex-col gap-4 mb-8">
     <!-- Search and Secondary Filters -->
-    <div
-      class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl shadow-sm"
-    >
+    <div class="flex flex-col md:flex-row gap-4 p-4 rounded-xl">
       <!-- Search Bar -->
       <div class="flex-1 min-w-[250px]">
         <div class="relative">
@@ -17,7 +15,7 @@
             [(ngModel)]="searchQuery"
             (input)="applyFilters()"
             placeholder="Search bookings..."
-            class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
+            class="w-full pl-10 pr-4 py-3 border border-gray-200 bg-white rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
           />
           <i
             class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -27,14 +25,14 @@
 
       <!-- Status Filter -->
       <div class="flex items-center gap-2 shrink-0">
-        <span class="text-gray-600 whitespace-nowrap font-medium">Status:</span>
+        <span class="text-black-600 whitespace-nowrap font-bold">Status:</span>
         <div class="flex flex-wrap gap-2">
           <button
             *ngFor="let status of statusFilters"
             [ngClass]="{
               'bg-rose-500 text-white shadow-md':
                 activeStatusFilter === status.value,
-              'bg-gray-100 text-gray-700 hover:bg-gray-200':
+              'bg-white text-gray-700 hover:bg-gray-200':
                 activeStatusFilter !== status.value
             }"
             class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:shadow-sm"
@@ -137,15 +135,6 @@
           <h2 class="text-2xl font-bold text-gray-900 mb-2 md:mb-0">
             {{ booking.listing.title }}
           </h2>
-          <!-- <div class="flex items-center bg-gray-50 px-3 py-1 rounded-full">
-            <i class="fas fa-star text-yellow-400 mr-1 text-sm"></i>
-            <span class="font-semibold text-gray-800">{{
-              booking.listing.averageRating || "New"
-            }}</span>
-            <span class="text-gray-500 text-xs ml-1"
-              >({{ booking.listing.reviewCount }} reviews)</span
-            >
-          </div> -->
         </div>
 
         <!-- Location -->
@@ -154,54 +143,63 @@
           {{ booking.listing.city }}, {{ booking.listing.state }},
           {{ booking.listing.country }}
         </p>
-        <!-- Guest Info -->
-        <div
-          *ngIf="showGuestData"
-          class="flex items-center gap-3 mb-4 bg-gray-50 p-3 rounded-lg"
-        >
-          <img
-            [src]="
-              booking.guest.profilePictureUrl || '/assets/default-avatar.jpg'
-            "
-            alt="Guest"
-            class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
-          />
-          <div>
-            <p class="text-xs text-gray-500">Guest</p>
-            <p class="font-medium text-gray-800">
-              {{ booking.guest.firstName }} {{ booking.guest.lastName }}
-              <span *ngIf="booking.guest.isVerified" class="text-blue-500 ml-1">
-                <i class="fas fa-check-circle"></i>
-              </span>
-            </p>
-            <p class="text-xs text-gray-500">
-              Booking date: {{ booking.bookingDate | date : "mediumDate" }}
-            </p>
+        <!-- Guest and Host Info Row -->
+        <div class="user-info-row flex flex-col sm:flex-row gap-4 mb-4">
+          <!-- Guest Info -->
+          <div
+            *ngIf="showGuestData"
+            class="guest-info flex items-center gap-3 bg-gray-50 p-3 rounded-lg flex-1"
+          >
+            <img
+              [src]="
+                booking.guest.profilePictureUrl || '/assets/default-avatar.jpg'
+              "
+              alt="Guest"
+              class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+            />
+            <div>
+              <p class="text-xs text-gray-500">Guest</p>
+              <p class="font-medium text-gray-800">
+                {{ booking.guest.firstName }} {{ booking.guest.lastName }}
+                <span
+                  *ngIf="booking.guest.isVerified"
+                  class="text-blue-500 ml-1"
+                >
+                  <i class="fas fa-check-circle"></i>
+                </span>
+              </p>
+              <p class="text-xs text-gray-500">
+                Booking date: {{ booking.bookingDate | date : "mediumDate" }}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <!-- Host Info -->
-        <div *ngIf="showHostData" class="flex items-center gap-3 mb-4">
-          <img
-            [src]="
-              booking.listing.host.profilePictureUrl ||
-              '/assets/default-avatar.jpg'
-            "
-            alt="Host"
-            class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
-          />
-          <div>
-            <p class="text-xs text-gray-500">Hosted by</p>
-            <p class="font-medium text-gray-800">
-              {{ booking.listing.host.firstName }}
-              {{ booking.listing.host.lastName }}
-              <span
-                *ngIf="booking.listing.host.isVerified"
-                class="text-blue-500 ml-1"
-              >
-                <i class="fas fa-check-circle"></i>
-              </span>
-            </p>
+          <!-- Host Info -->
+          <div
+            *ngIf="showHostData"
+            class="host-info flex items-center gap-3 bg-gray-50 p-3 rounded-lg flex-1"
+          >
+            <img
+              [src]="
+                booking.listing.host.profilePictureUrl ||
+                '/assets/default-avatar.jpg'
+              "
+              alt="Host"
+              class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+            />
+            <div>
+              <p class="text-xs text-gray-500">Hosted by</p>
+              <p class="font-medium text-gray-800">
+                {{ booking.listing.host.firstName }}
+                {{ booking.listing.host.lastName }}
+                <span
+                  *ngIf="booking.listing.host.isVerified"
+                  class="text-blue-500 ml-1"
+                >
+                  <i class="fas fa-check-circle"></i>
+                </span>
+              </p>
+            </div>
           </div>
         </div>
 

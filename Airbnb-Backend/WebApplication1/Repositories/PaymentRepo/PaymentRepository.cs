@@ -37,7 +37,7 @@ namespace WebApplication1.Repositories.Payment
             createPaymentDto.PaymentType = Enum.Parse<PaymentType>(source.intent.Metadata["paymentType"]);
             createPaymentDto.BookingId = Guid.Parse(source.intent.Metadata["bookingId"]);
             createPaymentDto.CurrencyId = int.Parse(source.intent.Metadata["currency"]);
-            createPaymentDto.UserId = GetCurrentUserId();
+            createPaymentDto.UserId = Guid.Parse(source.intent.Metadata["user_id"]);
             createPaymentDto.FailureMessage = source.charge?.FailureMessage ?? source.intent?.LastPaymentError?.Message;
             createPaymentDto.PaymentMethodId = int.Parse(source.intent.Metadata["paymentMethodId"]);
 

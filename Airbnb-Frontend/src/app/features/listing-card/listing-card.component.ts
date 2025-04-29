@@ -18,8 +18,8 @@ import { AvailabilityCalendarService } from '../../core/services/availability-ca
   styleUrls: ['./listing-card.component.css']
 })
 export class ListingCardComponent {
-  constructor(public imgsService: ImagesService , public router:Router , private _ToastrService:ToastrService , private authStatusService:AuthStatusService , public _AvailabilityCalendarService:AvailabilityCalendarService) { 
- 
+  constructor(public imgsService: ImagesService , public router:Router , private _ToastrService:ToastrService , private authStatusService:AuthStatusService , public _AvailabilityCalendarService:AvailabilityCalendarService) {
+
     effect(() => {
       const isLoggedIn = this.authStatusService.isLoggedInSignal();
       if (isLoggedIn) {
@@ -29,7 +29,7 @@ export class ListingCardComponent {
       }
     });
   }
-  
+
   token : any
   @Input() listingItem: Listing = {} as Listing;
   hover: boolean = false;
@@ -68,7 +68,7 @@ export class ListingCardComponent {
 
 
 
-  
+
 
 
   nextImage() {
@@ -83,29 +83,17 @@ export class ListingCardComponent {
     }
   }
 
-  // Format the date as "jun 14-17"
   getFormattedDate(): string {
     // console.log(this.listingItem.createdAt)
-
-    let startDate = new Date(); // June 14
-    const endDate = new Date(); // June 17
-
-    this._AvailabilityCalendarService.getAvailabilityCalendarOfListing(this.listingItem.id).subscribe(
-      (data) => {
-      startDate=data.filter((item) => item.isAvailable === true)[0].date
-    })
-
-    // startDate= new Date(startDate); // June 14
-    const apiDate=startDate;
+    const apiDate=this.listingItem.createdAt;
     const dateObj = new Date(apiDate);
 
     const year=dateObj.getFullYear();
     const month=dateObj.getMonth();
     const day=dateObj.getDate();
 
-
-
-
+    const startDate = new Date(year, month, day); // June 14
+    const endDate = new Date(year, month, day); // June 17
 
     const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
 

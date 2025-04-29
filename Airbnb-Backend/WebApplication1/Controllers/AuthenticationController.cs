@@ -341,11 +341,11 @@ namespace YourNamespace.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
-                return BadRequest("User not found");
+                return Ok("User not found");
 
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
-                return BadRequest("User not found");
+                return Ok("User not found");
 
             if (!await roleManager.RoleExistsAsync(UserRoles.Host))
                 await roleManager.CreateAsync(new IdentityRole<Guid>(UserRoles.Host));
