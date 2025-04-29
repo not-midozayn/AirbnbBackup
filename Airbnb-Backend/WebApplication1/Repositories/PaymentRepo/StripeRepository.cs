@@ -222,12 +222,14 @@ namespace WebApplication1.Repositories.Payment
                         { "paymentMethodId", request.PaymentMethodId.ToString() },
                         { "paymentType", request.PaymentType.ToString() },
                         { "currency", user.CurrencyId.ToString() },
-                        { "bookingId", bookingId.ToString() }
+                        { "bookingId", bookingId.ToString() },
+                        { "user_id", currentUserId.ToString() }
                     }
                 },
                 Metadata = new Dictionary<string, string>
                 {
-                    { "bookingId", bookingId.ToString() }
+                    { "bookingId", bookingId.ToString() },
+                    { "user_id", currentUserId.ToString() }
                 }
             };
             var service = new SessionService(_stripeClient);

@@ -70,6 +70,11 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = $"{UserRoles.Guest}")]
         public async Task<ActionResult<IEnumerable<GetBookingDTO>>> GetUserBookings([FromQuery] Dictionary<string, string> queryParams)
         {
+            if (!_bookingRepository.IsAuthenticated())
+            {
+                var emptyBookings = new List<GetBookingDTO>();
+                return Ok(emptyBookings);
+            }
             var userId = _bookingRepository.GetCurrentUserId();
             queryParams["GuestId"] = userId.ToString();
             var userBookings = await _bookingRepository.GetAllAsync(queryParams, includeProperties);

@@ -32,7 +32,7 @@ export const routes: Routes = [
   },
   { path: "dashboard", loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent), title: "dashboard", canActivate: [() => authGuard(), () => adminGuard()] },
   {path:"wishlist", loadComponent:() => import('./features/wishlist/wishlist.component').then(m => m.WishlistComponent), title:"WishList", canActivate: [() => authGuard()]},
-  {path:"Account", loadComponent:() => import('./features/account-settings/account-settings.component').then(m => m.AccountComponent), title:"Account"},
+  {path:"Account", loadComponent:() => import('./features/account-settings/account-settings.component').then(m => m.AccountComponent), title:"Account", canActivate: [() => authGuard()]},
   { path: "conversations", loadComponent: () => import('./features/conversations/conversations.component').then(m => m.ConversationsComponent), title: "conversations", canActivate: [() => authGuard()] },
   {path:"Account/personal-info", loadComponent:() => import('./features/personal-info/personal-info.component').then(m => m.PersonalInfoComponent), title:"Personal-Info"},
   { path: 'payment-success', component: PaymentSuccessComponent },

@@ -175,6 +175,7 @@ export class UserBookingsComponent implements OnInit {
   }
   toggleStatusFilter(status: string) {
     this.activeStatusFilter = status;
+    this.currentPage = 1; // Reset to first page when changing status filter
     if (status === 'Confirmed') {
       this.activeTab = 'upcoming';
     }// Fetch new data when status changes
@@ -186,6 +187,7 @@ export class UserBookingsComponent implements OnInit {
     this.activeStatusFilter = 'all';
     this.activeSort = 'newest';
     this.activeTab = 'upcoming';
+    this.currentPage = 1; // Reset to first page when resetting filters
     this.applyFilters();
   }
 

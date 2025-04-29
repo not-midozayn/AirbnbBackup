@@ -1,7 +1,7 @@
 
 
 <!-- <div class="sticky top-16 z-10 bg-white border-b border-[var(--border-color)] "> -->
-    
+
     <div class="max-w-5xl mx-auto px-2" >
       <p-carousel
         [value]="propertytypes"
@@ -10,16 +10,16 @@
         [circular]="true"
         [responsiveOptions]="responsiveOptions"
         [showIndicators]="false"
-        styleClass="custom-carousel" 
+        styleClass="custom-carousel"
       >
         <ng-template let-product pTemplate="item" >
           <div class="flex flex-col items-center text-center px-1 py-2"  >
-            
+
             <div class="w-12 h-12 mb-1 rounded-full overflow-hidden border border-gray-300 shadow-sm  hover:border-black transition cursor-pointer rounded-xl" (click)="OnSelectedPropertyType(product.id)" >
-              <img 
-              [src]="product.icon"
+              <img
+              [src]="imageService.getImageUrl(product.icon)"
                 [alt]="product.propertyTypeName"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-11 " 
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-11 "
               />
             </div>
             <span class="text-xs text-gray-700" (click)="OnSelectedPropertyType(product.id)"   >
