@@ -167,7 +167,7 @@ namespace WebApplication1.Repositories
         public Guid GetCurrentUserId()
         {
             //var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Guid.Parse("15690543-6927-4375-9f41-628b80520190");
+            return Guid.Parse("15690543-6927-4375-9F41-628B80520190");
             //return Guid.TryParse(userId, out var guid) ? guid : Guid.Empty;
         }
 
@@ -186,12 +186,15 @@ namespace WebApplication1.Repositories
                     query = query.Include(property);
                 }
             }
-            if (queryParams.TryGetValue("pageNumber", out string value))
+
+            if (queryParams.TryGetValue("pageNumber", out string pageNumberValue))
             {
-                int pageNumber = int.Parse(value);
-                query = query.Take(3 * pageNumber); 
+                int pageNumber = int.Parse(pageNumberValue);
+                query = query.Skip((pageNumber - 1) * 3).Take(3);
             }
             return await query.ToListAsync();
+
+
         }
         public async Task<T> GetByIDAsync(Guid id, List<string> includeProperties = null)
         {

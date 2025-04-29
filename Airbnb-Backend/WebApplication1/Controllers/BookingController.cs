@@ -33,6 +33,7 @@ namespace WebApplication1.Controllers
             _paymentRepository = paymentRepository;
             _stripeRepository = stripeRepository;
         }
+        private readonly List<string> includeProperties = ["Listing", "Listing.ListingPhotos", "Listing.Host", "Guest", "Listing.CancellationPolicy"];
         #endregion
 
         #region Post Methods
@@ -61,7 +62,7 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Host}")]
         public async Task<ActionResult<IEnumerable<GetBookingDTO>>> GetAllBookings([FromQuery] Dictionary<string, string> queryParams)
         {
-            var bookings = await _bookingRepository.GetAllAsync(queryParams);
+            var bookings = await _bookingRepository.GetAllAsync(queryParams, includeProperties);
             var bookingsDTOs = _mapper.Map<List<GetBookingDTO>>(bookings);
             return Ok(bookingsDTOs);
         }
@@ -71,7 +72,7 @@ namespace WebApplication1.Controllers
         {
             var userId = _bookingRepository.GetCurrentUserId();
             queryParams["GuestId"] = userId.ToString();
-            var userBookings = await _bookingRepository.GetAllAsync(queryParams);
+            var userBookings = await _bookingRepository.GetAllAsync(queryParams, includeProperties);
             var userBookingsDTOs = _mapper.Map<List<GetBookingDTO>>(userBookings);
 
             return Ok(userBookingsDTOs);
@@ -96,6 +97,41 @@ namespace WebApplication1.Controllers
             var bookings = await _bookingRepository.GetAllAsync(new Dictionary<string, string> { { "ListingId", id.ToString() } });
             var bookingsDTOs = _mapper.Map<List<GetBookingDTO>>(bookings);
             return Ok(bookingsDTOs);
+        }
+        #endregion
+
+        #region Get references
+        [HttpGet("current-host")]
+        public async Task<ActionResult<IEnumerable<GetBookingDTO>>> GetCurrentHostBookings([FromQuery] Dictionary<string, string> queryParams)
+        {
+            var userId = _bookingRepository.GetCurrentUserId();
+            var hostBookings = await _bookingRepository.GetAllAsync(queryParams, includeProperties);
+            var filteredBookings = hostBookings.Where(b => b.Listing.HostId == userId).ToList();
+            var hostBookingsDTOs = _mapper.Map<List<GetBookingDTO>>(filteredBookings);
+            return Ok(hostBookingsDTOs);
+        }
+        [HttpGet("{bookingId}/cancellation-policy")]
+        //[Authorize]
+        public async Task<ActionResult<CancellationPolicy>> GetCancellationPolicy(Guid bookingId)
+        {
+            var booking = await _bookingRepository.GetByIDAsync(bookingId, ["Listing", "Listing.CancellationPolicy"]);
+            if (booking == null) return NotFound("Booking not found.");
+            var cancellationPolicy = booking.Listing.CancellationPolicy;
+            return Ok(cancellationPolicy);
+        }
+        [HttpGet("{bookingId}/refund-amount")]
+        //[Authorize]
+        public async Task<ActionResult<decimal>> GetRefundAmount(Guid bookingId)
+        {
+            try
+            {
+                var refundAmount = await _paymentRepository.GetRefundAmountAsync(bookingId);
+                return Ok(refundAmount);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
         #endregion
 
