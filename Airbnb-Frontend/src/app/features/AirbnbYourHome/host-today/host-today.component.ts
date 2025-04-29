@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
+import { UserBookingService } from '../../../core/services/user-booking.service';
+import { UserBookingsComponent } from '../../../shared/components/user-bookings/user-bookings.component';
 
 @Component({
   selector: 'app-host-today',
-  imports: [],
+  imports: [UserBookingsComponent],
   templateUrl: './host-today.component.html',
-  styleUrl: './host-today.component.css'
+  styleUrls: ['./host-today.component.css']
 })
 export class HostTodayComponent {
-  constructor(public authService: AuthService) { }
 
+  constructor(private userBookingService: UserBookingService) { }
+
+  myBookingApi = () => this.userBookingService.getHostBookings();
 }

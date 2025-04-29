@@ -37,5 +37,6 @@ export const routes: Routes = [
   {path:"Account/personal-info", loadComponent:() => import('./features/personal-info/personal-info.component').then(m => m.PersonalInfoComponent), title:"Personal-Info"},
   { path: 'payment-success', component: PaymentSuccessComponent },
   { path: 'payment-cancelled', component: PaymentFailedComponent },
-  {path:"**", redirectTo:"home" , pathMatch:'full'  } // Wildcard route for a 404 page
+  {path:"Account/MyReservtions", loadComponent:() => import('./features/guest-reservation/guest-reservation.component').then(m => m.GuestReservationsComponent), title:"Guest-Reservations"},
+  {path:"**", redirectTo:"home" , pathMatch:'full' },// Wildcard route for a 404 page
 ];

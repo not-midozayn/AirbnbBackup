@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>Cancel Booking</h2>
+
+<mat-dialog-content>
+  <div class="policy-container">
+    <h3>Cancellation Policy</h3>
+    <pre>{{ cancellationPolicy || "Loading policy..." }}</pre>
+  </div>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Reason for cancellation</mat-label>
+    <textarea matInput [(ngModel)]="cancellationReason" required></textarea>
+  </mat-form-field>
+
+  <div class="refund-info">
+    <h3>Refund Estimate</h3>
+    <div *ngIf="refundAmount > 0" class="refund-amount">
+      <mat-icon>check_circle</mat-icon>
+      <span
+        >You will receive:
+        <strong>${{ refundAmount | number : "1.2-2" }}</strong></span
+      >
+    </div>
+    <div *ngIf="refundAmount === 0" class="no-refund">
+      <mat-icon>warning</mat-icon>
+      <span>No refund will be issued</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Back</button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="proceedWithCancellation()"
+    [disabled]="isLoading || !cancellationReason.trim()"
+  >
+    <span *ngIf="!isLoading">Confirm Cancellation</span>
+    <span *ngIf="isLoading">Processing...</span>
+  </button>
+</mat-dialog-actions>

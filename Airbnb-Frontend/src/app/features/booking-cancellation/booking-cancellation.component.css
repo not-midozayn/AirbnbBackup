@@ -1,0 +1,43 @@
+.policy-container {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #FF385C;
+}
+
+.w-full {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.refund-info {
+  margin-top: 16px;
+}
+
+.refund-amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4CAF50;
+  margin: 8px 0;
+}
+
+.no-refund {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #F44336;
+  margin: 8px 0;
+}
+
+pre {
+  white-space: pre-wrap;
+  font-family: inherit;
+  margin: 0;
+  line-height: 1.5;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+}

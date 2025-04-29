@@ -1,0 +1,378 @@
+<h1 class="text-3xl font-semibold mb-8">
+  Welcome back, {{ authService.currentUserSignal()?.firstName }}
+</h1>
+
+<div class="container mx-auto px-4 py-8">
+  <!-- Search and Filter Section -->
+  <div class="flex flex-col gap-4 mb-8">
+    <!-- Search and Secondary Filters -->
+    <div
+      class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl shadow-sm"
+    >
+      <!-- Search Bar -->
+      <div class="flex-1 min-w-[250px]">
+        <div class="relative">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            (input)="applyFilters()"
+            placeholder="Search bookings..."
+            class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
+          />
+          <i
+            class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+          ></i>
+        </div>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="text-gray-600 whitespace-nowrap font-medium">Status:</span>
+        <div class="flex flex-wrap gap-2">
+          <button
+            *ngFor="let status of statusFilters"
+            [ngClass]="{
+              'bg-rose-500 text-white shadow-md':
+                activeStatusFilter === status.value,
+              'bg-gray-100 text-gray-700 hover:bg-gray-200':
+                activeStatusFilter !== status.value
+            }"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:shadow-sm"
+            (click)="toggleStatusFilter(status.value)"
+          >
+            {{ status.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Sort Dropdown -->
+      <div class="relative min-w-[180px]">
+        <select
+          [(ngModel)]="activeSort"
+          (change)="applyFilters()"
+          class="w-full pl-3 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-rose-500 bg-white appearance-none transition-all duration-200"
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="priceHigh">Price (High to Low)</option>
+          <option value="priceLow">Price (Low to High)</option>
+          <option value="checkIn">Check-in Date</option>
+        </select>
+        <i
+          class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+        ></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking List -->
+  <!-- Booking Type Tabs (Only shown when status is Confirmed) -->
+  <div
+    *ngIf="activeStatusFilter === 'Confirmed'"
+    class="flex border-b border-gray-200"
+  >
+    <button
+      *ngFor="let tab of bookingTabs"
+      [ngClass]="{
+        'border-b-2 border-rose-500 text-rose-500': activeTab === tab.value,
+        'text-gray-500 hover:text-gray-700': activeTab !== tab.value
+      }"
+      class="px-4 py-3 font-medium text-sm focus:outline-none transition-all duration-200"
+      (click)="setActiveTab(tab.value)"
+    >
+      {{ tab.label }}
+    </button>
+  </div>
+  <div
+    *ngIf="filteredBookings.length > 0; else noBookings"
+    class="grid grid-cols-1 gap-6"
+  >
+    <div
+      *ngFor="let booking of filteredBookings"
+      class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+    >
+      <!-- Image -->
+      <div class="md:w-1/3 h-64 md:h-auto">
+        <img
+          [src]="
+            booking.listing.previewImageUrl || '/assets/default-listing.jpg'
+          "
+          alt="Listing Image"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <!-- Booking Info -->
+      <div class="flex-1 p-6 relative">
+        <!-- Status Badge -->
+        <!-- Status and Rating Container -->
+        <div class="flex justify-between mb-3">
+          <!-- Status Badge -->
+          <div
+            [ngClass]="{
+              'bg-green-100 text-green-800': booking.status === 'Confirmed',
+              'bg-yellow-100 text-yellow-800': booking.status === 'Pending',
+              'bg-red-100 text-red-800': booking.status === 'Cancelled'
+            }"
+            class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide"
+          >
+            {{ booking.status }}
+          </div>
+
+          <!-- Rating -->
+          <div class="flex items-center bg-gray-50 px-3 py-1 rounded-full">
+            <i class="fas fa-star text-yellow-400 mr-1 text-sm"></i>
+            <span class="font-semibold text-gray-800">
+              {{ booking.listing.averageRating || "New" }}
+            </span>
+            <span class="text-gray-500 text-xs ml-1"
+              >({{ booking.listing.reviewCount }} reviews)</span
+            >
+          </div>
+        </div>
+        <!-- Listing Title and Rating -->
+        <div
+          class="flex flex-col md:flex-row md:items-start justify-between mb-3"
+        >
+          <h2 class="text-2xl font-bold text-gray-900 mb-2 md:mb-0">
+            {{ booking.listing.title }}
+          </h2>
+          <!-- <div class="flex items-center bg-gray-50 px-3 py-1 rounded-full">
+            <i class="fas fa-star text-yellow-400 mr-1 text-sm"></i>
+            <span class="font-semibold text-gray-800">{{
+              booking.listing.averageRating || "New"
+            }}</span>
+            <span class="text-gray-500 text-xs ml-1"
+              >({{ booking.listing.reviewCount }} reviews)</span
+            >
+          </div> -->
+        </div>
+
+        <!-- Location -->
+        <p class="text-gray-600 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-gray-400"></i>
+          {{ booking.listing.city }}, {{ booking.listing.state }},
+          {{ booking.listing.country }}
+        </p>
+        <!-- Guest Info -->
+        <div
+          *ngIf="showGuestData"
+          class="flex items-center gap-3 mb-4 bg-gray-50 p-3 rounded-lg"
+        >
+          <img
+            [src]="
+              booking.guest.profilePictureUrl || '/assets/default-avatar.jpg'
+            "
+            alt="Guest"
+            class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+          />
+          <div>
+            <p class="text-xs text-gray-500">Guest</p>
+            <p class="font-medium text-gray-800">
+              {{ booking.guest.firstName }} {{ booking.guest.lastName }}
+              <span *ngIf="booking.guest.isVerified" class="text-blue-500 ml-1">
+                <i class="fas fa-check-circle"></i>
+              </span>
+            </p>
+            <p class="text-xs text-gray-500">
+              Booking date: {{ booking.bookingDate | date : "mediumDate" }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Host Info -->
+        <div *ngIf="showHostData" class="flex items-center gap-3 mb-4">
+          <img
+            [src]="
+              booking.listing.host.profilePictureUrl ||
+              '/assets/default-avatar.jpg'
+            "
+            alt="Host"
+            class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+          />
+          <div>
+            <p class="text-xs text-gray-500">Hosted by</p>
+            <p class="font-medium text-gray-800">
+              {{ booking.listing.host.firstName }}
+              {{ booking.listing.host.lastName }}
+              <span
+                *ngIf="booking.listing.host.isVerified"
+                class="text-blue-500 ml-1"
+              >
+                <i class="fas fa-check-circle"></i>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Property Details -->
+        <div class="flex flex-wrap gap-4 text-sm mb-4 text-gray-600">
+          <span class="flex items-center gap-1">
+            <i class="fas fa-bed text-gray-400"></i>
+            {{ booking.listing.bedrooms }} bedroom(s)
+          </span>
+          <span class="flex items-center gap-1">
+            <i class="fas fa-bath text-gray-400"></i>
+            {{ booking.listing.bathrooms }} bathroom(s)
+          </span>
+          <span class="flex items-center gap-1">
+            <i class="fas fa-users text-gray-400"></i>
+            Up to {{ booking.listing.capacity }} guests
+          </span>
+        </div>
+
+        <!-- Check-in/Check-out -->
+        <div class="flex gap-8 mb-4">
+          <div>
+            <p class="text-xs text-gray-500 uppercase tracking-wider">
+              Check-in
+            </p>
+            <p class="font-semibold text-gray-800">
+              {{ booking.checkInDate | date : "mediumDate" }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 uppercase tracking-wider">
+              Check-out
+            </p>
+            <p class="font-semibold text-gray-800">
+              {{ booking.checkOutDate | date : "mediumDate" }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="border-t border-gray-100 pt-4 mb-4">
+          <div class="flex justify-between text-sm mb-2 text-gray-600">
+            <span>
+              ${{ booking.listing.pricePerNight | number : "1.2-2" }} ×
+              {{ getNightCount(booking.checkInDate, booking.checkOutDate) }}
+              nights
+            </span>
+            <span class="font-medium">
+              ${{
+                booking.listing.pricePerNight *
+                  getNightCount(booking.checkInDate, booking.checkOutDate)
+                  | number : "1.2-2"
+              }}
+            </span>
+          </div>
+          <div class="flex justify-between text-sm mb-2 text-gray-600">
+            <span>Service fee</span>
+            <span class="font-medium"
+              >${{ booking.listing.serviceFee | number : "1.2-2" }}</span
+            >
+          </div>
+          <div
+            class="flex justify-between font-bold text-lg mt-3 text-gray-900"
+          >
+            <span>Total</span>
+            <span>${{ booking.totalPrice | number : "1.2-2" }}</span>
+          </div>
+        </div>
+
+        <!-- Special Requests -->
+        <div
+          *ngIf="booking.specialRequests"
+          class="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100"
+        >
+          <p class="text-sm font-semibold text-gray-700 mb-1">
+            Special Requests:
+          </p>
+          <p class="text-gray-600 text-sm">{{ booking.specialRequests }}</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap gap-3 mt-6">
+          <button
+            *ngIf="
+              showCancelButton &&
+              booking.status === 'Confirmed' &&
+              isComingCheckInDate(booking.checkInDate)
+            "
+            class="px-5 py-2 border border-rose-500 text-rose-500 rounded-lg hover:bg-rose-50 transition-all duration-200 font-medium"
+            (click)="cancelBooking(booking)"
+          >
+            Cancel Booking
+          </button>
+          <!-- <button
+            class="px-5 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
+            (click)="viewBookingDetails(booking.id)"
+          >
+            View Details
+          </button> -->
+        </div>
+
+        <!-- Booking ID and Date -->
+        <div class="absolute bottom-4 right-4 text-xs text-gray-400">
+          Booking #{{ booking.id.slice(0, 8) }}<br />
+          Booked on {{ booking.bookingDate | date : "mediumDate" }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noBookings>
+    <div class="text-center py-16 bg-white rounded-2xl shadow-sm">
+      <i class="fas fa-calendar-times text-5xl text-gray-300 mb-4"></i>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">
+        No bookings found
+      </h3>
+      <p class="text-gray-500 mb-4">
+        Try adjusting your filters or search query
+      </p>
+      <button
+        (click)="resetFilters()"
+        class="px-5 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-all duration-200 font-medium"
+      >
+        Reset Filters
+      </button>
+    </div>
+  </ng-template>
+  <!-- Add this at the bottom of your template -->
+  <div *ngIf="paginationEnabled && totalPages > 1" class="airbnb-pagination">
+    <button
+      class="pagination-arrow"
+      (click)="onPageChange(currentPage - 1)"
+      [disabled]="currentPage === 1"
+      aria-label="Previous page"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 32 32"
+        fill="none"
+        stroke="currentColor"
+      >
+        <path d="M20 8L12 16L20 24" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <div class="page-numbers">
+      <button
+        *ngFor="let page of visiblePages"
+        [class.active]="page === currentPage"
+        [class.ellipsis]="page === '...'"
+        (click)="onPageChange(page)"
+      >
+        {{ page === "..." ? "···" : page }}
+      </button>
+    </div>
+
+    <button
+      class="pagination-arrow"
+      (click)="onPageChange(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+      aria-label="Next page"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 32 32"
+        fill="none"
+        stroke="currentColor"
+      >
+        <path d="M12 8L20 16L12 24" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+</div>

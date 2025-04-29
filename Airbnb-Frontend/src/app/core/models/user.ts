@@ -52,3 +52,14 @@ export interface User {
   newPassword:string;
   confirmPassword:string;
 }
+
+
+export interface Host {
+  id: string;
+  firstName: string;
+  lastName: string;
+  profilePictureUrl: string;
+  bio: string;
+  isHost: boolean;
+  isVerified: boolean;
+}

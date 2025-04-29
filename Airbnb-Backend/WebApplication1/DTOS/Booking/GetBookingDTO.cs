@@ -1,14 +1,15 @@
 ﻿using WebApplication1.Models.Enums;
 using WebApplication1.Models;
 using WebApplication1.DTOS.Listing;
+using WebApplication1.DTOS.ApplicationUser;
 
 namespace WebApplication1.DTOS.Booking
 {
     public class GetBookingDTO
     {
         public Guid Id { get; set; }
-        public Guid GuestId { get; set; }
-        public Guid ListingId { get; set; }
+        public GetApplicationUserDto Guest { get; set; }
+        public GetListingDTO Listing { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
         public int GuestsCount { get; set; }

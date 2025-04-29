@@ -1,6 +1,9 @@
 /* Airbnb Color Palette */
 :root {
   --airbnb-pink: #FF385C;
+  --airbnb-pink-hover: #E61E4D;
+  --airbnb-blue: #008489;
+  --airbnb-green: #00A699;
   --airbnb-dark: #222222;
   --airbnb-light-gray: #F7F7F7;
   --airbnb-medium-gray: #EBEBEB;
@@ -333,4 +336,113 @@
   color: #CC0000;
   grid-column: 1 / -1;
   text-align: center;
+}
+
+/* Airbnb Pagination - Solid Pink Active Button */
+.airbnb-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 32px 0;
+  font-family: 'Circular', -apple-system, sans-serif;
+  gap: 8px;
+}
+
+/* Arrow buttons (prev/next) */
+.pagination-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #DDDDDD;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-arrow:hover:not([disabled]) {
+  border-color: #717171;
+}
+
+.pagination-arrow[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-arrow svg {
+  color: #222222;
+}
+
+/* Page number buttons */
+.page-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+.page-numbers button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #DDDDDD;
+  background: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #222222;
+}
+
+/* Hover effect (except active & ellipsis) */
+.page-numbers button:hover:not(.active):not(.ellipsis) {
+  border-color: #717171;
+}
+
+/* ACTIVE BUTTON - SOLID PINK */
+.page-numbers button.active {
+  background: #FF385C !important; /* Airbnb pink */
+  border-color: #FF385C !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+/* Hover effect on active button (slightly darker pink) */
+.page-numbers button.active:hover {
+  background: #E61E4D !important;
+  border-color: #E61E4D !important;
+}
+
+/* Ellipsis (...) styling */
+.page-numbers button.ellipsis {
+  cursor: default;
+  width: auto;
+  padding: 0 8px;
+  color: #717171;
+  border: none;
+  background: transparent;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .airbnb-pagination {
+    gap: 4px;
+  }
+
+  .pagination-arrow,
+  .page-numbers button {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+}
+/* Add to your component's CSS */
+.success-snackbar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.error-snackbar {
+  background-color: #F44336;
+  color: white;
 }

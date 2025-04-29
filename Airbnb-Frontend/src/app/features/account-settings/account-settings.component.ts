@@ -20,12 +20,18 @@ interface AccountCard {
 export class AccountComponent {
   userName = 'John Hany';
   userEmail = 'hanyjohn2001@gmail.com';
-  
+
   accountCards: AccountCard[] = [
     {
       icon: 'id-card',
       title: 'Personal info',
       description: 'Provide personal details and how we can reach you',
       routerLink: '/Account/personal-info'
-    }  ];
+    } ,
+  {
+    icon: 'id-card',
+    title: 'Reservations',
+    description: 'MyReservations',
+    routerLink: '/Account/MyReservtions'
+  },];
 }
