@@ -1,0 +1,21 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "primeicons/primeicons.css";
+@import "tailwindcss";
+
+body {
+  background-color: #f0f0f0;
+  color: black;
+  font-family: Arial, sans-serif;
+}
+
+/* PrimeNG ConfirmDialog Override Styles */
+:root .p-dialog.custom-confirm-dialog .p-dialog-header,
+:root .p-dialog.custom-confirm-dialog .p-dialog-content,
+:root .p-dialog.custom-confirm-dialog .p-dialog-footer {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+:root .p-dialog.custom-confirm-dialog .p-confirm-dialog-message {
+  color: #000000 !important;
+}

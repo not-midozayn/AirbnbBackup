@@ -1,0 +1,56 @@
+<div class="personal-info-container">
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="successMessage" class="message success">
+    {{ successMessage }}
+  </div>
+  
+  <div *ngIf="errorMessage" class="message error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngFor="let section of personalInfoSections" class="section">
+    <div class="section-header">
+      <h2>{{ section.title }}</h2>
+      <p *ngIf="section.description" class="section-description">{{ section.description }}</p>
+    </div>
+
+    <div class="section-content">
+      <div *ngFor="let field of section.fields" class="field">
+        <label for="{{ field.name }}">{{ field.label }}</label>
+        <input
+          id="{{ field.name }}"
+          [type]="field.type"
+          [placeholder]="field.placeholder"
+          [(ngModel)]="field.value"
+          [disabled]="!section.editMode"
+          class="input"
+        />
+      </div>
+
+      <div class="actions">
+        <button 
+          *ngIf="!section.editMode" 
+          (click)="editSection(section)" 
+          class="primary-button">
+          Edit
+        </button>
+        
+        <ng-container *ngIf="section.editMode">
+          <button 
+            (click)="saveSection(section)" 
+            class="primary-button">
+            Save
+          </button>
+          <button 
+            (click)="cancelEdit(section)" 
+            class="secondary-button">
+            Cancel
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

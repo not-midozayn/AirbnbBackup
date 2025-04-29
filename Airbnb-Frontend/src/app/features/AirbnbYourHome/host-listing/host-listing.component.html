@@ -1,0 +1,160 @@
+<main class="container min-h-screen p-5">
+  <p-confirmDialog
+    styleClass="custom-confirm-dialog"
+    [style]="{ width: '95vw', maxWidth: '30vw' }"
+    rejectButtonStyleClass="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition-colors"
+    acceptButtonStyleClass="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition-colors"
+    acceptIcon="hidden"
+    rejectIcon="hidden"
+    [closeOnEscape]="true"
+  ></p-confirmDialog>
+  <section>
+    <h1 class="text-3xl font-bold mb-8">Your listings</h1>
+  </section>
+  <section>
+    <div class="card rounded-lg p-6">
+      <p-table
+        #dt1
+        [value]="listingsService.hostListingsSignal()"
+        dataKey="id"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading"
+        [globalFilterFields]="['title', 'country', 'city', 'state']"
+        styleClass="p-datatable-lg"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row sm:justify-between sm:items-center mb-4">
+            <div>
+              <span class="p-input-icon-left w-full max-w-md relative">
+                <i class="pi pi-search absolute left-3 text-gray-400 z-10"></i>
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="searchValue"
+                  (input)="dt1.filterGlobal(searchValue, 'contains')"
+                  placeholder="Search listings by name or location"
+                  class="w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                />
+              </span>
+            </div>
+            <div
+              class="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition"
+              routerLink="/hosting/become-a-host"
+            >
+              <i class="fa-solid fa-plus"></i>
+          </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              class="text-sm font-medium text-gray-700 p-4 min-w-60"
+              pSortableColumn="title"
+            >
+              Listing
+            </th>
+            <th
+              class="text-sm font-medium text-gray-700 p-4 min-w-60"
+              pSortableColumn="country"
+            >
+              Location <p-sortIcon field="country"></p-sortIcon>
+            </th>
+            <th
+              class="text-sm font-medium text-gray-700 p-4 min-w-40"
+              pSortableColumn="status"
+            >
+              Status <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th class="text-sm font-medium text-gray-700 p-4 min-w-40">
+              Actions
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-listing>
+          <tr class="hover:bg-gray-50 transition-colors duration-150">
+            <td class="p-4 text-sm text-gray-900">
+              <div class="flex items-center gap-5">
+                @if(listing.previewImageUrl){
+                <img
+                  [src]="imgsService.getImageUrl(listing.previewImageUrl)"
+                  class="w-16 h-12 rounded-2xl"
+                  alt="listing-img"
+                />
+                } @else{
+                <img
+                  src="default-img.png"
+                  class="w-16 h-16 rounded-2xl"
+                  alt="listing-img"
+                />
+                }
+                <p class="fw-bold">{{ listing.title }}</p>
+              </div>
+            </td>
+            <td class="p-4 text-sm text-gray-900">
+              <div class="flex items-center gap-2">
+                {{
+                  listing.country + ", " + listing.state + ", " + listing.city
+                }}
+              </div>
+            </td>
+            <td class="p-4 text-sm text-gray-900">
+              <span
+                class="px-4 py-2 rounded-full text-xs font-medium"
+                [ngClass]="{
+                  'bg-stone-300 text-stone-800':
+                    listing.verificationStatusId === 1,
+                  'bg-yellow-100 text-yellow-800':
+                    listing.verificationStatusId === 2,
+                  'bg-green-100 text-green-800':
+                    listing.verificationStatusId === 3,
+                  'bg-red-100 text-red-800': listing.verificationStatusId === 4
+                }"
+                >{{ getStatus(listing.verificationStatusId) }}</span
+              >
+            </td>
+            <td>
+              @if(listing.verificationStatusId === 1){
+                <div class="flex gap-5">
+                  <a
+                  [routerLink]="['/hosting/become-a-host/', listing.id]"
+                  class="text-gray-500 hover:underline"
+                  >Continue</a>
+                  <button
+                  (click)="DeleteListing(listing.id)"
+                  class="text-red-500 hover:text-red-600 hover:scale-110 transition-all"
+                >
+                  <i class="fa-regular fa-trash-can text-xl"></i>
+                </button>
+                </div>
+              } @else if(listing.verificationStatusId !== 1){
+              <div class="flex gap-5">
+                <button
+                  class="text-gray-500 hover:text-gray-600 hover:scale-110 transition-all"
+                  [routerLink]="['/hosting/become-a-host', listing.id]"
+                >
+                  <i class="fa-solid fa-pen-to-square text-xl"></i>
+                </button>
+                <button
+                  (click)="DeleteListing(listing.id)"
+                  class="text-red-500 hover:text-red-600 hover:scale-110 transition-all"
+                >
+                  <i class="fa-regular fa-trash-can text-xl"></i>
+                </button>
+              </div>
+              }
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3" class="text-center p-4 text-gray-500">
+              No listings found.
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </section>
+  <!-- <app-add-listing></app-add-listing> -->
+</main>

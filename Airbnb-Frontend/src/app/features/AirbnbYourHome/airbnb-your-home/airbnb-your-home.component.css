@@ -1,0 +1,52 @@
+.container {
+  max-width: 1200px;
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+.reservation-tab {
+  position: relative;
+  cursor: pointer;
+}
+
+.reservation-tab:hover {
+  color: #000;
+}
+
+.reservation-tab.active {
+  color: #000;
+  border-bottom: 2px solid #000;
+}
+
+.empty-state-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+}
+
+.verification-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.verification-card:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .reservation-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1rem;
+  }
+
+  .reservation-tab {
+    padding: 0.5rem 1rem;
+  }
+}

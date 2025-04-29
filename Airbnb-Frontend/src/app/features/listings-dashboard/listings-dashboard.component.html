@@ -1,0 +1,182 @@
+<div class="card bg-blue-50 shadow-lg p-3 rounded-lg">
+  <p-confirmDialog styleClass="custom-confirm-dialog" [style]="{ width: '95vw', maxWidth: '30vw' }"
+    rejectButtonStyleClass="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition-colors"
+    acceptButtonStyleClass="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition-colors"
+    acceptIcon="hidden" rejectIcon="hidden" [closeOnEscape]="true"></p-confirmDialog>
+  <p-toast />
+  <p-table [value]="listings" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+    [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows"
+    [globalFilterFields]="['title', 'country', 'state']" #dt1>
+    <ng-template #caption>
+      <!-- <div class="flex flex-wrap justify-end gap-2">
+        <p-button
+          label="Expand All"
+          icon="pi pi-plus"
+          text
+          (onClick)="expandAll()"
+        />
+        <p-button
+          label="Collapse All"
+          icon="pi pi-minus"
+          text
+          (onClick)="collapseAll()"
+        />
+      </div> -->
+      <div class="flex">
+        <p-iconfield iconPosition="left" class="ml-auto">
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
+          <input pInputText type="text" [(ngModel)]="searchValue" (input)="dt1.filterGlobal(searchValue, 'contains')"
+            placeholder="Search keyword" />
+        </p-iconfield>
+      </div>
+    </ng-template>
+    <ng-template #header>
+      <tr>
+        <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+        <th>Image</th>
+        <th pSortableColumn="pricePerNight">
+          Price <p-sortIcon field="pricePerNight" />
+        </th>
+        <th pSortableColumn="country">
+          Location <p-sortIcon field="country" />
+        </th>
+        <th pSortableColumn="state">
+          State <p-sortIcon field="state" />
+        </th>
+        <th pSortableColumn="averageRating">
+          Average Rating<p-sortIcon field="averageRating" />
+        </th>
+        <th pSortableColumn="reviewCount">
+          Reviews <p-sortIcon field="reviewCount" />
+        </th>
+        <th pSortableColumn="status">Status</th>
+        <th style="width: 5rem">Actions</th>
+        <!-- <th pSortableColumn="inventoryStatus">
+          Status <p-sortIcon field="inventoryStatus" />
+        </th> -->
+      </tr>
+    </ng-template>
+    <ng-template #body let-listing let-expanded="expanded">
+      <tr>
+        <!-- <td>
+          <p-button
+            type="button"
+            pRipple
+            [pRowToggler]="listing"
+            [text]="true"
+            [rounded]="true"
+            [plain]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td> -->
+        <td>{{ listing.title }}</td>
+        <td>
+          <img [src]="imgService.getImageUrl(listing.previewImageUrl)" [alt]="listing.title"
+            class="shadow-lg w-20 h-12" />
+        </td>
+        <td>{{ listing.pricePerNight | currency : "USD" }}</td>
+        <td>{{ listing.country + ", " + listing.city }}</td>
+        <td>{{listing.state}}</td>
+        <td>
+          <p-rating [ngModel]="listing.averageRating" [readonly]="true" />
+        </td>
+        <td>
+          {{listing.reviewCount}}
+        </td>
+        <td>
+          <span class="px-4 py-2 rounded-full text-xs font-medium" [ngClass]="{
+            'bg-stone-300 text-stone-800':
+              listing.verificationStatusId === 1,
+            'bg-yellow-100 text-yellow-800':
+              listing.verificationStatusId === 2,
+            'bg-green-100 text-green-800':
+              listing.verificationStatusId === 3,
+            'bg-red-100 text-red-800': listing.verificationStatusId === 4
+          }">{{ getStatus(listing.verificationStatusId) }}
+          </span>
+        </td>
+        <td>
+          <div class="flex justify-between">
+            <button class="cursor-pointer w-6 h-6" (click)="updateListingStatus(listing.id, 3)" [disabled]="isLoading">
+              <!-- @if(isLoading) { -->
+                <!-- <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" aria-hidden="true"></span> -->
+                <!-- <span role="status"> loading...</span> -->
+              <!-- } @else { -->
+                <i class="pi pi-check-square transition-all text-indigo-400 hover:scale-125"></i>
+              <!-- } -->
+            </button>
+            <button class="cursor-pointer w-6 h-6" (click)="updateListingStatus(listing.id, 4)" [disabled]="isLoading">
+              <i class="pi pi-times transition-all text-red-400 hover:scale-125"></i>
+            </button>
+          </div>
+          <div class="flex justify-between">
+            <button class="cursor-pointer w-6 h-6" [disabled]="isLoading">
+              <i class="pi pi-eye transition-all text-indigo-400 hover:scale-125"></i>
+            </button>
+            <button class="cursor-pointer w-6 h-6" (click)="DeleteListing(listing.id)" [disabled]="isLoading">
+              <i class="pi pi-trash transition-all text-red-400 hover:scale-125"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="7">No listings found.</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-listing>
+      <tr>
+        <td colspan="7">
+          <div class="p-4">
+            <h5>Orders for {{ listing.name }}</h5>
+            <p-table [value]="listing.orders" dataKey="id">
+              <ng-template #header>
+      <tr>
+        <th pSortableColumn="id">Id <p-sortIcon field="price" /></th>
+        <th pSortableColumn="customer">
+          Customer <p-sortIcon field="customer" />
+        </th>
+        <th pSortableColumn="date">
+          Date <p-sortIcon field="date" />
+        </th>
+        <th pSortableColumn="amount">
+          Amount <p-sortIcon field="amount" />
+        </th>
+        <th pSortableColumn="status">
+          Status <p-sortIcon field="status" />
+        </th>
+        <th style="width: 4rem"></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-order>
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.customer }}</td>
+        <td>{{ order.date }}</td>
+        <td>{{ order.amount | currency : "USD" }}</td>
+        <td>
+          <!-- <p-tag
+                      [value]="order.status"
+                      [severity]="getStatusSeverity(order.status)"
+                    /> -->
+        </td>
+        <td><p-button type="button" icon="pi pi-search" /></td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6">There are no order for this product yet.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+</p-table>
+</div>

@@ -1,0 +1,287 @@
+/* Remove default date input styling */
+/* input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+} */
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Guest popup styles */
+.guest-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Button hover and active states */
+button:not([disabled]):hover {
+  border-color: #F43F5E;
+  color: #F43F5E;
+}
+
+button:not(:disabled):active {
+  background-color: #e5e7eb;
+}
+
+button.rounded-full:not(:disabled):hover {
+  border-color: #111;
+}
+
+button {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-color: #D1D5DB;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Check availability button hover */
+button[class*="bg-rose-500"]:not(:disabled):hover {
+  background-color: #e11d48;
+}
+
+button[class*="bg-rose-600"] {
+  width: 100%;
+  height: auto;
+}
+
+button[class*="bg-rose-600"][disabled] {
+  background-color: #F43F5E;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Reservation card styles */
+.reservation-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  background: white;
+}
+
+.booking-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+}
+
+.booking-price h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.booking-price h2 span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #6B7280;
+}
+
+.booking-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #111827;
+}
+
+.booking-rating i {
+  color: #F43F5E;
+}
+
+.date-range-section {
+  margin-bottom: 1.5rem;
+}
+
+.guest-section {
+  margin: 20px 0;
+  position: relative;
+}
+
+.guest-trigger {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.selected-guests {
+  font-size: 14px;
+}
+
+.guest-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.guest-type:last-child {
+  margin-bottom: 0;
+}
+
+.guest-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.guest-sublabel {
+  font-size: 12px;
+  color: #666;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.counter button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counter button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.counter span {
+  min-width: 20px;
+  text-align: center;
+}
+
+.price-section {
+  margin-bottom: 20px;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.per-night {
+  font-size: 16px;
+  color: #666;
+}
+
+.error-messages {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff3f3;
+}
+
+.error-message {
+  color: #d93025;
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.price-breakdown {
+  margin: 20px 0;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #666;
+}
+
+.breakdown-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #ddd;
+  font-weight: 600;
+}
+
+.reserve-button {
+  width: 100%;
+  padding: 14px;
+  background: #ff385c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reserve-button:hover {
+  background: #e31c5f;
+}
+
+.reserve-button:disabled {
+  background: #ddd;
+  cursor: not-allowed;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

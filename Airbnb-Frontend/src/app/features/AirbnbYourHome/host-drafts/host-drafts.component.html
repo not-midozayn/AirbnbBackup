@@ -1,0 +1,56 @@
+<div class="mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header Section -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold mb-2">Welcome back, {{authService.currentUserSignal()?.firstName}}</h1>
+      <p class="text-gray-600">Continue working on your listings or create a new one</p>
+    </div>
+
+    <!-- Draft Listings Section -->
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold mb-4">Finish your listing</h2>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center py-8">
+        <p class="text-gray-600">Loading your listings...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <p>{{ error }}</p>
+      </div>
+
+      <!-- Draft Listings -->
+      <div *ngIf="!isLoading && !error && listingsService.hostDraftsSignal().length > 0" class="space-y-4">
+        <div *ngFor="let listing of listingsService.hostDraftsSignal()" class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                <i class="fa-solid fa-house"></i>
+              </div>
+              <div>
+                <p class="font-medium">Your listing started {{ listing.createdAt | date }}</p>
+                <p class="text-sm text-gray-600">Continue setting up your space</p>
+              </div>
+            </div>
+            <a [routerLink]="['/hosting/become-a-host/', listing.id]" class="text-primary hover:underline">Continue</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Drafts State -->
+      <div *ngIf="!isLoading && !error && listingsService.hostDraftsSignal().length === 0" class="text-center py-8">
+        <p class="text-gray-600">You don't have any draft listings yet</p>
+      </div>
+    </div>
+
+    <!-- Start New Listing Section -->
+    <div class="text-center">
+      <h2 class="text-xl font-semibold mb-4">Start a new listing</h2>
+      <button (click)="createDraftListing()" class="inline-flex items-center cursor-pointer justify-center gap-2 px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary-dark transition-colors duration-200">
+        <i class="fa-solid fa-circle-plus text-xl"></i>
+        Create a new listing
+      </button>
+    </div>
+  </div>
+</div>

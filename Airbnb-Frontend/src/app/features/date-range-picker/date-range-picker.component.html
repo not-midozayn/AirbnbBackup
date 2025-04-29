@@ -1,0 +1,45 @@
+<form [formGroup]="dateRange" class="date-range-form">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="date-field-container">
+      <mat-form-field appearance="fill" class="w-full" [class.error-state]="dateRange.get('startDate')?.errors">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startDatePicker" [min]="minDate" [matDatepickerFilter]="dateFilter"
+          formControlName="startDate" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+        <mat-error *ngIf="dateRange.get('startDate')?.errors?.['required']">
+          Start date is required
+        </mat-error>
+        <mat-error *ngIf="dateRange.get('startDate')?.errors?.['pastDate']">
+          Cannot select dates in the past
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="date-field-container">
+      <mat-form-field appearance="fill" class="w-full" [class.error-state]="dateRange.get('endDate')?.errors">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endDatePicker" [min]="dateRange.get('startDate')?.value || minDate"
+          [matDatepickerFilter]="dateFilter" formControlName="endDate" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+        <mat-error *ngIf="dateRange.get('endDate')?.errors?.['required']">
+          End date is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Date Range Validation Error -->
+  <div *ngIf="formErrors['dateRange']" class="text-sm text-red-600 mt-2 mb-4">
+    {{ formErrors['dateRange'] }}
+  </div>
+
+  <!-- Availability Toggle (only for owners) -->
+  <div *ngIf="isOwner" class="mt-4">
+    <mat-checkbox [(ngModel)]="selectedAvailability" [ngModelOptions]="{standalone: true}"
+      (change)="dateRange.updateValueAndValidity()" class="text-gray-700">
+      Set as available for booking
+    </mat-checkbox>
+  </div>
+</form>

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Test</title>
+    <script>
+        let conversationId = null;
+
+        async function createConversation() {
+            const response = await fetch('/api/chat/conversation', { method: 'POST' });
+            const data = await response.json();
+            conversationId = data.conversationId;
+            document.getElementById('conversationId').textContent = conversationId;
+        }
+
+        async function sendMessage() {
+            const message = document.getElementById('messageInput').value;
+            const response = await fetch('/api/chat/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message, conversationId })
+            });
+
+            const data = await response.json();
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += `<p><b>User:</b> ${message}</p>`;
+            messagesDiv.innerHTML += `<p><b>Bot:</b> ${data.content}</p>`;
+
+            document.getElementById('messageInput').value = '';
+        }
+    </script>
+</head>
+<body>
+    <h1>Chat Test</h1>
+    <button onclick="createConversation()">Create Conversation</button>
+    <p>Conversation ID: <span id="conversationId">None</span></p>
+
+    <div>
+        <input id="messageInput" type="text" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <div id="messages"></div>
+</body>
+</html>

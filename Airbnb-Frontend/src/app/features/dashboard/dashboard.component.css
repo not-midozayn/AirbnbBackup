@@ -1,0 +1,49 @@
+:host ::ng-deep .p-datatable {
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+:host ::ng-deep .p-datatable .p-datatable-header {
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+:host ::ng-deep .p-datatable .p-datatable-header .p-inputtext{
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-wrapper {
+    background-color: rgb(226 232 240) !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+
+:host ::ng-deep .p-datatable .p-paginator {
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-footer {
+    background-color: rgb(226 232 240) !important;
+    color: black !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+    background-color: rgb(203 213 225) !important;
+}
+
+.container {
+  transition: padding-left 0.3s ease;
+}

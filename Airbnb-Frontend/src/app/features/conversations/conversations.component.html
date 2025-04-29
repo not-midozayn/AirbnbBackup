@@ -1,0 +1,79 @@
+<div class="conversations-container">
+  <!-- Left sidebar with conversation list -->
+  <div class="conversations-list">
+    <h2>Messages</h2>
+    
+    <div *ngIf="loading" class="loading">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF385C] mx-auto mb-2"></div>
+      <span>Loading conversations...</span>
+    </div>
+    
+    <div *ngIf="error" class="error">
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      {{ error }}
+    </div>
+    
+    <div *ngIf="!loading && !error && conversations.length === 0" class="no-conversations">
+      <i class="far fa-comments mb-2 text-2xl"></i>
+      <p>No conversations yet</p>
+    </div>
+    
+    <div *ngFor="let conversation of conversations" 
+         (click)="selectConversation(conversation)"
+         class="conversation-item"
+         [class.active]="selectedConversation?.id === conversation.id">
+      <div class="conversation-preview">
+        <div class="conversation-info">
+          <h3>
+            <i class="fas fa-robot mr-2 text-[#FF385C]"></i>
+            {{ conversation.title || 'AI Assistant Chat' }}
+          </h3>
+          <div class="message-content" [innerHTML]="getLastMessage(conversation) | safeHtml"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side chat area -->
+  <div class="chat-area" *ngIf="selectedConversation">
+    <div class="chat-header">
+      <div>
+        <h3>AI Assistant Chat</h3>
+        <p class="text-sm text-white opacity-80">I'm powered by generative AI</p>
+      </div>
+      <button (click)="closeConversation()" class="close-button">×</button>
+    </div>
+
+    <div id="messageContainer" class="messages-container">
+      <div *ngFor="let message of selectedConversation.messages" 
+           class="message"
+           [class.sent]="message.isFromUser"
+           [class.received]="!message.isFromUser">
+        <div class="message-content" [innerHTML]="message.content | safeHtml"></div>
+        <div class="message-time">
+          {{ message.timestamp | date:'short' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="message-input">
+      <input type="text" 
+             [(ngModel)]="newMessage" 
+             (keyup.enter)="sendMessage()"
+             placeholder="Type your message..."
+             [disabled]="loading">
+      <button (click)="sendMessage()" 
+              [disabled]="!newMessage.trim() || loading">
+        <i class="fas fa-paper-plane mr-2"></i>
+        Send
+      </button>
+    </div>
+  </div>
+
+  <div class="no-chat-selected" *ngIf="!selectedConversation">
+    <div class="text-center">
+      <i class="far fa-comment-dots text-4xl mb-4 text-[#FF385C]"></i>
+      <p>Select a conversation to start chatting</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<section class="container mx-auto">
+  <div class="card bg-blue-50 shadow-lg p-3 rounded-lg">
+    <p-confirmDialog styleClass="custom-confirm-dialog" [style]="{ width: '95vw', maxWidth: '30vw' }"
+      rejectButtonStyleClass="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition-colors"
+      acceptButtonStyleClass="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition-colors"
+      acceptIcon="hidden" rejectIcon="hidden" [closeOnEscape]="true"></p-confirmDialog>
+    <p-table [value]="users" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+      [paginator]="true" [globalFilterFields]="['firstName', 'lastName', 'status']" styleClass="text-black" #dt1>
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" /> -->
+          <p-iconfield iconPosition="left" class="ml-auto">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input pInputText type="text" [(ngModel)]="searchValue" (input)="dt1.filterGlobal(searchValue, 'contains')"
+              placeholder="Search keyword" />
+          </p-iconfield>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width:15rem">
+            <div class="flex items-center">
+              Name
+            </div>
+          </th>
+          <th style="min-width:15rem">
+            <div class="flex items-center">
+              Date Of Birth
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex items-center">
+              Date of joining
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex items-center">
+              Role
+            </div>
+          </th>
+          <th style="width: 3rem">
+            <div class="flex items-center">
+              Action
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            {{ user.firstName + ' ' + user.lastName }}
+          </td>
+          <td>
+            {{ user.dateOfBirth | date: 'MM/dd/yyyy' }}
+          </td>
+          <td>
+            {{ user.createdAt | date: 'MM/dd/yyyy' }}
+          </td>
+          <td>
+            <p-tag [value]="user.isHost?'Host':'Guest'" [severity]="getSeverity(user.isHost?'Host':'Guest')" />
+          </td>
+          <td>
+            <button (click)="DeleteUser(user.id)"
+              class="text-red-400 hover:text-red-600 hover:cursor-pointer hover:scale-110">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center">
+            <span>No Users found.</span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

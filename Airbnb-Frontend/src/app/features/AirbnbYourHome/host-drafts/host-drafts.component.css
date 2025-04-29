@@ -1,0 +1,15 @@
+.bg-primary {
+  background-color: #FF385C;
+}
+
+.bg-primary-dark {
+  background-color: #E31C5F;
+}
+
+.text-primary {
+  color: #FF385C;
+}
+
+.hover\:bg-primary-dark:hover {
+  background-color: #E31C5F;
+}

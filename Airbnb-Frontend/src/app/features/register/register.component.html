@@ -1,0 +1,229 @@
+@if(isModalOpen){
+<!-- Modal Backdrop and Container -->
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-slate-600/50 bg-opacity-50 p-4"
+  (click)="closeModalOnBackdrop($event)"
+>
+  <!-- Modal Content -->
+  <section
+    class="w-full max-w-md rounded-lg bg-white p-4 shadow-md"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Close Button -->
+    <div class="flex justify-end">
+      <button
+        (click)="closeRegisterModal()"
+        class="rounded-full p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+        aria-label="Close"
+      >
+        <i class="fa-solid fa-xmark text-2xl"></i>
+      </button>
+    </div>
+
+    <!-- Rest of your form remains the same -->
+    <section
+      class="mx-auto w-full max-w-md rounded-lg bg-white px-4 py-8 shadow-md"
+    >
+      <h1
+        class="mb-10 pb-2 text-center text-xl font-bold border-b-[1px] border-b-red-200"
+      >
+        Sign Up
+      </h1>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div>
+          <!-- Generic error message at the bottom -->
+          @if(registerError) {
+            <small class="block py-2 text-center text-red-500">{{ registerError }}</small>
+          }
+        </div>
+
+        <div class="mb-3 relative">
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-1 focus:ring-slate-300"
+            [class.border-red-500]="
+              registerForm.get('firstName')?.invalid &&
+              registerForm.get('firstName')?.touched
+            "
+          />
+          <label
+            for="firstName"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            First Name
+          </label>
+          @if(registerForm.get('firstName')?.touched &&
+          registerForm.get('firstName')?.errors; as errors) {
+          <div class="mt-1 text-sm text-red-500">
+            @if(errors['required']) {
+            <div>First Name is required</div>
+            } @if(errors['minlength']) {
+            <div>First Name must be at least 3 characters</div>
+            }
+          </div>
+          }
+        </div>
+        <div class="mb-3 relative">
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-1 focus:ring-slate-300"
+            [class.border-red-500]="
+              registerForm.get('lastName')?.invalid &&
+              registerForm.get('lastName')?.touched
+            "
+          />
+          <label
+            for="lastName"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            Last Name
+          </label>
+          @if(registerForm.get('lastName')?.touched &&
+          registerForm.get('lastName')?.errors; as errors) {
+          <div class="mt-1 text-sm text-red-500">
+            @if(errors['required']) {
+            <div>Last Name is required</div>
+            } @if(errors['minlength']) {
+            <div>Last Name must be at least 3 characters</div>
+            }
+          </div>
+          }
+        </div>
+        <div class="mb-3 relative">
+          <input
+            type="date"
+            id="birthDate"
+            formControlName="birthDate"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-1 focus:ring-slate-300"
+            [class.border-red-500]="
+              registerForm.get('birthDate')?.invalid &&
+              registerForm.get('birthDate')?.touched
+            "
+          />
+          <label
+            for="birthDate"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            Birth Date
+          </label>
+          @if(registerForm.get('birthDate')?.touched &&
+          registerForm.get('birthDate')?.errors; as errors) {
+            <div class="mt-1 text-sm text-red-500">
+              @if(errors['required']) {
+                <div>Birth Date is required</div>
+              }
+            </div>
+          }
+        </div>
+        <div class="mb-3 relative">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-1 focus:ring-slate-300"
+            [class.border-red-500]="
+              registerForm.get('email')?.invalid &&
+              registerForm.get('email')?.touched
+            "
+          />
+          <label
+            for="email"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            Email
+          </label>
+          @if(registerForm.get('email')?.touched &&
+          registerForm.get('email')?.errors; as errors) {
+          <div class="mt-1 text-sm text-red-500">
+            @if(errors['required']) {
+            <div>Email is required</div>
+            } @if(errors['email']) {
+            <div>Please enter a valid email</div>
+            }
+          </div>
+          }
+        </div>
+        <div class="mb-5 relative">
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-2 focus:focus:ring-slate-300"
+            [class.border-red-500]="
+              registerForm.get('password')?.invalid &&
+              registerForm.get('password')?.touched
+            "
+          />
+          <label
+            for="password"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            Password
+          </label>
+          @if(registerForm.get('password')?.touched &&
+          registerForm.get('password')?.errors; as errors) {
+          <div class="mt-1 text-sm text-red-500">
+            @if(errors['required']) {
+              <div>Password is required</div>
+            }
+            @if(errors['pattern']) {
+              <div>Password must be at least 8 characters with letters and numbers</div>
+            }
+          </div>
+          }
+        </div>
+        <div class="mb-5 relative">
+          <input
+            type="password"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-2 focus:focus:ring-slate-300"
+            [class.border-red-500]="
+              (registerForm.get('confirmPassword')?.invalid &&
+              registerForm.get('confirmPassword')?.touched) ||
+              registerForm.hasError('passwordMismatch')
+            "
+          />
+          <label
+            for="confirmPassword"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            Confirm Password
+          </label>
+          @if(registerForm.get('confirmPassword')?.touched) {
+            <div class="mt-1 text-sm text-red-500">
+              @if(registerForm.get('confirmPassword')?.errors?.['required']) {
+                <div>Confirm password is required</div>
+              } @if(registerForm.get('confirmPassword')?.errors?.['passwordMismatch'] || registerForm.hasError('passwordMismatch')) {
+                <div>Passwords do not match</div>
+              }
+            </div>
+          }
+        </div>
+        <!-- <div>
+          <a [routerLink]="['/login']" class="text-slate-500 hover:underline">have an account!</a>
+        </div> -->
+        <button
+          type="submit"
+          class="w-full mt-3 rounded bg-[var(--primary-color)] px-4 py-2 font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
+          [disabled]="registerForm.invalid || isLoading"
+        >
+          @if(isLoading) {
+          <span
+            class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"
+          ></span>
+          <span role="status"> Singing up...</span>
+          } @else { Sign Up }
+        </button>
+      </form>
+    </section>
+    <!-- ... -->
+  </section>
+</div>
+
+}

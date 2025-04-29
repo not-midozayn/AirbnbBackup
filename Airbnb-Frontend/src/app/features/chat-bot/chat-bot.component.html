@@ -1,0 +1,94 @@
+<!-- Chat Button (Closed State) -->
+<div *ngIf="!isOpen" class="fixed bottom-4 right-4 cursor-pointer z-[12]" (click)="toggleChat()">
+    <div class="bg-[#FF385C] text-white rounded-lg p-4 flex items-center gap-2">
+        <i class="fas fa-comment"></i>
+        <span>Hi, How can I help?</span>
+    </div>
+</div>
+
+<!-- Chat Interface (Open State) -->
+<div *ngIf="isOpen" class="fixed bottom-4 right-4 w-96 bg-white rounded-lg shadow-xl border border-[#DDDDDD] z-[12]">
+    <!-- Chat Header -->
+    <div class="p-4 border-b flex justify-between items-center bg-[#FF385C] text-white rounded-t-lg cursor-pointer" (click)="toggleChat()">
+        <div>
+            <h3 class="font-semibold">Chat Assistant</h3>
+            <p class="text-sm text-gray-100">I'm powered by generative AI</p>
+        </div>
+        <i class="fas fa-times"></i>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="h-96 overflow-y-auto p-4">
+        <!-- Loading states -->
+        <div *ngIf="isLoadingConversation || isProcessingAudio" class="flex justify-center items-center h-full">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF385C]"></div>
+            <span class="ml-3 text-gray-600">
+                {{isProcessingAudio ? 'Processing audio message...' : 'Loading conversation...'}}
+            </span>
+        </div>
+
+        <!-- Messages -->
+        <div *ngFor="let message of messages" 
+             [ngClass]="{'flex justify-end': message.isFromUser, 'flex justify-start': !message.isFromUser}"
+             class="mb-4">
+            <div [ngClass]="{
+                'bg-[#FF385C] text-white': message.isFromUser,
+                'bg-[#F7F7F7] text-gray-900': !message.isFromUser
+            }"
+            class="max-w-[80%] rounded-lg p-3">
+                <div [innerHTML]="message.content | safeHtml" class="message-content"></div>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="!isLoadingConversation && !isProcessingAudio && (!messages || messages.length === 0)" 
+             class="text-center text-gray-500 mt-4">
+        </div>
+    </div>
+
+    <!-- Chat Actions -->
+    <div class="p-4 border-t border-[#DDDDDD]">
+        <div class="flex gap-2">
+            <a routerLink="/conversations" 
+               class="w-full px-4 py-2 text-[#484848] border border-[#DDDDDD] rounded-md hover:bg-[#F7F7F7] transition-colors">
+                <i class="far fa-clock mr-2"></i>
+                View all conversations
+            </a>
+            <button class="w-full px-4 py-2 text-[#484848] border border-[#DDDDDD] rounded-md hover:bg-[#F7F7F7] transition-colors"
+                    (click)="endConversation()">
+                <i class="fas fa-times mr-2"></i>
+                End Conversation
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="p-4 border-t border-[#DDDDDD]">
+        <div class="flex gap-2">
+            <input type="text" 
+                   id="chatInput"
+                   #chatInput
+                   [(ngModel)]="newMessage"
+                   (keyup.enter)="sendMessage()"
+                   placeholder="Type a Message"
+                   [disabled]="isProcessingAudio"
+                   class="flex-1 p-2 border border-[#DDDDDD] rounded-md focus:outline-none focus:border-[#FF385C]">
+            <button (click)="startRecording()" 
+                    *ngIf="!isRecording"
+                    [disabled]="isProcessingAudio"
+                    class="p-2 bg-[#FF385C] text-white rounded-md hover:bg-[#E31C5F] transition-colors disabled:opacity-50">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button (click)="stopRecording()" 
+                    *ngIf="isRecording"
+                    class="p-2 bg-[#E31C5F] text-white rounded-md hover:bg-[#FF385C] transition-colors animate-pulse">
+                <i class="fas fa-stop"></i>
+            </button>
+            <button (click)="sendMessage()"
+                    [disabled]="isProcessingAudio"
+                    class="p-2 bg-[#FF385C] text-white rounded-md hover:bg-[#E31C5F] transition-colors disabled:opacity-50">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>

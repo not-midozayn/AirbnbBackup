@@ -1,0 +1,91 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+:host ::ng-deep .p-datatable {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-header {
+  background-color: transparent;
+  border: none;
+  padding: 1rem;
+  color: rgb(0 0 0);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: transparent;
+  border: none;
+  padding: 1rem;
+  font-weight: 600;
+  color: rgb(0 0 0);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background-color: transparent;
+  border-bottom: 1px solid #eee;
+  color: rgb(0 0 0);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  padding: 1rem;
+  border: none;
+  color: rgb(0 0 0);
+}
+
+:host ::ng-deep .p-inputtext {
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border-radius: 24px;
+  border: 1px solid #ddd;
+  width: 300px;
+  font-size: 0.875rem;
+  background-color: transparent;
+  color: black;
+}
+
+:host ::ng-deep .p-input-icon-left > i {
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  z-index: 1;
+}
+
+:host ::ng-deep .p-button.p-button-outlined {
+  border-radius: 24px;
+  border-color: #ddd;
+  color: #222;
+}
+
+:host ::ng-deep .p-button.p-button-outlined:hover {
+  background-color: #f7f7f7;
+  border-color: #ddd;
+  color: #222;
+}
+
+:host ::ng-deep .custom-confirm-dialog .p-dialog {
+  background-color: white;
+}
+
+:host ::ng-deep .custom-confirm-dialog .p-dialog-header,
+:host ::ng-deep .custom-confirm-dialog .p-dialog-content,
+:host ::ng-deep .custom-confirm-dialog .p-dialog-footer {
+  background-color: white !important;
+  color: black !important;
+}
+
+:host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-icon {
+  color: black !important;
+}
+
+:host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-message {
+  color: black !important;
+  font-size: 1rem;
+}

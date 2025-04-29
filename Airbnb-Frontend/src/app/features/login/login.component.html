@@ -1,0 +1,105 @@
+@if(isModalOpen){
+  <!-- Modal Backdrop and Container -->
+  <div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-slate-600/50 bg-opacity-50 p-4"
+  (click)="closeModalOnBackdrop($event)">
+  <!-- Modal Content -->
+  <section
+    class="w-full max-w-md rounded-lg bg-white p-4 shadow-md"
+    (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <div class="flex justify-end">
+      <button
+        (click)="closeModal()"
+        class="rounded-full p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+        aria-label="Close"
+      >
+      <i class="fa-solid fa-xmark text-2xl"></i>
+      </button>
+    </div>
+
+    <!-- Rest of your form remains the same -->
+    <section class="mx-auto w-full max-w-md rounded-lg bg-white px-4 py-8 shadow-md">
+      <h1 class="mb-10 pb-2 text-center text-xl font-bold border-b-[1px] border-b-red-200">Login</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        @if(loginError) {
+          <div class="mb-4 text-center text-red-500">{{ loginError }}</div>
+        }
+        <div>
+          <!-- Generic error message at the bottom -->
+          @if(loginError) {
+            <small class="block py-2 text-center text-red-500">{{loginError}}</small>
+          }
+        </div>
+        <div class="mb-3 relative">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-1 focus:ring-slate-300"
+            [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          >
+          <label
+            for="email"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            Email
+          </label>
+          @if(loginForm.get('email')?.touched && loginForm.get('email')?.errors; as errors) {
+            <div class="mt-1 text-sm text-red-500">
+              @if(errors['required']) {
+                <div>Email is required</div>
+              }
+              @if(errors['email']) {
+                <div>Please enter a valid email</div>
+              }
+            </div>
+          }
+        </div>
+        <div class="mb-5 relative">
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="peer w-full rounded border px-3 pt-5 pb-2 focus:outline-none focus:ring-2 focus:focus:ring-slate-300"
+            [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          >
+          <label
+            for="password"
+            class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm"
+          >
+            Password
+          </label>
+          @if(loginForm.get('password')?.touched && loginForm.get('password')?.errors; as errors) {
+            <div class="mt-1 text-sm text-red-500">
+              @if(errors['required']) {
+                <div>Password is required</div>
+              }
+              @if(errors['pattern']) {
+                <div>Password must contain at least one uppercase letter, one number, and one special character</div>
+              }
+            </div>
+          }
+        </div>
+        <div>
+          <a [routerLink]="['/register']" class="text-slate-500 hover:underline">don't have an account!</a>
+        </div>
+        <button
+          type="submit"
+          class="w-full mt-3 rounded bg-[var(--primary-color)] px-4 py-2 font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          @if(isLoading) {
+            <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" aria-hidden="true"></span>
+            <span role="status"> Logging in...</span>
+          } @else {
+            Continue
+          }
+        </button>
+      </form>
+    </section>
+    <!-- ... -->
+  </section>
+</div>
+
+}

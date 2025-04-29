@@ -1,0 +1,100 @@
+.date-range-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.date-field-container {
+  width: 100%;
+}
+
+:host {
+  mat-form-field {
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .error-state {
+    animation: shake 0.4s ease-in-out;
+  }
+
+  ::ng-deep {
+    .mat-mdc-form-field {
+      width: 100%;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background-color: white;
+      transition: background-color 0.2s ease;
+    }
+
+    .mat-mdc-form-field-flex {
+      border-radius: 0.5rem;
+      border: 1px solid #D1D5DB;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 0.5rem 0;
+    }
+
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+      background-color: transparent;
+
+      &:hover {
+        background-color: rgba(243, 244, 246, 0.1);
+      }
+    }
+
+    .mat-mdc-form-field-error {
+      font-size: 0.875rem;
+      color: #DC2626;
+      opacity: 0;
+      transform: translateY(-5px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+
+      &.mat-mdc-form-field-error-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .mat-mdc-form-field.error-state .mat-mdc-form-field-flex {
+      border-color: #EF4444;
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2);
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      position: static;
+    }
+
+    .mat-mdc-checkbox.mat-accent {
+      --mdc-checkbox-selected-checkmark-color: #FFFFFF;
+      --mdc-checkbox-selected-focus-icon-color: #F43F5E;
+      --mdc-checkbox-selected-hover-icon-color: #F43F5E;
+      --mdc-checkbox-selected-icon-color: #F43F5E;
+      --mdc-checkbox-selected-pressed-icon-color: #F43F5E;
+      --mdc-checkbox-unselected-focus-icon-color: #6B7280;
+      --mdc-checkbox-unselected-hover-icon-color: #6B7280;
+      --mdc-checkbox-unselected-icon-color: #6B7280;
+      --mdc-checkbox-unselected-pressed-icon-color: #6B7280;
+    }
+
+    .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {
+      background-color: #F43F5E;
+      border-color: #F43F5E;
+    }
+
+    .mat-mdc-form-field.mat-focused .mat-mdc-form-field-flex {
+      border-color: #F43F5E;
+      box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.1);
+    }
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}

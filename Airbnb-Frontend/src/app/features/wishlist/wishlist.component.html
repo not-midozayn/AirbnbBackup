@@ -1,0 +1,16 @@
+<div class="p-4">
+  <h2 class="text-2xl font-semibold mb-4">Your Wishlist</h2>
+
+  <div *ngIf="wishlistListings.length === 0" class="text-gray-600">
+    No listings in your wishlist yet.
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <app-listing-card
+      *ngFor="let listing of wishlistListings"
+      [listingItem]="listing"
+      [isFavorite]="isInWishlist(listing.id)"
+      (toggleWishList)="removeFromWishlist(listing.id)">
+    </app-listing-card>
+  </div>
+</div>

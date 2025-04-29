@@ -1,0 +1,306 @@
+<header class="bg-white shadow-sm border-b border-[var(--border-color)] z-10 relative p-2">
+  <div class="max-w-[100rem] mx-auto">
+    <!-- Desktop Navigation -->
+    <div class="flex justify-between items-center h-28 px-4 sm:px-6 lg:px-8">
+      <!-- Logo -->
+      <a (click)="goHome()">
+        <div class="flex-shrink-0 flex items-center text-[var(--primary-color)] cursor-pointer">
+          <i class="fa-brands fa-airbnb text-4xl" ></i>
+          <span class="ml-2 font-bold text-xl hidden sm:block">airbnb</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <form class="hidden md:flex flex-1 justify-center mx-8">
+        <div class="relative max-w-4xl w-full">
+          <div
+            class="flex items-center justify-between h-16 bg-[var(--light-gray)] border border-[var(--border-color)] rounded-full shadow-sm hover:shadow-md transition-shadow duration-200">
+            <!-- Location Section -->
+            <div
+              class="h-full py-3 pl-5 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
+              <label for="location" class="block truncate">Anywhere</label>
+              <input type="text" id="location" class="w-36 outline-none p-1 bg-transparent"
+                placeholder="Search destination" [(ngModel)]="searchParams.location" name="location">
+            </div>
+            <span class="h-7 border-r border-[var(--border-color)]"></span>
+
+            <!-- Check-in Section -->
+            <div
+              class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
+              <label for="check-in" class="block truncate">Check in</label>
+              <input type="date" id="check-in" class="bg-transparent" [(ngModel)]="searchParams.checkIn" name="checkIn">
+            </div>
+            <span class="h-7 border-r border-[var(--border-color)]"></span>
+
+            <!-- Check-out Section -->
+            <div
+              class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
+              <label for="check-out" class="block truncate">Check out</label>
+              <input type="date" id="check-out" class="bg-transparent" [(ngModel)]="searchParams.checkOut"
+                name="checkOut">
+            </div>
+            <span class="h-7 border-r border-[var(--border-color)]"></span>
+
+            <!-- Guests Section -->
+            <div class="relative flex-1 h-full">
+              <div
+                class="py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 flex items-center justify-between w-full h-full rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
+                <button type="button" (click)="toggleGuestMenu($event)">
+                  <div>
+                    <h3 class="block truncate">Guests</h3>
+                    <span class="block truncate text-gray-500">{{ guestText }}</span>
+                  </div>
+                </button>
+                <button type="button" (click)="performSearch()"
+                  class="ml-2 p-2 bg-[var(--primary-color)] rounded-full text-[var(--light-gray)] w-10 h-10 flex items-center justify-center hover:shadow-md hover:bg-red-500 hover:transition-shadow duration-200">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </div>
+
+              <!-- Guest Selection Menu -->
+              <!-- <ng-container *ngTemplateOutlet="guestMenuTemplate"></ng-container> -->
+              <div *ngIf="isGuestMenuOpen && !isMobileSearchOpen"
+                class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-4 z-20">
+                <ng-container *ngTemplateOutlet="guestMenuTemplate"></ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- User Menu -->
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        @if(authService.currentUserSignal() && isHost()) {
+          <button routerLink="/hosting" [disabled]="isLoading"
+          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer">
+          @if(isLoading) {
+          <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"></span>
+          <span role="status"> loading ...</span>
+          } @else {
+            Switch to Host
+          }
+          </button>
+        }
+        @if(authService.currentUserSignal() && isAdmin()) {
+          <button routerLink="/dashboard" [disabled]="isLoading"
+          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer">
+          @if(isLoading) {
+          <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"></span>
+          <span role="status"> loading ...</span>
+          } @else {
+            Dashboard
+          }
+          </button>
+        }
+        @else if(authService.currentUserSignal() && isHost() == false && isAdmin() == false){
+          <button (click)="becomeAHost()" [disabled]="isLoading"
+          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer">
+          @if(isLoading) {
+          <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"></span>
+          <span role="status"> loading ...</span>
+          } @else {
+            Airbnb your home
+          }
+          </button>
+        }
+
+        <div class="relative">
+          <button
+            class="flex items-center gap-4 border border-[var(--border-color)] rounded-full px-4 py-2 shadow-sm hover:shadow-md cursor-pointer transition-shadow"
+            (click)="toggleUserMenu($event)">
+            <i class="fa-solid fa-bars text-black"></i>
+            <i class="fa-regular fa-circle-user text-2xl text-black"  ></i>
+            <!-- <img [src]="" class="fa-regular fa-circle-user text-2xl text-black"  /> -->
+          </button>
+
+          <!-- User dropdown menu -->
+          <div *ngIf="isUserMenuOpen"
+            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
+            @if(authService.currentUserSignal() == null){
+            <div class="py-2">
+              <a (click)="openRegisterModal()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-medium">Sign
+                up</a>
+              <a (click)="openLoginModal()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log in</a>
+            </div>
+            }
+            @else {
+            <div class="py-2">
+              <a (click)="logout()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log Out</a>
+            </div>
+            }
+            <hr>
+            <div class="py-2">
+              @if(authService.currentUserSignal() && isAdmin()) {
+                <button routerLink="/dashboard" [disabled]="isLoading"
+                class=" w-full text-start px-4 py-2 text-gray-800 hover:bg-gray-100">
+                @if(isLoading) {
+                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                  aria-hidden="true"></span>
+                <span role="status"> loading ...</span>
+                } @else {
+                  Dashboard
+                }
+                </button>
+              }
+              @if(authService.currentUserSignal() && isHost()) {
+                <button routerLink="/hosting" [disabled]="isLoading"
+                class=" w-full text-start px-4 py-2 text-gray-800 hover:bg-gray-100">
+                @if(isLoading) {
+                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                  aria-hidden="true"></span>
+                <span role="status"> loading ...</span>
+                } @else {
+                  Switch to Host
+                }
+                </button>
+              }
+              @else if(authService.currentUserSignal() && isHost() == false && isAdmin() == false){
+                <button (click)="becomeAHost()" [disabled]="isLoading"
+                class=" w-full text-start py-2 text-gray-800 hover:bg-gray-100">
+                @if(isLoading) {
+                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                  aria-hidden="true"></span>
+                <span role="status"> loading ...</span>
+                } @else {
+                  Airbnb your home
+                }
+                </button>
+              }
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/wishlist">WishList</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/Account">Account</a>
+              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Help</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Search Trigger -->
+    <div class="md:hidden px-4 pb-4">
+      <div class="relative">
+        <div
+          class="flex items-center h-14 bg-[var(--light-gray)] border border-[var(--border-color)] rounded-full shadow-sm hover:shadow-md transition-shadow duration-200 px-4">
+          <i class="fa-solid fa-magnifying-glass text-[var(--primary-color)] mr-2"></i>
+          <div class="flex-1">
+            <div class="text-sm font-medium">{{ searchParams.location || 'Anywhere' }}</div>
+            <div class="text-xs text-gray-500 truncate">
+              <span>{{ searchParams.checkIn ? (searchParams.checkIn | date) : 'Any week' }}</span>
+              <span class="mx-1">·</span>
+              <span>{{ guestText }}</span>
+            </div>
+          </div>
+        </div>
+        <button class="absolute inset-0 w-full h-full rounded-full opacity-0"
+          (click)="openMobileSearch($event)"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Search Modal -->
+  <div *ngIf="isMobileSearchOpen" class="fixed inset-0 bg-white z-50 overflow-y-auto pt-4">
+    <div class="px-4">
+      <!-- Search Input -->
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-[var(--primary-color)]"></i>
+        <input type="text" class="w-full h-14 pl-12 pr-4 border border-[var(--border-color)] rounded-full shadow-sm"
+          placeholder="Where are you going?" [(ngModel)]="searchParams.location">
+      </div>
+
+      <!-- Date Pickers -->
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <div class="border border-[var(--border-color)] rounded-lg p-3">
+          <label class="block text-xs font-medium">Check in</label>
+          <input type="date" class="w-full outline-none" [(ngModel)]="searchParams.checkIn">
+        </div>
+        <div class="border border-[var(--border-color)] rounded-lg p-3">
+          <label class="block text-xs font-medium">Check out</label>
+          <input type="date" class="w-full outline-none" [(ngModel)]="searchParams.checkOut">
+        </div>
+      </div>
+
+      <!-- Guests Selector -->
+      <div class="mt-4 border border-[var(--border-color)] rounded-lg p-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="font-medium">Guests</h3>
+            <p class="text-sm text-gray-500">{{ guestText }}</p>
+          </div>
+          <button type="button" class="p-2 bg-[var(--primary-color)] rounded-full text-white"
+            (click)="showGuestMenuInMobile()">
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Button -->
+      <div class="mt-6">
+        <button class="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-medium"
+          (click)="performSearch()">
+          Search
+        </button>
+      </div>
+
+      <!-- Close Button -->
+      <button class="absolute top-4 right-4 p-2" (click)="closeMobileSearch()">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Guest Menu for Mobile (Only shown when showMobileGuestMenu is true) -->
+    <!-- <div *ngIf="showMobileGuestMenu" class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto"> -->
+    <div *ngIf="isGuestMenuOpen && isMobileSearchOpen" class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <button class="p-2 rounded-full hover:bg-gray-100" (click)="hideGuestMenuInMobile()">
+          <i class="fa-solid fa-chevron-left text-xl"></i>
+        </button>
+        <h2 class="font-medium">Who's coming?</h2>
+        <div class="w-8"></div>
+      </div>
+
+      <ng-container *ngTemplateOutlet="guestMenuTemplate"></ng-container>
+
+      <button
+        class="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-medium mt-4 fixed bottom-4 left-4 right-4"
+        (click)="hideGuestMenuInMobile()">
+        Done
+      </button>
+    </div>
+  </div>
+
+  <ng-template #guestMenuTemplate>
+    <div [class.absolute]="!isMobileSearchOpen" [class.right-0]="!isMobileSearchOpen" [class.mt-2]="!isMobileSearchOpen"
+      [class.w-80]="!isMobileSearchOpen" [class.bg-white]="!isMobileSearchOpen" [class.rounded-lg]="!isMobileSearchOpen"
+      [class.shadow-lg]="!isMobileSearchOpen" [class.border]="!isMobileSearchOpen"
+      [class.border-gray-200]="!isMobileSearchOpen" [class.py-4]="!isMobileSearchOpen"
+      [class.z-20]="!isMobileSearchOpen" class="px-4 py-2">
+
+      <ng-container *ngFor="let type of guestTypes; let i = index">
+        <div class="flex justify-between items-center py-3" [class.border-t]="i > 0">
+          <div>
+            <h4 class="font-medium">{{ type.label }}</h4>
+            <p class="text-sm text-gray-500">{{ type.description }}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button type="button" (click)="updateGuests(type.key, -1)" [disabled]="isDecrementDisabled(type.key)"
+              class="w-8 h-8 rounded-full border flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span>{{ guests[type.key] }}</span>
+            <button type="button" (click)="updateGuests(type.key, 1)" [disabled]="isIncrementDisabled(type.key)"
+              class="w-8 h-8 rounded-full border flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <div *ngIf="getTotalPeople() >= 16" class="pt-2 text-sm text-red-500">
+        Maximum 16 guests (adults + children) allowed
+      </div>
+    </div>
+  </ng-template>
+
+</header>

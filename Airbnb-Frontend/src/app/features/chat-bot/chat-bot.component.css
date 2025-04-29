@@ -1,0 +1,107 @@
+.message-content {
+    line-height: 1.6;
+    word-wrap: break-word;
+  }
+
+.message-content h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    color: inherit;
+}
+
+.message-content h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0.75rem 0;
+    color: inherit;
+}
+
+.message-content h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    color: inherit;
+}
+
+.message-content p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.message-content .numbered-list {
+    margin: 0.25rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.message-content p + p {
+    margin-top: 1rem;
+}
+
+.message-content pre {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.message-content code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+.message-content ul, 
+.message-content ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.message-content li {
+    margin: 0.25rem 0;
+  }
+
+.message-content ul li {
+    list-style-type: disc;
+    margin: 0.25rem 0;
+    padding-left: 0.5rem;
+}
+
+.message-content ol li {
+    list-style-type: decimal;
+    margin: 0.25rem 0;
+    padding-left: 0.5rem;
+}
+
+.message-content a {
+    color: #0366d6;
+    text-decoration: underline;
+}
+
+.message-content strong {
+    font-weight: 600;
+}
+
+.message-content em {
+    font-style: italic;
+}
+
+/* Adjust colors for user messages */
+.bg-FF385C .message-content code,
+.bg-FF385C .message-content pre {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+}
+
+.bg-FF385C .message-content a {
+    color: white;
+    text-decoration: underline;
+}
+
