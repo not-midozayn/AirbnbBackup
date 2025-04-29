@@ -4,6 +4,7 @@ import { User } from '../../core/models/user';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { ImagesService } from '../../core/services/images.service';
 
 interface PersonalInfoField {
   name: string;
@@ -38,10 +39,11 @@ export class PersonalInfoComponent {
 
   personalInfoSections: PersonalInfoSection[] = [];
 
-  constructor(private _PersonalInfoService: PersonalInfoService) {}
+  constructor(private _PersonalInfoService: PersonalInfoService , private _ToastrService:ToastrService , public _ImagesService:ImagesService) {}
 
   ngOnInit(): void {
     this.getMyPersonalInfo();
+    this.getProfilePicture();
   }
 
   getMyPersonalInfo() {
@@ -207,4 +209,72 @@ export class PersonalInfoComponent {
       }
     });
   }
+
+
+
+
+
+
+
+
+  selectedFile: File | null = null;
+  previewImage: string | null = null; 
+
+  getProfilePicture() {
+    this._PersonalInfoService.getMyPersonalInfo().subscribe(
+      (response) => {
+        this.previewImage = response.profilePictureUrl; 
+      },
+      (error) => {
+        console.error('Error loading profile picture', error);
+      }
+    );
+  }
+
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      // Check if the file is an image
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+  
+      if (!allowedTypes.includes(file.type)) {
+        this._ToastrService.error('Only images are allowed (JPG, JPEG, PNG, WEBP)', 'Invalid File');
+        return;
+      }
+  
+      this.selectedFile = file;
+  
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          this.previewImage = reader.result; // هنا بستخدمها علطول من غير اجيبها من _ImagesService
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
+
+
+  onSubmit() {
+   if (this.selectedFile) {
+      this._PersonalInfoService.changeProfilePicture(this.selectedFile).subscribe(
+        (response) => {
+          console.log('Profile picture uploaded successfully', response);
+          this._ToastrService.success("Profile Picture Uploaded ","Success")
+          this.previewImage= this._ImagesService.getImageUrl(response.profilePictureUrl);
+          
+          // localStorage.setItem("profilePic",this.previewImage)
+        },
+        (error) => {
+          this._ToastrService.error("You Should Upload A Picture","Fail")
+          console.error('Error uploading profile picture', error);
+        }
+      );
+    }
+  }
+
+
+
 }

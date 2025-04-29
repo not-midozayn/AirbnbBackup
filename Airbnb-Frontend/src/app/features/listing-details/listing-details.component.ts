@@ -18,6 +18,8 @@ import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 import { ActivatedRoute } from '@angular/router';
 import { ReservationCardComponent } from '../reservation-card/reservation-card.component';
+import { LeafletMapComponent } from '../leaflet-map/leaflet-map.component';
+import { ImagesService } from '../../core/services/images.service';
 
 
 interface RatingCategory {
@@ -34,6 +36,7 @@ interface RatingCategory {
     DividerModule,
     ButtonModule,
     ProgressBarModule,
+    LeafletMapComponent,
     ReservationCardComponent,
 ],
   templateUrl: './listing-details.component.html',
@@ -44,7 +47,8 @@ export class ListingDetailsComponent
 {
   constructor(
     private listingsService: ListingsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+     public imgsService: ImagesService
   ) {}
     // unavailableDates: Date[] = [];
     // checkIn: Date | null = null;
@@ -62,8 +66,8 @@ export class ListingDetailsComponent
   responsiveOptions!: any[];
   visibleAmenities: any[] = [];
   visibleReviews: any[] = [];
-  defaultVisibleCount: number = 1;
-  defaultVisibleReviewsCount: number = 4;
+  defaultVisibleCount: number = 3;
+  defaultVisibleReviewsCount: number = 3;
   ratingCategories: RatingCategory[] = [];
 
    ngOnInit(): void {

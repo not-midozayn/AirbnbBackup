@@ -1,23 +1,36 @@
 
 
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Listing } from './../../core/models/Listing';
-import { RouterLink } from '@angular/router';
-import { Toast, ToastModule } from 'primeng/toast';
+import { Router, RouterLink } from '@angular/router';
 import { ImagesService } from '../../core/services/images.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+ import { AuthStatusService } from '../../core/services/auth-status-service.service';
+import { AvailabilityCalendarService } from '../../core/services/availability-calendar.service';
 
 
 @Component({
   selector: 'app-listing-card',
   standalone: true,
-  imports:[CommonModule , RouterLink ,Toast,ToastModule ],
+  imports:[CommonModule , RouterLink  ],
   templateUrl: './listing-card.component.html',
   styleUrls: ['./listing-card.component.css']
 })
 export class ListingCardComponent {
-  constructor(public imgsService: ImagesService) { }
+  constructor(public imgsService: ImagesService , public router:Router , private _ToastrService:ToastrService , private authStatusService:AuthStatusService , public _AvailabilityCalendarService:AvailabilityCalendarService) { 
+ 
+    effect(() => {
+      const isLoggedIn = this.authStatusService.isLoggedInSignal();
+      if (isLoggedIn) {
+        // لو حصل login
+        // this.reloadToken();  // أو أي فانكشن انت عايزها
+        this.token=localStorage.getItem("accessToken")
+      }
+    });
+  }
   
+  token : any
   @Input() listingItem: Listing = {} as Listing;
   hover: boolean = false;
   currentImageIndex = 0;
@@ -35,11 +48,21 @@ export class ListingCardComponent {
   Router: any;
 
   toggleFavorite(event: Event) {
+    this.token = localStorage.getItem("accessToken")
+     if(this.token){
     event.preventDefault(); // إضافة هذه السطر لمنع السلوك الافتراضي
     event.stopPropagation(); // لمنع انتشار الحدث
     this.isFavorite = !this.isFavorite;
     this.toggleWishList.emit(this.listingItem.id);
     console.log('Favorite status:', this.isFavorite); // للتأكد من أن الدالة تعمل
+  }
+  else{
+    this.isFavorite = this.isFavorite;
+    this._ToastrService.info("you should LogIn First" , "Attention")
+    console.log("you must login")
+    event.preventDefault();
+    event.stopPropagation();
+  }
   }
 
 
@@ -63,15 +86,26 @@ export class ListingCardComponent {
   // Format the date as "jun 14-17"
   getFormattedDate(): string {
     // console.log(this.listingItem.createdAt)
-    const apiDate=this.listingItem.createdAt;
+
+    let startDate = new Date(); // June 14
+    const endDate = new Date(); // June 17
+
+    this._AvailabilityCalendarService.getAvailabilityCalendarOfListing(this.listingItem.id).subscribe(
+      (data) => {
+      startDate=data.filter((item) => item.isAvailable === true)[0].date
+    })
+
+    // startDate= new Date(startDate); // June 14
+    const apiDate=startDate;
     const dateObj = new Date(apiDate);
 
     const year=dateObj.getFullYear();
     const month=dateObj.getMonth();
     const day=dateObj.getDate();
 
-    const startDate = new Date(year, month, day); // June 14
-    const endDate = new Date(year, month, day); // June 17
+
+
+
 
     const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
 

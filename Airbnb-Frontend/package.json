@@ -37,6 +37,7 @@
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "ng2-charts": "^5.0.4",
+    "ngx-infinite-scroll": "^19.0.0",
     "ngx-toastr": "^19.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.10",

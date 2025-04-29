@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Listing } from '../models/Listing';
 import { catchError, map, Observable, of, tap } from 'rxjs';
@@ -6,6 +5,12 @@ import { PropertyType } from '../models/PropertyType';
 import { RoomType } from '../models/RoomType';
 import { Amenity } from '../models/Amenity';
 import { NewListing } from '../models/NewListing';
+import { HttpClient, HttpParams } from '@angular/common/http';
+
+interface SuggestionsDTO {
+  value: string;
+  type: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +21,28 @@ export class ListingsService {
   hostDraftsSignal = signal<Listing[]>([]);
   constructor(private http : HttpClient) { }
 
-  getListings() {
-    return this.http.get<Listing[]>(`${this.apiUrl}/Listings`);
+
+  getListings(queryParams : {[key:string]:any} = {}) {
+ 
+    let params = new HttpParams();
+    Object.entries(queryParams).forEach(([key,value])=>{
+      if(value){
+        params=params.set(key,value);
+      }
+    });
+
+    return this.http.get<Listing[]>(`${this.apiUrl}/Listings`,{params});
   }
+
+
+  getListingsSuggestions(query:string):Observable<string[]>{
+    console.log('Calling API with query:', query);
+    return  this.http.get<SuggestionsDTO[]>(`${this.apiUrl}/Listings/suggestions`,{params:{query}})
+    .pipe(
+      map(suggestions => suggestions.map(s => s.value))
+    );
+  }
+  
 
   getPropertyTypes() {
     return this.http.get<PropertyType[]>(`${this.apiUrl}/PropertyTypes`);

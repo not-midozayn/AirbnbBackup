@@ -27,4 +27,13 @@ export class PersonalInfoService {
   changeMyPersonalData(user:User):Observable<any>{
     return this._HttpClient.put('https://localhost:7200/api/users/me',user)
   }
+
+  changeProfilePicture(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    return this._HttpClient.post('https://localhost:7200/api/users/me/profile-picture', formData);
+  }
+
+
 }
