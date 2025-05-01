@@ -78,7 +78,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           this.isLoading = false;
           this.closeModal();
-          this.router.navigate(['/home']);
+          // this.router.navigate(['/home']).then(() => {
+          //   window.location.reload();
+          // });
         },
         error: (error) => {
           this.loginError = error.error.message;

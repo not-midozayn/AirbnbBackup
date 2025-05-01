@@ -2,11 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonalInfoService {
+  private profilePictureUpdatedSource = new BehaviorSubject<boolean>(false);
+  profilePictureUpdated$ = this.profilePictureUpdatedSource.asObservable();
+
+  notifyProfilePictureUpdated() {
+    this.profilePictureUpdatedSource.next(true);
+  }
 
   constructor(private _HttpClient:HttpClient) { }
 
@@ -31,9 +38,6 @@ export class PersonalInfoService {
   changeProfilePicture(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file, file.name);
-
     return this._HttpClient.post('https://localhost:7200/api/users/me/profile-picture', formData);
   }
-
-
 }

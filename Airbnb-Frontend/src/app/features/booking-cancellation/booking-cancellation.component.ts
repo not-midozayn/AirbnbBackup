@@ -29,7 +29,7 @@ export class BookingCancellationComponent implements OnInit {
   cancellationReason: string = '';
   isLoading: boolean = false;
   cancellationPolicy: string = '';
-  refundAmount: number = 0;
+  refundAmount!: number;
 
   constructor(
     public dialogRef: MatDialogRef<BookingCancellationComponent>,

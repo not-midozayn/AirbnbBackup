@@ -135,13 +135,27 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-    this.authService.isLoggedInSubject.subscribe((isLoggedIn) => {
+    this.authService.loginStatus$.subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         this.getProfilePicture();
       }
+      // ngOnInit(): void {
+      //   this.authService.loginStatus$.subscribe((isLoggedIn) => {
+      //     if (isLoggedIn) {
+      //       this.getProfilePicture();
+      //     }
+      //   });
+      // }
+
+
     });
-    this.getProfilePicture();
-  }
+    this._PersonalInfoService.profilePictureUpdated$.subscribe((updated) => {
+      if (updated) {
+        this.getProfilePicture();
+      }
+    // this.getProfilePicture();
+  })
+}
 
   // ngOnChanges(changes: SimpleChange) {
   //     this.getProfilePicture();

@@ -128,7 +128,7 @@ export class DateRangePickerComponent implements OnInit, OnDestroy {
           this.dateRangeService.setEndDate(normalizedEndDate);
         }
 
-        if (range.startDate && range.endDate && !this.formErrors['dateRange']) {
+        if (range.startDate && range.endDate && !this.formErrors['dateRange']&& this.listingId) {
           // Check availability before emitting range
           if (!this.isOwner) {
             this.availabilityService.checkAvailabilityOfListing(
@@ -157,6 +157,22 @@ export class DateRangePickerComponent implements OnInit, OnDestroy {
             this.emitValidRange({
               startDate: range.startDate!,
               endDate: range.endDate!
+            });
+          }
+        }
+        else if (range.startDate && range.endDate && !this.formErrors['dateRange']&& !this.listingId) {
+          this.rangeSelected.emit({
+            startDate: range.startDate,
+            endDate: range.endDate
+          });
+
+          if (this.isOwner) {
+            this.availabilitySet.emit({
+              range: {
+                startDate: range.startDate,
+                endDate: range.endDate
+              },
+              isAvailable: this.selectedAvailability
             });
           }
         }
