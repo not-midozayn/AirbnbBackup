@@ -86,7 +86,7 @@ namespace WebApplication1.Controllers
         [Authorize]
         public async Task<ActionResult<GetBookingDTO>> GetBookingById(Guid id)
         {
-            var booking = await _bookingRepository.GetByIDAsync(id);
+            var booking = await _bookingRepository.GetByIDAsync(id,includeProperties);
             if (booking == null)
                 return NotFound();
             var bookingDTO = _mapper.Map<GetBookingDTO>(booking);
