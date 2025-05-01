@@ -5,6 +5,8 @@ import { ModalService } from '../../core/services/modal.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { ResponseUser } from '../../core/models/responseUser';
+import { AppComponent } from '../../app.component';
+ import { HeaderComponent } from '../../shared/components/header/header.component';
 
 
 @Component({
@@ -19,7 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isModalOpen = false;
   subscription: Subscription = new Subscription();
   loginError: string | null = null;
-  constructor(private fb: FormBuilder, private router: Router, private modalService: ModalService, private authService: AuthService) {}
+  constructor(private fb: FormBuilder, private router: Router, private modalService: ModalService, private authService: AuthService  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -60,6 +62,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           console.log(response);
           localStorage.setItem('accessToken', (response.accessToken));
           localStorage.setItem('refreshToken', (response.refreshToken));
+          this.authService.isLoggedIn = true;
+          this.authService.isLoggedInSubject.next(true);
           this.isLoading = false;
 
           console.log("token data: ",this.authService.getAccessTokenData());
@@ -84,7 +88,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           } else {
             this.loginError = 'An error occurred during login. Please try again.';
           }
-          console.error('Login error:', error);
         }
       })
     );

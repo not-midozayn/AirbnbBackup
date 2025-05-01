@@ -2,9 +2,9 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div class="date-field-container">
       <mat-form-field appearance="fill" class="w-full" [class.error-state]="dateRange.get('startDate')?.errors">
-        <mat-label>Start Date</mat-label>
+        <mat-label>{{ dateRange.get('startDate')?.value ? (dateRange.get('startDate')?.value | date) : 'Start Date' }}</mat-label>
         <input matInput [matDatepicker]="startDatePicker" [min]="minDate" [matDatepickerFilter]="dateFilter"
-          formControlName="startDate" placeholder="Choose a date">
+          formControlName="startDate" [placeholder]="dateRange.get('startDate')?.value ? '' : 'Choose a date'">
         <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #startDatePicker></mat-datepicker>
         <mat-error *ngIf="dateRange.get('startDate')?.errors?.['required']">
@@ -18,9 +18,9 @@
 
     <div class="date-field-container">
       <mat-form-field appearance="fill" class="w-full" [class.error-state]="dateRange.get('endDate')?.errors">
-        <mat-label>End Date</mat-label>
+        <mat-label>{{ dateRange.get('endDate')?.value ? (dateRange.get('endDate')?.value | date) : 'End Date' }}</mat-label>
         <input matInput [matDatepicker]="endDatePicker" [min]="dateRange.get('startDate')?.value || minDate"
-          [matDatepickerFilter]="dateFilter" formControlName="endDate" placeholder="Choose a date">
+          [matDatepickerFilter]="dateFilter" formControlName="endDate" [placeholder]="dateRange.get('endDate')?.value ? '' : 'Choose a date'">
         <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #endDatePicker></mat-datepicker>
         <mat-error *ngIf="dateRange.get('endDate')?.errors?.['required']">

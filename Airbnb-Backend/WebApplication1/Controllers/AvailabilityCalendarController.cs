@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
 
         #region Initialize availability
         [HttpPost("listings/{listingId}/init")]
-        [Authorize(Roles = $"{UserRoles.Host}")]
+        //[Authorize(Roles = $"{UserRoles.Host}")]
         public async Task<IActionResult> InitializeAvailability(Guid listingId, [FromBody] InitAvailabilityCalendarDTO dto)
         {
             try
@@ -84,7 +84,7 @@ namespace WebApplication1.Controllers
 
         #region Get Methods
         [HttpGet("listings/{listingId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IEnumerable<GetAvailabilityCalendarDTO>>> GetAvailabilityByListingId(Guid listingId)
         {
             try
@@ -103,7 +103,7 @@ namespace WebApplication1.Controllers
             }
         }
         [HttpGet("listings/{listingId}/date/{date}")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<GetAvailabilityCalendarDTO>> GetAvailabilityByListingIdAndDate(Guid listingId, DateTime date)
         {
             try
@@ -128,7 +128,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("listings/{listingId}/available")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IEnumerable<GetAvailabilityCalendarDTO>>> GetAvailablabiltyForListings(Guid listingId, [FromQuery] DateTime startDate, [FromQuery] DateTime? endDate = null)
         {
             if (endDate < startDate)
