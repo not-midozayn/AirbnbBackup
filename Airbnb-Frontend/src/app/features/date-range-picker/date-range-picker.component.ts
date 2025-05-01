@@ -156,4 +156,9 @@ export class DateRangePickerComponent implements OnInit {
       reserved.getDate() === date.getDate()
     );
   }
+
+  clearDateRange(){
+    this.dateRange.reset();
+    this.formErrors = {};
+  }
 }

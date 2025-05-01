@@ -1,10 +1,11 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, of, Subject, switchMap } from 'rxjs';
 import { ListingsService } from '../../core/services/listings.service';
 import { CommonModule } from '@angular/common';
 import { ScrollService } from '../../core/services/scroll-service.service';
 import { ToastrService } from 'ngx-toastr';
+import { DateRangePickerComponent } from '../date-range-picker/date-range-picker.component';
 
 
 interface GuestCount {
@@ -31,18 +32,26 @@ interface SearchParams {
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule , DateRangePickerComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
 
 export class SearchComponent implements OnInit , OnChanges {
-
+  @ViewChild(DateRangePickerComponent) public dateRangePicker!: DateRangePickerComponent;
   highlightedIndex: number = -1;
  @Input() Location ='';
- @Input()startDate = '';
- @Input()endDate = '';
+//  @Input()startDate = '';
+//  @Input()endDate = '';
  @Input() Capacity=0;
+
+ @Input() startDate: any = null;
+@Input() endDate: any = null;
+
+onDateRangeSelected(range: { startDate: Date, endDate: Date }) {
+  this.startDate = range.startDate;
+  this.endDate = range.endDate;
+}
 
   suggestions: string[] = [];
   showSuggestions: boolean = false;
@@ -97,19 +106,28 @@ export class SearchComponent implements OnInit , OnChanges {
   }
   
 
-  onSearch()   {
-    this._ScrollService.stopScroll();
 
-
-
-
-    this.searchChanged.emit({
-      Location:this.Location,
-      startDate: this.startDate,
-      endDate: this.endDate,
-      Capacity :this.getTotalPeople() 
-    })
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
+  
+  onSearch() {
+    this._ScrollService.stopScroll();
+  
+    const formattedStartDate = this.startDate ? this.formatDate(this.startDate) : '';
+    const formattedEndDate = this.endDate ? this.formatDate(this.endDate) : '';
+  
+    this.searchChanged.emit({
+      Location: this.Location,
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+      Capacity: this.getTotalPeople()
+    });
+  }
+  
 
   clearInputs() {
     this.Location = '';

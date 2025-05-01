@@ -1,4 +1,4 @@
-<!-- Search Bar -->
+      <!-- Search Bar -->
  <form class="hidden md:flex flex-1 justify-center mx-8" >
     <div class="relative max-w-4xl w-full " >
       <div
@@ -19,9 +19,9 @@
           (focus)="showInitialSuggestions()"
         />
 
-
+        
         <ul
-
+        
           *ngIf=" showSuggestions"
           class="absolute left-0 mt-2 w-100 max-h-60 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-xl z-50 divide-y divide-gray-100"
         >
@@ -38,20 +38,27 @@
         <span class="h-7 border-r border-[var(--border-color)]"></span>
 
         <!-- Check-in Section -->
-        <div
+        <!-- <div
           class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
           <label for="check-in" class="block truncate">Check in</label>
           <input type="date"  id="check-in" class="bg-transparent"  name="checkIn" [(ngModel)]="startDate" >
         </div>
-        <span class="h-7 border-r border-[var(--border-color)]"></span>
+        <span class="h-7 border-r border-[var(--border-color)]"></span> -->
 
         <!-- Check-out Section -->
-        <div
+        <!-- <div
           class="h-full py-3 px-3 text-left font-medium text-sm text-[var(--text-color)] flex-1 min-w-0 rounded-full hover:shadow-md hover:bg-[var(--border-color)] transition-shadow duration-200">
           <label for="check-out" class="block truncate">Check out</label>
-          <input type="date" id="check-out" class="bg-transparent"
+          <input type="date" id="check-out" class="bg-transparent" 
             name="checkOut"  [(ngModel)]="endDate" >
-        </div>
+        </div> -->
+
+
+
+        <app-date-range-picker
+        (rangeSelected)="onDateRangeSelected($event)"
+        [selectedRange]="{ startDate: startDate, endDate: endDate }"
+      ></app-date-range-picker>
         <span class="h-7 border-r border-[var(--border-color)]"></span>
 
         <!-- Guests Section -->
@@ -61,7 +68,7 @@
             <button type="button" (click)="toggleGuestMenu($event)" >
               <div>
                 <h3 class="block truncate">Guests</h3>
-                <span class="block truncate text-gray-500" name="capacity" [(ngModel)]="Capacity">{{getTotalPeople() + " Guests"}}</span>
+                <span class="block truncate text-gray-500" [(ngModel)]="Capacity">{{getTotalPeople() + " Guests"}}</span>
               </div>
             </button>
             <button type="button"
@@ -81,7 +88,7 @@
 
 
 
-
+          
   <ng-template #guestMenuTemplate>
     <div [class.absolute]="!isMobileSearchOpen" [class.right-0]="!isMobileSearchOpen" [class.mt-2]="!isMobileSearchOpen"
       [class.w-80]="!isMobileSearchOpen" [class.bg-white]="!isMobileSearchOpen" [class.rounded-lg]="!isMobileSearchOpen"
@@ -117,7 +124,7 @@
 
 
 
-
+  
         </div>
       </div>
     </div>
@@ -126,3 +133,4 @@
 
 
 
+  
