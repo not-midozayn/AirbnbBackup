@@ -66,7 +66,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public loadWishlist() {
     this._wishListService.getAllWishlists().subscribe({
       next: (wishes) => {
-        console.log(wishes);
         this.wishList = wishes.wishlistItems.map((item: any) => item.listingId);
       },
       error: (err) => {
@@ -89,7 +88,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Load property types
     this._propertyTypeService.getAllPropertyTypes().subscribe({
       next: (p) => {
-        console.log(p);
       },
       error: (err) => {
         console.error(err);
@@ -131,7 +129,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .getListings(queryParams)
       .subscribe({
         next: (data) => {
-          this.listingItems = data;
+          this.listingItems = data.filter(listing => listing.verificationStatusId == 3);
           this.loading = false;
         },
         error: (err) => {
@@ -146,7 +144,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       .getListings((this.paginationParams = { pageNumber: this.currentPage }))
       .subscribe({
         next: (data) => {
-          this.listingItems = [...this.listingItems, ...data];
+          let filteredData = data.filter(listing => listing.verificationStatusId == 3);
+          this.listingItems = [...this.listingItems, ...filteredData];
         },
         error: (err) => {
           this.error = 'Failed to pagination';

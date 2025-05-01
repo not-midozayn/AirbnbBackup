@@ -88,7 +88,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           } else {
             this.loginError = 'An error occurred during login. Please try again.';
           }
-          console.error('Login error:', error);
         }
       })
     );

@@ -4,15 +4,55 @@
     <span class="per-night">night</span>
   </div>
 
-  <app-date-range-picker
-    [listingId]="listingId"
-    [selectedRange]="selectedDateRange"
-    [isOwner]="false"
-    (rangeSelected)="onDateRangeSelected($event)">
-  </app-date-range-picker>
+  <div class="date-range-section">
+    <mat-form-field appearance="fill" class="date-field">
+      <mat-label>Check-in</mat-label>
+      <input
+        matInput
+        [min]="minDate"
+        [max]="maxDate"
+        [matDatepicker]="checkinPicker"
+        [matDatepickerFilter]="dateFilter"
+        [(ngModel)]="selectedDateRange.startDate"
+        (dateChange)="onDateChange('start', $event)"
+      />
+      <mat-hint>Available from {{ minDate | date }}</mat-hint>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="checkinPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #checkinPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="date-field">
+      <mat-label>Check-out</mat-label>
+      <input
+        matInput
+        [min]="selectedDateRange.startDate || minDate"
+        [max]="maxDate"
+        [matDatepicker]="checkoutPicker"
+        [matDatepickerFilter]="dateFilter"
+        [(ngModel)]="selectedDateRange.endDate"
+        (dateChange)="onDateChange('end', $event)"
+      />
+      <mat-hint>Available until {{ maxDate | date }}</mat-hint>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="checkoutPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #checkoutPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="listing" class="text-sm text-gray-600 mt-10">
+    <p>Minimum stay: {{ listing.minNights }} night{{ listing.minNights !== 1 ? 's' : '' }}</p>
+    <p>Maximum stay: {{ listing.maxNights }} night{{ listing.maxNights !== 1 ? 's' : '' }}</p>
+  </div>
 
   <div *ngIf="dateRangeErrors.length > 0" class="error-messages">
-    <p *ngFor="let error of dateRangeErrors" class="error-message">{{ error }}</p>
+    <p *ngFor="let error of dateRangeErrors" class="error-message">
+      {{ error }}
+    </p>
   </div>
 
   <div class="guest-section">
@@ -21,7 +61,11 @@
         <div class="label">GUESTS</div>
         <div class="selected-guests">{{ getGuestsText() }}</div>
       </div>
-      <i class="fas" [class.fa-chevron-up]="isGuestPopupOpen" [class.fa-chevron-down]="!isGuestPopupOpen"></i>
+      <i
+        class="fas"
+        [class.fa-chevron-up]="isGuestPopupOpen"
+        [class.fa-chevron-down]="!isGuestPopupOpen"
+      ></i>
     </div>
 
     <div class="guest-popup" *ngIf="isGuestPopupOpen">
@@ -32,9 +76,19 @@
           <div class="guest-sublabel">Age 13+</div>
         </div>
         <div class="counter">
-          <button [disabled]="guests.adults <= 1" (click)="updateGuestCount('adults', -1)">-</button>
+          <button
+            [disabled]="guests.adults <= 1"
+            (click)="updateGuestCount('adults', -1)"
+          >
+            -
+          </button>
           <span>{{ guests.adults }}</span>
-          <button [disabled]="getTotalGuests() >= maxGuests" (click)="updateGuestCount('adults', 1)">+</button>
+          <button
+            [disabled]="getTotalGuests() >= maxGuests"
+            (click)="updateGuestCount('adults', 1)"
+          >
+            +
+          </button>
         </div>
       </div>
 
@@ -44,9 +98,19 @@
           <div class="guest-sublabel">Ages 2-12</div>
         </div>
         <div class="counter">
-          <button [disabled]="guests.children <= 0" (click)="updateGuestCount('children', -1)">-</button>
+          <button
+            [disabled]="guests.children <= 0"
+            (click)="updateGuestCount('children', -1)"
+          >
+            -
+          </button>
           <span>{{ guests.children }}</span>
-          <button [disabled]="getTotalGuests() >= maxGuests" (click)="updateGuestCount('children', 1)">+</button>
+          <button
+            [disabled]="getTotalGuests() >= maxGuests"
+            (click)="updateGuestCount('children', 1)"
+          >
+            +
+          </button>
         </div>
       </div>
 
@@ -56,9 +120,19 @@
           <div class="guest-sublabel">Under 2</div>
         </div>
         <div class="counter">
-          <button [disabled]="guests.infants <= 0" (click)="updateGuestCount('infants', -1)">-</button>
+          <button
+            [disabled]="guests.infants <= 0"
+            (click)="updateGuestCount('infants', -1)"
+          >
+            -
+          </button>
           <span>{{ guests.infants }}</span>
-          <button [disabled]="guests.infants >= 5" (click)="updateGuestCount('infants', 1)">+</button>
+          <button
+            [disabled]="guests.infants >= 5"
+            (click)="updateGuestCount('infants', 1)"
+          >
+            +
+          </button>
         </div>
       </div>
 
@@ -67,21 +141,40 @@
           <div class="guest-label">Pets</div>
         </div>
         <div class="counter">
-          <button [disabled]="guests.pets <= 0" (click)="updateGuestCount('pets', -1)">-</button>
+          <button
+            [disabled]="guests.pets <= 0"
+            (click)="updateGuestCount('pets', -1)"
+          >
+            -
+          </button>
           <span>{{ guests.pets }}</span>
-          <button [disabled]="guests.pets >= 5" (click)="updateGuestCount('pets', 1)">+</button>
+          <button
+            [disabled]="guests.pets >= 5"
+            (click)="updateGuestCount('pets', 1)"
+          >
+            +
+          </button>
         </div>
       </div>
 
-      <div *ngIf="getTotalGuests() >= maxGuests" class="mt-4 text-sm text-red-500">
+      <div
+        *ngIf="getTotalGuests() >= maxGuests"
+        class="mt-4 text-sm text-red-500"
+      >
         Maximum {{ maxGuests }} guests allowed for this property
       </div>
     </div>
   </div>
 
-  <div class="price-breakdown" *ngIf="selectedDateRange.startDate && selectedDateRange.endDate">
+  <div
+    class="price-breakdown"
+    *ngIf="selectedDateRange.startDate && selectedDateRange.endDate"
+  >
     <div class="breakdown-item">
-      <span>${{ priceBreakdown.nightlyRate }} x {{ priceBreakdown.nights }} nights</span>
+      <span
+        >${{ priceBreakdown.nightlyRate }} x
+        {{ priceBreakdown.nights }} nights</span
+      >
       <span>${{ priceBreakdown.subtotal }}</span>
     </div>
     <div class="breakdown-item">
@@ -97,7 +190,12 @@
   <button
     class="reserve-button"
     (click)="reserveNow()"
-    [disabled]="!selectedDateRange.startDate || !selectedDateRange.endDate || dateRangeErrors.length > 0">
+    [disabled]="
+      !selectedDateRange.startDate ||
+      !selectedDateRange.endDate ||
+      dateRangeErrors.length > 0
+    "
+  >
     Reserve
   </button>
 </div>

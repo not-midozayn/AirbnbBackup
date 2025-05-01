@@ -24,7 +24,7 @@ export class CarouselBasicDemo implements OnInit {
   @Input() value: any[] = [];
   @Output() propertyTypeSelected = new EventEmitter<string>();
   responsiveOptions: any[] | undefined;
-  propertytypes: any = {} as PropertyType;
+  propertytypes: PropertyType[] = [];
 
   constructor(private _propertyTypeService: PropertyTypeService, public imageService: ImagesService) {}
 
@@ -32,7 +32,6 @@ export class CarouselBasicDemo implements OnInit {
     this._propertyTypeService.getAllPropertyTypes().subscribe({
       next: (data) => {
         this.propertytypes = data;
-        console.log(this.propertytypes);
       },
       error: (err) => {
         console.error(err);
@@ -64,9 +63,7 @@ export class CarouselBasicDemo implements OnInit {
   }
 
   OnSelectedPropertyType(id: any) {
-    console.log('hello');
     this.propertyTypeSelected.emit(id);
-    console.log(id);
   }
 
   getSeverity(status: string) {
