@@ -1,39 +1,47 @@
-<h2 mat-dialog-title>Cancel Booking</h2>
+<h2 mat-dialog-title class="dialog-title">Cancel Booking</h2>
 
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
   <div class="policy-container">
-    <h3>Cancellation Policy</h3>
+    <h3 class="section-title">Cancellation Policy</h3>
     <pre>{{ cancellationPolicy || "Loading policy..." }}</pre>
   </div>
 
-  <mat-form-field appearance="outline" class="w-full">
+  <mat-form-field appearance="fill" class="reason-field">
     <mat-label>Reason for cancellation</mat-label>
-    <textarea matInput [(ngModel)]="cancellationReason" required></textarea>
+    <textarea
+      matInput
+      [(ngModel)]="cancellationReason"
+      rows="4"
+      placeholder="Let the host know why you're cancelling..."
+    ></textarea>
   </mat-form-field>
 
   <div class="refund-info">
-    <h3>Refund Estimate</h3>
+    <h3 class="section-title">Refund Details</h3>
+
     <div *ngIf="refundAmount > 0" class="refund-amount">
-      <mat-icon>check_circle</mat-icon>
+      <mat-icon class="refund-icon success">check_circle</mat-icon>
       <span
-        >You will receive:
+        >You’ll be refunded
         <strong>${{ refundAmount | number : "1.2-2" }}</strong></span
       >
     </div>
+
     <div *ngIf="refundAmount === 0" class="no-refund">
-      <mat-icon>warning</mat-icon>
-      <span>No refund will be issued</span>
+      <mat-icon class="refund-icon error">cancel</mat-icon>
+      <span>This booking is non-refundable</span>
     </div>
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Back</button>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="cancel-btn">Go Back</button>
   <button
     mat-raised-button
     color="warn"
     (click)="proceedWithCancellation()"
     [disabled]="isLoading || !cancellationReason.trim()"
+    class="confirm-btn"
   >
     <span *ngIf="!isLoading">Confirm Cancellation</span>
     <span *ngIf="isLoading">Processing...</span>

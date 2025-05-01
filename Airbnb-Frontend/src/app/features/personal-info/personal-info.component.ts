@@ -18,7 +18,7 @@ interface PersonalInfoSection {
   title: string;
   fields: PersonalInfoField[];
   editMode: boolean;
-  description?: string; 
+  description?: string;
 }
 
 @Component({
@@ -116,7 +116,7 @@ export class PersonalInfoComponent {
     //     { name: 'Gender', label: 'Gender', value: this.userData.email || '', placeholder: 'Gender', type: 'Gender' }
     //   ]
     // }
-      
+
     ];
   }
 
@@ -144,13 +144,13 @@ export class PersonalInfoComponent {
       const oldPass = section.fields.find(f => f.name === 'currentPassword')?.value || '';
       const newPass = section.fields.find(f => f.name === 'newPassword')?.value || '';
       const confirmPass = section.fields.find(f => f.name === 'confirmPassword')?.value || '';
-      
+
       if (newPass !== confirmPass) {
         this.errorMessage = 'New passwords do not match';
         this.loading = false;
         return;
       }
-      
+
       this.changepassword(oldPass, newPass, confirmPass);
       return;
     }
@@ -177,7 +177,7 @@ export class PersonalInfoComponent {
         this.initPersonalInfoSections();
         this.successMessage = 'Your information has been updated successfully';
         this.loading = false;
-        
+
         // Reset edit mode for all sections
         this.personalInfoSections.forEach(s => s.editMode = false);
       },
@@ -194,7 +194,7 @@ export class PersonalInfoComponent {
       next: (res) => {
         this.successMessage = 'Password updated successfully';
         this.loading = false;
-        
+
         // Reset password fields
         const passwordSection = this.personalInfoSections.find(s => s.title === 'Password');
         if (passwordSection) {
@@ -218,12 +218,12 @@ export class PersonalInfoComponent {
 
 
   selectedFile: File | null = null;
-  previewImage: string | null = null; 
+  previewImage: string | null = null;
 
   getProfilePicture() {
     this._PersonalInfoService.getMyPersonalInfo().subscribe(
       (response) => {
-        this.previewImage = response.profilePictureUrl; 
+        this.previewImage = response.profilePictureUrl;
       },
       (error) => {
         console.error('Error loading profile picture', error);
@@ -237,14 +237,14 @@ export class PersonalInfoComponent {
     if (file) {
       // Check if the file is an image
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-  
+
       if (!allowedTypes.includes(file.type)) {
         this._ToastrService.error('Only images are allowed (JPG, JPEG, PNG, WEBP)', 'Invalid File');
         return;
       }
-  
+
       this.selectedFile = file;
-  
+
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === 'string') {
@@ -254,7 +254,6 @@ export class PersonalInfoComponent {
       reader.readAsDataURL(file);
     }
   }
-  
 
 
   onSubmit() {
@@ -262,10 +261,12 @@ export class PersonalInfoComponent {
       this._PersonalInfoService.changeProfilePicture(this.selectedFile).subscribe(
         (response) => {
           console.log('Profile picture uploaded successfully', response);
+
           this._ToastrService.success("Profile Picture Uploaded ","Success");
           this.previewImage = this._ImagesService.getImageUrl(response.profilePictureUrl);
           // Notify about the profile picture update
           this._PersonalInfoService.notifyProfilePictureUpdated(response.profilePictureUrl);
+
         },
         (error) => {
           this._ToastrService.error("You Should Upload A Picture","Fail");

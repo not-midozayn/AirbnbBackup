@@ -77,7 +77,7 @@
           >
             <div class="method-icon-container">
               <img
-                src="visa.png"
+                [src]="getPaymentMethodImage(selectedPaymentMethod)"
                 alt="{{ selectedPaymentMethod.name }}"
                 class="payment-brand-logo"
               />
@@ -125,7 +125,7 @@
       <section class="payment-section">
         <h2 class="section-title">Cancellation policy</h2>
         <div class="cancellation-policy">
-          <p>{{ (bookingDetails.listing.cancellationPolicy && bookingDetails.listing.cancellationPolicy.description) || 'Cancellation policy not available' }}</p>
+          <p>{{ bookingDetails.listing.cancellationPolicy.description }}</p>
         </div>
       </section>
 
@@ -159,15 +159,15 @@
     <div class="summary-card">
       <div class="listing-card">
         <img
-          [src]="imgService.getImageUrl(bookingDetails.listing.previewImageUrl)"
+          [src]="bookingDetails.listing.previewImageUrl"
           alt="Listing image"
           class="listing-image"
         />
         <div class="listing-info">
-          <div class="listing-rating" *ngIf="bookingDetails.listing.averageRating !== undefined">
-            <!-- <span class="star">★</span> -->
-            <span>{{bookingDetails.listing.averageRating | number:'1.1-1'}}</span>
-            <span class="reviews">{{bookingDetails.listing.reviewCount}} review{{bookingDetails.listing.reviewCount !== 1 ? 's' : ''}}</span>
+          <div class="listing-rating">
+            <span class="star">★</span>
+            <span>4.95</span>
+            <span class="reviews">(127 reviews)</span>
           </div>
           <h3 class="listing-title">{{ bookingDetails.listing.title }}</h3>
           <p class="listing-location">
@@ -211,9 +211,9 @@
         </div>
       </div>
 
-      <!-- <div class="summary-divider"></div> -->
+      <div class="summary-divider"></div>
 
-      <!-- <div class="price-details">
+      <div class="price-details">
         <h3 class="details-title">Price details</h3>
         <div class="price-row">
           <span class="price-label">
@@ -249,7 +249,7 @@
             >${{ bookingDetails.listing.serviceFee | number : "1.2-2" }}</span
           >
         </div>
-      </div> -->
+      </div>
 
       <div class="summary-divider"></div>
 

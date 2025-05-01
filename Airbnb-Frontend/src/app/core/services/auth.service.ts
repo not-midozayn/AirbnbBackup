@@ -12,6 +12,8 @@ import { AuthStatusService } from './auth-status-service.service';
   providedIn: 'root'
 })
 export class AuthService {
+  private loginStatusSource = new BehaviorSubject<boolean>(false);
+  loginStatus$ = this.loginStatusSource.asObservable();
   apiUrl = 'https://localhost:7200/api';
   currentUserSignal = signal<undefined | null | ResponseUser | User>(undefined);
   isLoggedIn = false;
@@ -27,9 +29,13 @@ export class AuthService {
       }
     });
   }
+  updateLoginStatus(status: boolean) {
+    this.loginStatusSource.next(status);
+  }
 
   login(user: loginUser) {
      // this.authStatusService.setLoggedIn()
+    this.loginStatusSource.next(true); // Notify subscriber
     return this.http.post<any>(`${this.apiUrl}/Authentication/login`, user);
   }
 
@@ -41,6 +47,7 @@ export class AuthService {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     this.currentUserSignal.set(null);
+    this.loginStatusSource.next(true); // Notify subscriber
   }
 
   getCurrentUser() {

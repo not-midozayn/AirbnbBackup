@@ -78,9 +78,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           this.isLoading = false;
           this.closeModal();
+
           this.router.navigateByUrl('/Account', { skipLocationChange: true }).then(() => {
             this.router.navigate(['/home']);
           });
+
         },
         error: (error) => {
           this.loginError = error.error.message;

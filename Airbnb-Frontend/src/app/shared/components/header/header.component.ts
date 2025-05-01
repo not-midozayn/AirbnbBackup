@@ -109,6 +109,7 @@ export class HeaderComponent implements OnDestroy {
   }
   ngOnInit() {
 
+
     // const user= this.authService.currentUserSignal();
     // this.currentUser=user
 
@@ -120,6 +121,7 @@ if(isLoggedIn){
 
     this.getProfilePicture();
   }
+
 
   // ngOnChanges(changes: SimpleChange) {
   //     this.getProfilePicture();

@@ -23,6 +23,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ScrollService } from '../../core/services/scroll-service.service';
 import { AuthStatusService } from '../../core/services/auth-status-service.service';
+import { AuthService } from '../../core/services/auth.service';
 import { SearchService } from '../../core/services/search.service';
 
 @Component({
@@ -43,7 +44,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private _ScrollService: ScrollService,
     private authStatusService: AuthStatusService,
-    private _propertyTypeService: PropertyTypeService
+    private _propertyTypeService: PropertyTypeService,
+    private authService: AuthService
   ) {}
 
   private readonly _wishListService = inject(WishlistService);
@@ -62,6 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   paginationParams: { [key: string]: any } = {};
   propertyTypeParams: { [key: string]: any } = {};
   public destroyed = new Subject<any>();
+  searchParams: { [key: string]: any } = { pageNumber: 1 };
 
   public loadWishlist() {
     this._wishListService.getAllWishlists().subscribe({
@@ -110,6 +113,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Subscribe to search params
     this._searchService.searchParams$.subscribe(
       (params: { [key: string]: any }) => {
+        this.searchParams = params;
         this.loadListings(params);
       }
     );

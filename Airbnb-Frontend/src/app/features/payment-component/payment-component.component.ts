@@ -128,7 +128,7 @@ export class PaymentComponent implements OnInit {
     const methodName = method.name.toLowerCase();
 
   if (methodName.includes('apple pay')) {
-      return '../../../assets/imgs/Apple-Pay-logo.png';
+      return 'Apple-Pay-logo.png';
     } else if (methodName.includes('google pay')) {
       return 'google-pay-logo.png';
     } else if (methodName.includes('carddebit')) {
