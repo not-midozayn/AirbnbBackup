@@ -121,8 +121,6 @@ namespace WebApplication1.Repositories.Payment
             var payment = await GetLatestSuccessfulPaymentWithPolicyAsync(bookingId);
             var policy = payment.Booking.Listing.CancellationPolicy;
             var refundPercentage = CalculateRefundPercentage(payment.Booking, policy);
-            if (refundPercentage == 0)
-                throw new InvalidOperationException("Refund not allowed based on the policy.");
             return (long)(payment.Amount * refundPercentage);
         }
         #endregion
