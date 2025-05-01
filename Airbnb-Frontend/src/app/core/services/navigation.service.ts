@@ -14,9 +14,9 @@ export interface NavItem {
 export class NavigationService {
   private navItems: NavItem[] = [
     { path: 'today', label: 'Today', active: true },
-    { path: 'calendar', label: 'Calendar', active: false },
+    // { path: 'calendar', label: 'Calendar', active: false },
     { path: 'listings', label: 'Listings', active: false },
-    { path: 'messages', label: 'Messages', active: false }
+    // { path: 'messages', label: 'Messages', active: false }
   ];
 
   private navItemsSubject = new BehaviorSubject<NavItem[]>(this.navItems);

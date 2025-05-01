@@ -58,6 +58,8 @@
         <app-date-range-picker
         (rangeSelected)="onDateRangeSelected($event)"
         [selectedRange]="{ startDate: startDate, endDate: endDate }"
+        class="flex-1 h-full "
+        [customClass]="'w-100 h-full flex items-center px-3 mt-3 hover:shadow-md hover:bg-[var(--border-color)] rounded-full transition-shadow duration-200 cursor-pointer'"
       ></app-date-range-picker>
         <span class="h-7 border-r border-[var(--border-color)]"></span>
 

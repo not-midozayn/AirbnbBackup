@@ -26,6 +26,12 @@ export class AirbnbYourHomeHeaderComponent implements OnInit {
     });
   }
 
+  goHome() {
+    this.router.navigateByUrl('/Account', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/home']);
+    });
+  }
+
   openLoginModal() {
     this.modalService.openLoginModal();
     this.isUserMenuOpen = false;

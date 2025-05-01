@@ -262,13 +262,13 @@ export class PersonalInfoComponent {
       this._PersonalInfoService.changeProfilePicture(this.selectedFile).subscribe(
         (response) => {
           console.log('Profile picture uploaded successfully', response);
-          this._ToastrService.success("Profile Picture Uploaded ","Success")
-          this.previewImage= this._ImagesService.getImageUrl(response.profilePictureUrl);
-          
-          // localStorage.setItem("profilePic",this.previewImage)
+          this._ToastrService.success("Profile Picture Uploaded ","Success");
+          this.previewImage = this._ImagesService.getImageUrl(response.profilePictureUrl);
+          // Notify about the profile picture update
+          this._PersonalInfoService.notifyProfilePictureUpdated(response.profilePictureUrl);
         },
         (error) => {
-          this._ToastrService.error("You Should Upload A Picture","Fail")
+          this._ToastrService.error("You Should Upload A Picture","Fail");
           console.error('Error uploading profile picture', error);
         }
       );

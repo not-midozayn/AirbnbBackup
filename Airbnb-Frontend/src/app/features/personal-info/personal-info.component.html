@@ -55,7 +55,7 @@
 
       <div class="actions">
         <button 
-          *ngIf="!section.editMode" 
+          *ngIf="!section.editMode && section.title !== 'Email address'" 
           (click)="editSection(section)" 
           class="primary-button">
           Edit

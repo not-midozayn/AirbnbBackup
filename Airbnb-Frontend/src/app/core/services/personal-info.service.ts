@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonalInfoService {
+  private profilePictureUpdated = new Subject<string>();
+  profilePictureUpdated$ = this.profilePictureUpdated.asObservable();
 
   constructor(private _HttpClient:HttpClient) { }
 
@@ -35,5 +37,8 @@ export class PersonalInfoService {
     return this._HttpClient.post('https://localhost:7200/api/users/me/profile-picture', formData);
   }
 
+  notifyProfilePictureUpdated(url: string) {
+    this.profilePictureUpdated.next(url);
+  }
 
 }
