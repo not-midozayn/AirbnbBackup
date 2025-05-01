@@ -1,18 +1,31 @@
 <div>
   <carousel-basic-demo
     (propertyTypeSelected)="filterListings($event)"
-    [value]="propertytypes">
+    [value]="propertytypes"
+  >
   </carousel-basic-demo>
 </div>
 
-<div class="search-results" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="500"
-  (scrolled)="onScroll()" [scrollWindow]="true">
-<main class="container mx-auto min-h-screen py-10 mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-  @for(item of listingItems; track item.id) {
-  <app-listing-card [listingItem]="item" [isFavorite]="isInWishlist(item.id)"
-    (toggleWishList)="toggleFavorite($event)"></app-listing-card>
-  }
-</main>
+<div
+  class="search-results"
+  infinite-scroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="500"
+  (scrolled)="onScroll()"
+  [scrollWindow]="true"
+>
+  <main
+    class="container mx-auto min-h-screen py-10 mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+  >
+    @for(item of listingItems; track item.id) {
+    <app-listing-card
+      [listingItem]="item"
+      [isFavorite]="isInWishlist(item.id)"
+      (toggleWishList)="toggleFavorite($event)"
+    >
+    </app-listing-card>
+    }
+  </main>
 </div>
 
 <app-chat-bot></app-chat-bot>

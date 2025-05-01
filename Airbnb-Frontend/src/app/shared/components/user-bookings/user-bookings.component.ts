@@ -9,6 +9,7 @@ import { BookingCancellationComponent } from '../../../features/booking-cancella
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { ImagesService } from '../../../core/services/images.service';
 
 @Component({
   selector: 'app-user-bookings',
@@ -69,7 +70,8 @@ export class UserBookingsComponent implements OnInit {
     public authService: AuthService,
     private userBookingService: UserBookingService,
     private dialog: MatDialog, // Add dialog service
-    private snackBar: MatSnackBar // Add snackbar service
+    private snackBar: MatSnackBar, // Add snackbar service
+    public imgService: ImagesService
   ) { }
 
   ngOnInit() {

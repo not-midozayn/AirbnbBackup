@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, HostListener, inject, SimpleChange, ViewChild } from '@angular/core';
+import {
+  Component,
+  effect,
+  HostListener,
+  inject,
+  SimpleChange,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { ModalService } from '../../../core/services/modal.service';
@@ -7,14 +14,16 @@ import { RegisterModalService } from '../../../core/services/register-modal.serv
 import { AuthService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user';
-import { SearchComponent } from "../../../features/search/search.component";
- import { SearchService } from '../../../core/services/search.service';
- import { PersonalInfoComponent } from '../../../features/personal-info/personal-info.component';
- import { PersonalInfoService } from '../../../core/services/personal-info.service';
- import { ImagesService } from '../../../core/services/images.service';
- import { ResponseUser } from '../../../core/models/responseUser';
- import { ScrollService } from '../../../core/services/scroll-service.service';
-
+import { SearchComponent } from '../../../features/search/search.component';
+import { SearchService } from '../../../core/services/search.service';
+import { PersonalInfoComponent } from '../../../features/personal-info/personal-info.component';
+import { PersonalInfoService } from '../../../core/services/personal-info.service';
+import { ImagesService } from '../../../core/services/images.service';
+import { ResponseUser } from '../../../core/models/responseUser';
+import { ScrollService } from '../../../core/services/scroll-service.service';
+import { DateRangePickerComponent } from '../../../features/date-range-picker/date-range-picker.component';
+import { HomeComponent } from '../../../features/home/home.component';
+import { AppComponent } from '../../../app.component';
 
 interface GuestCount {
   adults: number;
@@ -42,12 +51,22 @@ interface SearchParams {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule , SearchComponent ],
+  imports: [CommonModule, RouterModule, FormsModule, SearchComponent],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
-  constructor(private modalService: ModalService, private registerModalService: RegisterModalService, public authService: AuthService , private router:Router , private searchService: SearchService , public _PersonalInfoService:PersonalInfoService , public _ImagesService:ImagesService , private _ScrollService:ScrollService) {}
+  constructor(
+    private modalService: ModalService,
+    private registerModalService: RegisterModalService,
+    public authService: AuthService,
+    private router: Router,
+    private searchService: SearchService,
+    public _PersonalInfoService: PersonalInfoService,
+    public _ImagesService: ImagesService,
+    private _ScrollService: ScrollService,
+    public _AppComponent: AppComponent
+  ) {}
   isUserMenuOpen = false;
   isGuestMenuOpen = false;
   isMobileSearchOpen = false;
@@ -58,43 +77,69 @@ export class HeaderComponent {
     adults: 0,
     children: 0,
     infants: 0,
-    pets: 0
+    pets: 0,
   };
   guestTypes: GuestType[] = [
-    { key: 'adults', label: 'Adults', description: 'Ages 13 or above', minValue: 1, maxValue: 16 },
-    { key: 'children', label: 'Children', description: 'Ages 2–12', minValue: 0, maxValue: 16 },
-    { key: 'infants', label: 'Infants', description: 'Under 2', minValue: 0, maxValue: 5 },
-    { key: 'pets', label: 'Pets', description: 'Bringing an assistance animal?', minValue: 0, maxValue: 5 }
+    {
+      key: 'adults',
+      label: 'Adults',
+      description: 'Ages 13 or above',
+      minValue: 1,
+      maxValue: 16,
+    },
+    {
+      key: 'children',
+      label: 'Children',
+      description: 'Ages 2–12',
+      minValue: 0,
+      maxValue: 16,
+    },
+    {
+      key: 'infants',
+      label: 'Infants',
+      description: 'Under 2',
+      minValue: 0,
+      maxValue: 5,
+    },
+    {
+      key: 'pets',
+      label: 'Pets',
+      description: 'Bringing an assistance animal?',
+      minValue: 0,
+      maxValue: 5,
+    },
   ];
   searchParams: SearchParams = {
     location: '',
     checkIn: '',
     checkOut: '',
-    guests: 'Add guests'
+    guests: 'Add guests',
   };
 
+  profilePictureUrl: string | null = null;
+  currentUser: User | ResponseUser | null | undefined = undefined;
 
-
-
-
-  profilePictureUrl: string | null = null; 
-  currentUser: User | ResponseUser | null | undefined = undefined
-
-  @ViewChild(SearchComponent) SearchComponent!:SearchComponent;
+  @ViewChild(SearchComponent) SearchComponent!: SearchComponent;
   clearSearch() {
     if (this.SearchComponent) {
       this.SearchComponent.clearInputs();
-    } 
+    }
   }
 
-  isHomeUrl():boolean{
-    return this.router.url==='/home'
+  isProfilePictureAvailable(): any {
+    return localStorage.getItem('accessToken');
   }
+
+  isHomeUrl(): boolean {
+    return this.router.url === '/home';
+  }
+
   ngOnInit() {
-
-    // const user= this.authService.currentUserSignal();
-    // this.currentUser=user
-
+    this.authService.isLoggedInSubject.subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.getProfilePicture();
+      }
+    });
     this.getProfilePicture();
   }
 
@@ -102,13 +147,14 @@ export class HeaderComponent {
   //     this.getProfilePicture();
   // }
 
-
-  getProfilePicture() {
+  public getProfilePicture() {
     this._PersonalInfoService.getMyPersonalInfo().subscribe(
       (response) => {
         // لو فيه صورة موجودة
         if (response.profilePictureUrl) {
-          this.profilePictureUrl = this._ImagesService.getImageUrl(response.profilePictureUrl);
+          this.profilePictureUrl = this._ImagesService.getImageUrl(
+            response.profilePictureUrl
+          );
         } else {
           // لو مفيش صورة
           this.profilePictureUrl = null;
@@ -119,15 +165,12 @@ export class HeaderComponent {
         this.profilePictureUrl = null; // لو فيه مشكلة في التحميل، هنخليها null
       }
     );
+    this.isUserMenuOpen = false;
   }
-
-
-
 
   onSearch(data: any) {
     this.searchService.emitSearchParams(data);
   }
-
 
   openLoginModal() {
     this.modalService.openLoginModal();
@@ -145,6 +188,9 @@ export class HeaderComponent {
   logout() {
     this.router.navigateByUrl('/home');
     this.authService.logout();
+    this._AppComponent.homeComponent.wishList = [];
+    this.authService.isLoggedIn = false;
+    this.authService.isLoggedInSubject.next(false);
   }
   becomeAHost() {
     this.isLoading = true;
@@ -155,16 +201,16 @@ export class HeaderComponent {
       error: (error) => {
         console.log('Error updating user:', error.error.message);
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
   isHost(): boolean {
     const roles = this.authService.getAccessTokenClaim('roles');
-    return roles.includes("Host");
+    return roles.includes('Host');
   }
   isAdmin(): boolean {
     const roles = this.authService.getAccessTokenClaim('roles');
-    return roles.includes("Admin");
+    return roles.includes('Admin');
   }
 
   showGuestMenuInMobile(): void {
@@ -218,7 +264,11 @@ export class HeaderComponent {
   @HostListener('click', ['$event'])
   onClick(event: Event): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.mobile-search-content') && this.isMobileSearchOpen && !this.isGuestMenuOpen) {
+    if (
+      !target.closest('.mobile-search-content') &&
+      this.isMobileSearchOpen &&
+      !this.isGuestMenuOpen
+    ) {
       this.closeMobileSearch();
     }
     event.stopPropagation();
@@ -239,11 +289,17 @@ export class HeaderComponent {
     }
 
     if (this.guests.infants > 0) {
-      parts.push(`${this.guests.infants} ${this.guests.infants === 1 ? 'infant' : 'infants'}`);
+      parts.push(
+        `${this.guests.infants} ${
+          this.guests.infants === 1 ? 'infant' : 'infants'
+        }`
+      );
     }
 
     if (this.guests.pets > 0) {
-      parts.push(`${this.guests.pets} ${this.guests.pets === 1 ? 'pet' : 'pets'}`);
+      parts.push(
+        `${this.guests.pets} ${this.guests.pets === 1 ? 'pet' : 'pets'}`
+      );
     }
 
     this.guestText = parts.join(' · ');
@@ -251,7 +307,7 @@ export class HeaderComponent {
   }
 
   isDecrementDisabled(type: keyof GuestCount): boolean {
-    const guestType = this.guestTypes.find(t => t.key === type);
+    const guestType = this.guestTypes.find((t) => t.key === type);
     return guestType ? this.guests[type] <= guestType.minValue : true;
   }
 
@@ -259,12 +315,12 @@ export class HeaderComponent {
     if (type === 'adults' || type === 'children') {
       return this.getTotalPeople() >= 16;
     }
-    const guestType = this.guestTypes.find(t => t.key === type);
+    const guestType = this.guestTypes.find((t) => t.key === type);
     return guestType ? this.guests[type] >= guestType.maxValue : true;
   }
 
   updateGuests(type: keyof GuestCount, change: number): void {
-    const guestType = this.guestTypes.find(t => t.key === type);
+    const guestType = this.guestTypes.find((t) => t.key === type);
     if (!guestType) return;
 
     const newValue = this.guests[type] + change;
@@ -272,7 +328,8 @@ export class HeaderComponent {
     if (type === 'adults' || type === 'children') {
       const wouldExceedLimit =
         (type === 'adults' ? newValue : this.guests.adults) +
-        (type === 'children' ? newValue : this.guests.children) > 16;
+          (type === 'children' ? newValue : this.guests.children) >
+        16;
 
       if (!wouldExceedLimit && newValue >= guestType.minValue) {
         this.guests[type] = newValue;
@@ -306,7 +363,7 @@ export class HeaderComponent {
       adults: 0,
       children: 0,
       infants: 0,
-      pets: 0
+      pets: 0,
     };
     this.guestText = 'Add guests';
     this.searchParams.guests = this.guestText;
@@ -316,22 +373,26 @@ export class HeaderComponent {
       location: '',
       checkIn: '',
       checkOut: '',
-      guests: 'Add guests'
+      guests: 'Add guests',
     };
     this.resetGuests();
   }
 
-  modifiedLoc: string = "";
-   modifiedStartDate: string = "";
-   modifiedEndDate: string ="";
-   modifiedGuests: number = 0;
+  modifiedLoc: string = '';
+  modifiedStartDate: string = '';
+  modifiedEndDate: string = '';
+  modifiedGuests: number = 0;
   goHome() {
     this.clearSearch();
-    this._ScrollService.startScroll()
-    this.router.navigateByUrl('/Account', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/home']);
-    });
+    if(this.SearchComponent){
+      this.SearchComponent.dateRangePicker.clearDateRange();
+    }
+    this._ScrollService.startScroll();
+    this.router
+      .navigateByUrl('/Account', { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate(['/home']);
+      });
     console.log('Home clicked');
   }
-
 }

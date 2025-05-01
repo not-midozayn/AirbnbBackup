@@ -1,126 +1,187 @@
-<header class="bg-white shadow-sm border-b border-[var(--border-color)] z-10 relative p-2">
+<header
+  class="bg-white shadow-sm border-b border-[var(--border-color)] z-10 relative p-2"
+>
   <div class="max-w-[100rem] mx-auto">
     <!-- Desktop Navigation -->
     <div class="flex justify-between items-center h-28 px-4 sm:px-6 lg:px-8">
       <!-- Logo -->
       <a (click)="goHome()">
-        <div class="flex-shrink-0 flex items-center text-[var(--primary-color)] cursor-pointer">
-          <i class="fa-brands fa-airbnb text-4xl" ></i>
+        <div
+          class="flex-shrink-0 flex items-center text-[var(--primary-color)] cursor-pointer"
+        >
+          <i class="fa-brands fa-airbnb text-4xl"></i>
           <span class="ml-2 font-bold text-xl hidden sm:block">airbnb</span>
         </div>
       </a>
 
       <!-- Search Bar -->
       @if(isHomeUrl()) {
-        <app-search    [Location]="modifiedLoc"
-        [startDate]="modifiedStartDate" [endDate]="modifiedEndDate" [Capacity]="modifiedGuests"  (searchChanged)="onSearch($event)"></app-search>
-         }
+      <app-search
+        [Location]="modifiedLoc"
+        [startDate]="modifiedStartDate"
+        [endDate]="modifiedEndDate"
+        [Capacity]="modifiedGuests"
+        (searchChanged)="onSearch($event)"
+      ></app-search>
+      }
 
       <!-- User Menu -->
       <div class="flex items-center space-x-2 sm:space-x-4">
         @if(authService.currentUserSignal() && isHost()) {
-          <button routerLink="/hosting" [disabled]="isLoading"
-          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer">
+        <button
+          routerLink="/hosting"
+          [disabled]="isLoading"
+          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer"
+        >
           @if(isLoading) {
-          <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-            aria-hidden="true"></span>
+          <span
+            class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"
+          ></span>
           <span role="status"> loading ...</span>
-          } @else {
-            Switch to Host
-          }
-          </button>
-        }
-        @if(authService.currentUserSignal() && isAdmin()) {
-          <button routerLink="/dashboard" [disabled]="isLoading"
-          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer">
+          } @else { Switch to Host }
+        </button>
+        } @if(authService.currentUserSignal() && isAdmin()) {
+        <button
+          routerLink="/dashboard"
+          [disabled]="isLoading"
+          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer"
+        >
           @if(isLoading) {
-          <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-            aria-hidden="true"></span>
+          <span
+            class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"
+          ></span>
           <span role="status"> loading ...</span>
-          } @else {
-            Dashboard
-          }
-          </button>
-        }
-        @else if(authService.currentUserSignal() && isHost() == false && isAdmin() == false){
-          <button (click)="becomeAHost()" [disabled]="isLoading"
-          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer">
+          } @else { Dashboard }
+        </button>
+        } @else if(authService.currentUserSignal() && isHost() == false &&
+        isAdmin() == false){
+        <button
+          (click)="becomeAHost()"
+          [disabled]="isLoading"
+          class="hidden lg:block font-medium text-sm rounded-full hover:bg-gray-200 px-4 py-3 transition-colors cursor-pointer"
+        >
           @if(isLoading) {
-          <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-            aria-hidden="true"></span>
+          <span
+            class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"
+          ></span>
           <span role="status"> loading ...</span>
-          } @else {
-            Airbnb your home
-          }
-          </button>
+          } @else { Airbnb your home }
+        </button>
         }
 
         <div class="relative">
           <button
             class="flex items-center gap-4 border border-[var(--border-color)] rounded-full px-4 py-2 shadow-sm hover:shadow-md cursor-pointer transition-shadow"
-            (click)="toggleUserMenu($event)">
+            (click)="toggleUserMenu($event)"
+          >
             <i class="fa-solid fa-bars text-black"></i>
+            <!-- <i
+              *ngIf="!isProfilePictureAvailable()"
+              class="fa-regular fa-circle-user text-2xl text-black"
+            ></i> -->
             <!-- <i class="fa-regular fa-circle-user text-2xl text-black"  ></i> -->
             <!-- <img [src]="" class="fa-regular fa-circle-user text-2xl text-black"  /> -->
-            <img *ngIf="authService.currentUserSignal()!=null" [src]="profilePictureUrl"  alt="Profile Picture" class="w-8 h-8 rounded-full object-cover" />
+            <img
+              *ngIf="isProfilePictureAvailable()"
+              [src]="profilePictureUrl"
+              alt="Profile Picture"
+              class="w-8 h-8 rounded-full object-cover"
+            />
           </button>
 
           <!-- User dropdown menu -->
-          <div *ngIf="isUserMenuOpen"
-            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
+          <div
+            *ngIf="isUserMenuOpen"
+            class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20"
+          >
             @if(authService.currentUserSignal() == null){
             <div class="py-2">
-              <a (click)="openRegisterModal()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-medium">Sign
-                up</a>
-              <a (click)="openLoginModal()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log in</a>
+              <a
+                (click)="openRegisterModal()"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-medium"
+                >Sign up</a
+              >
+              <a
+                (click)="openLoginModal()"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >Log in</a
+              >
             </div>
-            }
-            @else {
+            } @else {
             <div class="py-2">
-              <a (click)="logout()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Log Out</a>
-              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/wishlist">WishList</a>
-              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" routerLink="/Account">Account</a>
+              <a
+                (click)="logout()"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >Log Out</a
+              >
+              <a
+                href="#"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                routerLink="/wishlist"
+                >WishList</a
+              >
+              <a
+                href="#"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                routerLink="/Account"
+                >Account</a
+              >
             </div>
             }
-            <hr>
+            <hr />
             <div class="py-2">
               @if(authService.currentUserSignal() && isAdmin()) {
-                <button routerLink="/dashboard" [disabled]="isLoading"
-                class=" w-full text-start px-4 py-2 text-gray-800 hover:bg-gray-100">
+              <button
+                routerLink="/dashboard"
+                [disabled]="isLoading"
+                class="w-full text-start px-4 py-2 text-gray-800 hover:bg-gray-100"
+              >
                 @if(isLoading) {
-                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-                  aria-hidden="true"></span>
+                <span
+                  class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                  aria-hidden="true"
+                ></span>
                 <span role="status"> loading ...</span>
-                } @else {
-                  Dashboard
-                }
-                </button>
-              }
-              @if(authService.currentUserSignal() && isHost()) {
-                <button routerLink="/hosting" [disabled]="isLoading"
-                class=" w-full text-start px-4 py-2 text-gray-800 hover:bg-gray-100">
+                } @else { Dashboard }
+              </button>
+              } @if(authService.currentUserSignal() && isHost()) {
+              <button
+                routerLink="/hosting"
+                [disabled]="isLoading"
+                class="w-full text-start px-4 py-2 text-gray-800 hover:bg-gray-100"
+              >
                 @if(isLoading) {
-                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-                  aria-hidden="true"></span>
+                <span
+                  class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                  aria-hidden="true"
+                ></span>
                 <span role="status"> loading ...</span>
-                } @else {
-                  Switch to Host
-                }
-                </button>
-              }
-              @else if(authService.currentUserSignal() && isHost() == false && isAdmin() == false){
-                <button (click)="becomeAHost()" [disabled]="isLoading"
-                class=" w-full text-start py-2 text-gray-800 hover:bg-gray-100">
+                } @else { Switch to Host }
+              </button>
+              } @else if(authService.currentUserSignal() && isHost() == false &&
+              isAdmin() == false){
+              <button
+                (click)="becomeAHost()"
+                [disabled]="isLoading"
+                class="w-full text-start py-2 text-gray-800 hover:bg-gray-100"
+              >
                 @if(isLoading) {
-                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-                  aria-hidden="true"></span>
+                <span
+                  class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                  aria-hidden="true"
+                ></span>
                 <span role="status"> loading ...</span>
-                } @else {
-                  Airbnb your home
-                }
-                </button>
+                } @else { Airbnb your home }
+              </button>
               }
-              <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Help</a>
+              <a
+                href="#"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >Help</a
+              >
             </div>
           </div>
         </div>
@@ -131,42 +192,70 @@
     <div class="md:hidden px-4 pb-4">
       <div class="relative">
         <div
-          class="flex items-center h-14 bg-[var(--light-gray)] border border-[var(--border-color)] rounded-full shadow-sm hover:shadow-md transition-shadow duration-200 px-4">
-          <i class="fa-solid fa-magnifying-glass text-[var(--primary-color)] mr-2"></i>
+          class="flex items-center h-14 bg-[var(--light-gray)] border border-[var(--border-color)] rounded-full shadow-sm hover:shadow-md transition-shadow duration-200 px-4"
+        >
+          <i
+            class="fa-solid fa-magnifying-glass text-[var(--primary-color)] mr-2"
+          ></i>
           <div class="flex-1">
-            <div class="text-sm font-medium">{{ searchParams.location || 'Anywhere' }}</div>
+            <div class="text-sm font-medium">
+              {{ searchParams.location || "Anywhere" }}
+            </div>
             <div class="text-xs text-gray-500 truncate">
-              <span>{{ searchParams.checkIn ? (searchParams.checkIn | date) : 'Any week' }}</span>
+              <span>{{
+                searchParams.checkIn
+                  ? (searchParams.checkIn | date)
+                  : "Any week"
+              }}</span>
               <span class="mx-1">·</span>
               <span>{{ guestText }}</span>
             </div>
           </div>
         </div>
-        <button class="absolute inset-0 w-full h-full rounded-full opacity-0"
-          (click)="openMobileSearch($event)"></button>
+        <button
+          class="absolute inset-0 w-full h-full rounded-full opacity-0"
+          (click)="openMobileSearch($event)"
+        ></button>
       </div>
     </div>
   </div>
 
   <!-- Mobile Search Modal -->
-  <div *ngIf="isMobileSearchOpen" class="fixed inset-0 bg-white z-50 overflow-y-auto pt-4">
+  <div
+    *ngIf="isMobileSearchOpen"
+    class="fixed inset-0 bg-white z-50 overflow-y-auto pt-4"
+  >
     <div class="px-4">
       <!-- Search Input -->
       <div class="relative">
-        <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-[var(--primary-color)]"></i>
-        <input type="text" class="w-full h-14 pl-12 pr-4 border border-[var(--border-color)] rounded-full shadow-sm"
-          placeholder="Where are you going?" [(ngModel)]="searchParams.location">
+        <i
+          class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-[var(--primary-color)]"
+        ></i>
+        <input
+          type="text"
+          class="w-full h-14 pl-12 pr-4 border border-[var(--border-color)] rounded-full shadow-sm"
+          placeholder="Where are you going?"
+          [(ngModel)]="searchParams.location"
+        />
       </div>
 
       <!-- Date Pickers -->
       <div class="mt-4 grid grid-cols-2 gap-2">
         <div class="border border-[var(--border-color)] rounded-lg p-3">
           <label class="block text-xs font-medium">Check in</label>
-          <input type="date" class="w-full outline-none" [(ngModel)]="searchParams.checkIn">
+          <input
+            type="date"
+            class="w-full outline-none"
+            [(ngModel)]="searchParams.checkIn"
+          />
         </div>
         <div class="border border-[var(--border-color)] rounded-lg p-3">
           <label class="block text-xs font-medium">Check out</label>
-          <input type="date" class="w-full outline-none" [(ngModel)]="searchParams.checkOut">
+          <input
+            type="date"
+            class="w-full outline-none"
+            [(ngModel)]="searchParams.checkOut"
+          />
         </div>
       </div>
 
@@ -177,8 +266,11 @@
             <h3 class="font-medium">Guests</h3>
             <p class="text-sm text-gray-500">{{ guestText }}</p>
           </div>
-          <button type="button" class="p-2 bg-[var(--primary-color)] rounded-full text-white"
-            (click)="showGuestMenuInMobile()">
+          <button
+            type="button"
+            class="p-2 bg-[var(--primary-color)] rounded-full text-white"
+            (click)="showGuestMenuInMobile()"
+          >
             <i class="fa-solid fa-chevron-down"></i>
           </button>
         </div>
@@ -186,8 +278,10 @@
 
       <!-- Search Button -->
       <div class="mt-6">
-        <button class="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-medium"
-          (click)="performSearch()">
+        <button
+          class="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-medium"
+          (click)="performSearch()"
+        >
           Search
         </button>
       </div>
@@ -199,57 +293,88 @@
     </div>
 
     <!-- Guest Menu for Mobile (Only shown when showMobileGuestMenu is true) -->
-    <div *ngIf="showMobileGuestMenu" class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto">
-    <div *ngIf="isGuestMenuOpen && isMobileSearchOpen" class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto">
-      <div class="flex justify-between items-center mb-4">
-        <button class="p-2 rounded-full hover:bg-gray-100" (click)="hideGuestMenuInMobile()">
-          <i class="fa-solid fa-chevron-left text-xl"></i>
-        </button>
-        <h2 class="font-medium">Who's coming?</h2>
-        <div class="w-8"></div>
-      </div>
-
-      <ng-container *ngTemplateOutlet="guestMenuTemplate"></ng-container>
-
-      <button
-        class="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-medium mt-4 fixed bottom-4 left-4 right-4"
-        (click)="hideGuestMenuInMobile()">
-        Done
-      </button>
-    </div>
-  </div>
-
-  <ng-template #guestMenuTemplate>
-    <div [class.absolute]="!isMobileSearchOpen" [class.right-0]="!isMobileSearchOpen" [class.mt-2]="!isMobileSearchOpen"
-      [class.w-80]="!isMobileSearchOpen" [class.bg-white]="!isMobileSearchOpen" [class.rounded-lg]="!isMobileSearchOpen"
-      [class.shadow-lg]="!isMobileSearchOpen" [class.border]="!isMobileSearchOpen"
-      [class.border-gray-200]="!isMobileSearchOpen" [class.py-4]="!isMobileSearchOpen"
-      [class.z-20]="!isMobileSearchOpen" class="px-4 py-2">
-
-      <ng-container *ngFor="let type of guestTypes; let i = index">
-        <div class="flex justify-between items-center py-3" [class.border-t]="i > 0">
-          <div>
-            <h4 class="font-medium">{{ type.label }}</h4>
-            <p class="text-sm text-gray-500">{{ type.description }}</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <button type="button" (click)="updateGuests(type.key, -1)" [disabled]="isDecrementDisabled(type.key)"
-              class="w-8 h-8 rounded-full border flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
-              <i class="fa-solid fa-minus"></i>
-            </button>
-            <span>{{ guests[type.key] }}</span>
-            <button type="button" (click)="updateGuests(type.key, 1)" [disabled]="isIncrementDisabled(type.key)"
-              class="w-8 h-8 rounded-full border flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
-              <i class="fa-solid fa-plus"></i>
-            </button>
-          </div>
+    <div
+      *ngIf="showMobileGuestMenu"
+      class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto"
+    >
+      <div
+        *ngIf="isGuestMenuOpen && isMobileSearchOpen"
+        class="fixed inset-0 bg-white z-50 mt-16 p-4 overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <button
+            class="p-2 rounded-full hover:bg-gray-100"
+            (click)="hideGuestMenuInMobile()"
+          >
+            <i class="fa-solid fa-chevron-left text-xl"></i>
+          </button>
+          <h2 class="font-medium">Who's coming?</h2>
+          <div class="w-8"></div>
         </div>
-      </ng-container>
 
-      <div *ngIf="getTotalPeople() >= 16" class="pt-2 text-sm text-red-500">
-        Maximum 16 guests (adults + children) allowed
+        <ng-container *ngTemplateOutlet="guestMenuTemplate"></ng-container>
+
+        <button
+          class="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-medium mt-4 fixed bottom-4 left-4 right-4"
+          (click)="hideGuestMenuInMobile()"
+        >
+          Done
+        </button>
       </div>
     </div>
-  </ng-template>
 
-<!-- </header> -->
+    <ng-template #guestMenuTemplate>
+      <div
+        [class.absolute]="!isMobileSearchOpen"
+        [class.right-0]="!isMobileSearchOpen"
+        [class.mt-2]="!isMobileSearchOpen"
+        [class.w-80]="!isMobileSearchOpen"
+        [class.bg-white]="!isMobileSearchOpen"
+        [class.rounded-lg]="!isMobileSearchOpen"
+        [class.shadow-lg]="!isMobileSearchOpen"
+        [class.border]="!isMobileSearchOpen"
+        [class.border-gray-200]="!isMobileSearchOpen"
+        [class.py-4]="!isMobileSearchOpen"
+        [class.z-20]="!isMobileSearchOpen"
+        class="px-4 py-2"
+      >
+        <ng-container *ngFor="let type of guestTypes; let i = index">
+          <div
+            class="flex justify-between items-center py-3"
+            [class.border-t]="i > 0"
+          >
+            <div>
+              <h4 class="font-medium">{{ type.label }}</h4>
+              <p class="text-sm text-gray-500">{{ type.description }}</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                (click)="updateGuests(type.key, -1)"
+                [disabled]="isDecrementDisabled(type.key)"
+                class="w-8 h-8 rounded-full border flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <i class="fa-solid fa-minus"></i>
+              </button>
+              <span>{{ guests[type.key] }}</span>
+              <button
+                type="button"
+                (click)="updateGuests(type.key, 1)"
+                [disabled]="isIncrementDisabled(type.key)"
+                class="w-8 h-8 rounded-full border flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <div *ngIf="getTotalPeople() >= 16" class="pt-2 text-sm text-red-500">
+          Maximum 16 guests (adults + children) allowed
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- </header> -->
+  </div>
+</header>

@@ -1,34 +1,64 @@
-<div class="listing-card" (mouseenter)="hover = true" (mouseleave)="hover = false" [routerLink]="['/listing-details', listingItem.id]">
-    <div class="image-container">
-      <img [src]="imgsService.getImageUrl(listingItem.imageUrls[currentImageIndex])" alt="Listing Image" class="listing-img">
-      <button class="favorite-btn p-2 bg-transparent border-2 border-gray-300 rounded-full transition-all hover:bg-gray-100" (click)="toggleFavorite($event)">
-        <i class="fa-heart" [ngClass]="isFavorite? 'fa-solid' : 'fa-regular' " ></i>
-      </button>
+<div
+  class="listing-card"
+  (mouseenter)="hover = true"
+  (mouseleave)="hover = false"
+  [routerLink]="['/listing-details', listingItem.id]"
+>
+  <div class="image-container">
+    <img
+      [src]="imgsService.getImageUrl(listingItem.imageUrls[currentImageIndex])"
+      alt="Listing Image"
+      class="listing-img"
+    />
+    <button
+      class="favorite-btn p-2 bg-transparent border-2 border-gray-300 rounded-full transition-all hover:bg-gray-100"
+      (click)="toggleFavorite($event)"
+    >
+      <i
+        class="fa-heart"
+        [ngClass]="isFavorite ? 'fa-solid' : 'fa-regular'"
+      ></i>
+    </button>
 
-      <!-- Left Arrow -->
-      <button *ngIf="hover && currentImageIndex > 0" class="nav-arrow left" (click)="prevImage();  $event.stopPropagation() ">‹</button>
+    <!-- Left Arrow -->
+    <button
+      *ngIf="hover && currentImageIndex > 0"
+      class="nav-arrow left"
+      (click)="prevImage(); $event.stopPropagation()"
+    >
+      ‹
+    </button>
 
-      <!-- Right Arrow -->
-      <button *ngIf="hover && currentImageIndex < images.length - 1" class="nav-arrow right" (click)="nextImage();  $event.stopPropagation()">›</button>
+    <!-- Right Arrow -->
+    <button
+      *ngIf="hover && currentImageIndex < images.length - 1"
+      class="nav-arrow right"
+      (click)="nextImage(); $event.stopPropagation()"
+    >
+      ›
+    </button>
 
-      <!-- Dots Navigation -->
-      <div class="dots">
-        <span *ngFor="let image of listingItem.imageUrls; let i = index"
-              [class.active]="i === currentImageIndex"
-              (click)="currentImageIndex = i"></span>
-      </div>
-    </div>
-
-    <div class="listing-details">
-      <div class="listing-header">
-        <h3>{{listingItem.city}},{{listingItem.country}}</h3>
-        <div class="rating">★ {{listingItem.averageRating}} ({{listingItem.reviewCount}})</div>
-      </div>
-      <p>{{listingItem.title}}</p>
-      <p><strong>{{listingItem.pricePerNight}} EGP</strong> / night</p>
-      <p class="date-range">{{ getFormattedDate() }}</p>
+    <!-- Dots Navigation -->
+    <div class="dots">
+      <span
+        *ngFor="let dot of [0, 1, 2]; let i = index"
+        [class.active]="i === currentImageIndex"
+        (click)="currentImageIndex = i"
+      ></span>
     </div>
   </div>
 
-
-
+  <div class="listing-details">
+    <div class="listing-header">
+      <h3>{{ listingItem.city }},{{ listingItem.country }}</h3>
+      <div class="rating">
+        ★ {{ listingItem.averageRating }} ({{ listingItem.reviewCount }})
+      </div>
+    </div>
+    <p>{{ listingItem.title }}</p>
+    <p>
+      <strong>{{ listingItem.pricePerNight }} EGP</strong> / night
+    </p>
+    <p class="date-range">{{ getFormattedDate() }}</p>
+  </div>
+</div>

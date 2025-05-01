@@ -1,19 +1,19 @@
 <!-- listing-details.component.html -->
-    <div class="listing-container">
-      <!-- Header section -->
-      <div class="listing-header">
-        <h1>{{ listing.title }}</h1>
-        <div class="listing-subheader">
-          <div class="listing-info">
-            <span class="rating">
-              <i class="pi pi-star-fill"></i> {{ listing.averageRating }}
-            </span>
-            <span class="reviews">({{ listing.reviewCount }} reviews)</span>
-            <span class="separator">·</span>
+<div class="listing-container">
+  <!-- Header section -->
+  <div class="listing-header">
+    <h1>{{ listing.title }}</h1>
+    <div class="listing-subheader">
+      <div class="listing-info">
+        <span class="rating">
+          <i class="pi pi-star-fill"></i> {{ listing.averageRating }}
+        </span>
+        <span class="reviews">({{ listing.reviewCount }} reviews)</span>
+        <span class="separator">·</span>
         <span class="location">{{ listing.city }} , {{ listing.country }}</span>
-          </div>
+      </div>
 
-          <div class="action-buttons">
+      <div class="action-buttons">
         <button
           pButton
           icon="pi pi-share-alt"
@@ -26,23 +26,32 @@
           label="Save"
           class="p-button-text"
         ></button>
-          </div>
-        </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Photo gallery -->
-      <div class="listing-photos">
-        <div class="photos-grid" *ngIf="!showAllPhotos">
-          <div class="main-photo">
-            <img [src]= "imgsService.getImageUrl(listing.imageUrls[0])" alt="invalid" (click)="togglePhotos()">
-          </div>
-          <div class="side-photos">
-            <img *ngFor="let image of listing.imageUrls; let i =index" [src]="imgsService.getImageUrl(image)" alt="invaliddd" (click)="togglePhotos(i)">
-          </div>
-          <button class="show-all-photos" (click)="togglePhotos()">
-            <i class="pi pi-images"></i> Show all photos
-          </button>
-        </div>
+  <!-- Photo gallery -->
+  <div class="listing-photos">
+    <div class="photos-grid" *ngIf="!showAllPhotos">
+      <div class="main-photo">
+        <img
+          [src]="imgsService.getImageUrl(listing.imageUrls[0])"
+          alt="invalid"
+          (click)="togglePhotos()"
+        />
+      </div>
+      <div class="side-photos">
+        <img
+          *ngFor="let image of listing.imageUrls; let i = index"
+          [src]="imgsService.getImageUrl(image)"
+          alt="invaliddd"
+          (click)="togglePhotos(i)"
+        />
+      </div>
+      <button class="show-all-photos" (click)="togglePhotos()">
+        <i class="pi pi-images"></i> Show all photos
+      </button>
+    </div>
     <p-galleria
       [value]="listing.imageUrls"
       [activeIndex]="activeImageIndex"
@@ -54,15 +63,21 @@
       [showThumbnails]="true"
       *ngIf="showAllPhotos"
     >
-          <ng-template pTemplate="item" let-url>
-            <img [src]="imgsService.getImageUrl(url)"  style="width: 100%; display: block;" >
-          </ng-template>
-          <ng-template pTemplate="thumbnail" let-url>
-            <div class="p-grid p-nogutter p-justify-center">
-               <img [src]="imgsService.getImageUrl(url)"  style="width: 100px; display: block;">
-            </div>
-          </ng-template>
-        </p-galleria>
+      <ng-template pTemplate="item" let-url>
+        <img
+          [src]="imgsService.getImageUrl(url)"
+          style="width: 100%; display: block"
+        />
+      </ng-template>
+      <ng-template pTemplate="thumbnail" let-url>
+        <div class="p-grid p-nogutter p-justify-center">
+          <img
+            [src]="imgsService.getImageUrl(url)"
+            style="width: 100px; display: block"
+          />
+        </div>
+      </ng-template>
+    </p-galleria>
 
     <button
       pButton
@@ -72,61 +87,61 @@
       *ngIf="showAllPhotos"
       class="p-button-secondary close-photos"
     ></button>
-      </div>
+  </div>
 
-      <div class="listing-content">
-        <!-- Left column with details -->
-        <div class="listing-details">
-          <!-- Host info -->
-           <div class="host-info">
-            <div class="host-header">
+  <div class="listing-content">
+    <!-- Left column with details -->
+    <div class="listing-details">
+      <!-- Host info -->
+      <div class="host-info">
+        <div class="host-header">
           <h2>
             {{ listing.capacity }} guests · {{ listing.bedrooms }} bedrooms ·
             {{ listing.bathrooms }} bathrooms
           </h2>
-            </div>
-          </div>
-          <p-divider></p-divider>
-          <div class="host-avatar">
-        <img [src]="listing.host.profilePictureUrl" alt="Host" />
-            <div>
+        </div>
+      </div>
+      <p-divider></p-divider>
+      <div class="host-avatar">
+        <img [src]="imgsService.getImageUrl(listing.host.profilePictureUrl)" alt="Host" />
+        <div>
           <h3>
             Hosted by {{ listing.host.firstName }} {{ listing.host.lastName }}
           </h3>
-              <!-- <p>Host since {{ listing.host.joinedDate }}</p> -->
-              <p>Host since 22/2/2022</p>
+          <!-- <p>Host since {{ listing.host.joinedDate }}</p> -->
+          <p>Host since 22/2/2022</p>
           <p>{{ listing.host.bio }}</p>
-            </div>
-          </div>
-          <!-- Highlights -->
-          <div class="listing-highlights">
-            <div class="highlight-item">
-              <i class="pi pi-check-circle"></i>
-              <div>
-                <p>{{ listing.description }}</p>
-              </div>
-            </div>
-          </div>
-
-          <p-divider></p-divider>
-
-          <!-- Description -->
-          <div class="listing-description">
-            <h3>About this place</h3>
+        </div>
+      </div>
+      <!-- Highlights -->
+      <div class="listing-highlights">
+        <div class="highlight-item">
+          <i class="pi pi-check-circle"></i>
+          <div>
             <p>{{ listing.description }}</p>
           </div>
+        </div>
+      </div>
 
-        <p-divider></p-divider>
+      <p-divider></p-divider>
 
-          <!-- Amenities -->
-          <div class="listing-amenities">
-            <h3>What this place offers</h3>
-            <div class="amenities-grid">
+      <!-- Description -->
+      <div class="listing-description">
+        <h3>About this place</h3>
+        <p>{{ listing.description }}</p>
+      </div>
+
+      <p-divider></p-divider>
+
+      <!-- Amenities -->
+      <div class="listing-amenities">
+        <h3>What this place offers</h3>
+        <div class="amenities-grid">
           <div class="amenity-item" *ngFor="let amenity of visibleAmenities">
-                <i class="{{ amenity.icon }}"></i>
-                <span>{{ amenity.name }}</span>
-              </div>
-            </div>
+            <i class="{{ amenity.icon }}"></i>
+            <span>{{ amenity.name }}</span>
+          </div>
+        </div>
         <button
           *ngIf="listing.amenities.length > defaultVisibleCount"
           pButton
@@ -139,11 +154,11 @@
           class="p-button-outlined"
           (click)="toggleAmenities()"
         ></button>
-          </div>
+      </div>
 
-          <p-divider></p-divider>
+      <p-divider></p-divider>
 
-    <!-- reviews-rating.component.html -->
+      <!-- reviews-rating.component.html -->
 
       <div class="rating-categories">
         <div class="rating-grid">
@@ -155,7 +170,7 @@
             <div class="rating-bar">
               <p-progressBar
                 [value]="ratingToPercentage(category.rating)"
-                            [showValue]="false"
+                [showValue]="false"
                 styleClass="rating-progress"
               ></p-progressBar>
             </div>
@@ -165,29 +180,34 @@
 
       <p-divider></p-divider>
 
-          <!-- Reviews summary -->
-           <div class="listing-reviews">
-            <div class="reviews-header">
+      <!-- Reviews summary -->
+      <div class="listing-reviews">
+        <div class="reviews-header">
           <h3>
             <i class="pi pi-star-fill"></i> {{ listing.averageRating }} ·
             {{ listing.reviewCount }} reviews
           </h3>
-            </div>
+        </div>
 
-            <div class="reviews-grid">
-              <div class="review-card" *ngFor="let review of visibleReviews">
-                <div class="review-header">
-                  <img [src]="imgsService.getImageUrl(review.reviewer.profilePictureUrl)" alt="">
-                  <div>
+        <div class="reviews-grid">
+          <div class="review-card" *ngFor="let review of visibleReviews">
+            <div class="review-header">
+              <img
+                [src]="
+                  imgsService.getImageUrl(review.reviewer.profilePictureUrl)
+                "
+                alt=""
+              />
+              <div>
                 <h4>
                   {{ review.reviewer.firstName }} {{ review.reviewer.lastName }}
                 </h4>
-                    <p>{{ review.createdAt }}</p>
-                  </div>
-                </div>
-                <p class="review-text">{{ review.comment }}</p>
+                <p>{{ review.createdAt }}</p>
               </div>
             </div>
+            <p class="review-text">{{ review.comment }}</p>
+          </div>
+        </div>
 
         <button
           *ngIf="listing.reviews.length > defaultVisibleCount"
@@ -202,24 +222,25 @@
           routerLink="reviews"
           (click)="toggleReviews()"
         ></button>
-          </div>
-
-          <p-divider></p-divider>
-
-          <!-- Location -->
-          <div class="listing-location">
-            <h3>Where you'll be</h3>
-        <p>{{ listing.city }} , {{ listing.country }}</p>
-        <app-leaflet-map  
-        [latitude]="listing.latitude" 
-        [longitude]="listing.longitude"
-        [markerImageUrl]="imgsService.getImageUrl(listing.previewImageUrl)"></app-leaflet-map>
-          </div>
-        </div>
-
-        <!-- Right column with booking form -->
-        <div class="booking-container">
-          <app-reservation-card [listingId]="listing.id"></app-reservation-card>
-        </div>
-        </div>
       </div>
+
+      <p-divider></p-divider>
+
+      <!-- Location -->
+      <div class="listing-location">
+        <h3>Where you'll be</h3>
+        <p>{{ listing.city }} , {{ listing.country }}</p>
+        <app-leaflet-map
+          [latitude]="listing.latitude"
+          [longitude]="listing.longitude"
+          [markerImageUrl]="imgsService.getImageUrl(listing.previewImageUrl)"
+        ></app-leaflet-map>
+      </div>
+    </div>
+
+    <!-- Right column with booking form -->
+    <div class="booking-container">
+      <app-reservation-card [listingId]="listing.id"></app-reservation-card>
+    </div>
+  </div>
+</div>

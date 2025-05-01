@@ -35,6 +35,7 @@ export const routes: Routes = [
   {path:"Account", loadComponent:() => import('./features/account-settings/account-settings.component').then(m => m.AccountComponent), title:"Account", canActivate: [() => authGuard()]},
   { path: "conversations", loadComponent: () => import('./features/conversations/conversations.component').then(m => m.ConversationsComponent), title: "conversations", canActivate: [() => authGuard()] },
   {path:"Account/personal-info", loadComponent:() => import('./features/personal-info/personal-info.component').then(m => m.PersonalInfoComponent), title:"Personal-Info"},
+  {path: 'payment',loadComponent: () => import('./features/payment-component/payment-component.component').then(m => m.PaymentComponent), title: 'Payment', canActivate: [() => authGuard()]},
   { path: 'payment-success', component: PaymentSuccessComponent },
   { path: 'payment-cancelled', component: PaymentFailedComponent },
   {path:"Account/MyReservtions", loadComponent:() => import('./features/guest-reservation/guest-reservation.component').then(m => m.GuestReservationsComponent), title:"Guest-Reservations"},

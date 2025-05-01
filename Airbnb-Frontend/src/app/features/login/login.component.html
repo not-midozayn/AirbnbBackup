@@ -22,13 +22,10 @@
     <section class="mx-auto w-full max-w-md rounded-lg bg-white px-4 py-8 shadow-md">
       <h1 class="mb-10 pb-2 text-center text-xl font-bold border-b-[1px] border-b-red-200">Login</h1>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        @if(loginError) {
-          <div class="mb-4 text-center text-red-500">{{ loginError }}</div>
-        }
         <div>
           <!-- Generic error message at the bottom -->
           @if(loginError) {
-            <small class="block py-2 text-center text-red-500">{{loginError}}</small>
+            <small class="block text-sm py-2 text-center text-red-500">{{loginError}}</small>
           }
         </div>
         <div class="mb-3 relative">

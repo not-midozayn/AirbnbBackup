@@ -1,0 +1,276 @@
+<div class="payment-container">
+  <!-- Main payment section -->
+  <div class="payment-main">
+    <div class="payment-header">
+      <h1>Complete your booking</h1>
+      <p class="secure-payment">
+        <svg viewBox="0 0 24 24" class="lock-icon">
+          <path
+            d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+          />
+        </svg>
+        Secure payment processing
+      </p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="loading-spinner"></div>
+    </div>
+
+    <div *ngIf="!isLoading && bookingDetails" class="payment-content">
+      <!-- Payment options -->
+      <section class="payment-section">
+        <h2 class="section-title">Payment options</h2>
+        <div class="payment-options">
+          <div
+            class="payment-option"
+            [class.active]="paymentType === 0"
+            (click)="paymentType = 0"
+          >
+            <div class="option-radio">
+              <div class="radio-dot" [class.checked]="paymentType === 0"></div>
+            </div>
+            <div class="option-content">
+              <div class="option-header">
+                <h3>Pay in full</h3>
+                <span class="badge">Recommended</span>
+              </div>
+              <p class="option-amount">
+                ${{ bookingDetails.totalPrice | number : "1.2-2" }}
+              </p>
+              <p class="option-description">
+                Pay the total amount now and you're all set
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="payment-option"
+            [class.active]="paymentType === 1"
+            (click)="paymentType = 1"
+          >
+            <div class="option-radio">
+              <div class="radio-dot" [class.checked]="paymentType === 1"></div>
+            </div>
+            <div class="option-content">
+              <h3>Pay part now</h3>
+              <p class="option-amount">
+                ${{ bookingDetails.totalPrice / 2 | number : "1.2-2" }} now
+              </p>
+              <p class="option-description">
+                Pay a portion now and the rest
+                {{ bookingDetails.checkInDate | date : "MMM d, y" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Payment method section -->
+      <section class="payment-section">
+        <h2 class="section-title">Payment method</h2>
+        <div class="payment-method-selector">
+          <!-- Selected method display -->
+          <div
+            class="selected-method-display"
+            (click)="togglePaymentMethodsDropdown()"
+          >
+            <div class="method-icon-container">
+              <img
+                src="visa.png"
+                alt="{{ selectedPaymentMethod.name }}"
+                class="payment-brand-logo"
+              />
+            </div>
+            <span class="selected-method-name">{{
+              selectedPaymentMethod.name
+            }}</span>
+            <span class="dropdown-arrow">
+              {{ showPaymentMethodsDropdown ? "▲" : "▼" }}
+            </span>
+          </div>
+
+          <!-- Single dropdown list -->
+          <div
+            *ngIf="showPaymentMethodsDropdown"
+            class="payment-methods-dropdown"
+          >
+            <div
+              *ngFor="let method of paymentMethods"
+              class="method-option"
+              (click)="selectPaymentMethod(method)"
+            >
+              <div class="method-icon-container">
+                <img
+                  [src]="getPaymentMethodImage(method)"
+                  alt="{{ method.name }}"
+                  class="payment-brand-logo"
+                />
+              </div>
+              <div class="method-info">
+                <span class="method-name">{{ method.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="!loadingPaymentMethods && paymentMethods.length === 0"
+          class="no-methods"
+        >
+          No payment methods available
+        </div>
+      </section>
+      <!-- Cancellation policy -->
+      <section class="payment-section">
+        <h2 class="section-title">Cancellation policy</h2>
+        <div class="cancellation-policy">
+          <p>{{ (bookingDetails.listing.cancellationPolicy && bookingDetails.listing.cancellationPolicy.description) || 'Cancellation policy not available' }}</p>
+        </div>
+      </section>
+
+      <!-- Terms and conditions -->
+      <section class="terms-section">
+        <p>
+          By selecting the button below, I agree to the
+          <a href="#" class="terms-link">House Rules</a>,
+          <a href="#" class="terms-link">Cancellation Policy</a>, and
+          acknowledge that I may be charged a fee if I cause damage to the
+          property.
+        </p>
+      </section>
+
+      <!-- Payment button -->
+      <button
+        class="payment-button"
+        (click)="proceedToPayment()"
+        [disabled]="isLoading"
+      >
+        <span *ngIf="!isLoading"
+          >Pay ${{ getDueNowAmount() | number : "1.2-2" }} now</span
+        >
+        <span *ngIf="isLoading">Processing your payment...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Booking summary -->
+  <div class="booking-summary">
+    <div class="summary-card">
+      <div class="listing-card">
+        <img
+          [src]="imgService.getImageUrl(bookingDetails.listing.previewImageUrl)"
+          alt="Listing image"
+          class="listing-image"
+        />
+        <div class="listing-info">
+          <div class="listing-rating" *ngIf="bookingDetails.listing.averageRating !== undefined">
+            <!-- <span class="star">★</span> -->
+            <span>{{bookingDetails.listing.averageRating | number:'1.1-1'}}</span>
+            <span class="reviews">{{bookingDetails.listing.reviewCount}} review{{bookingDetails.listing.reviewCount !== 1 ? 's' : ''}}</span>
+          </div>
+          <h3 class="listing-title">{{ bookingDetails.listing.title }}</h3>
+          <p class="listing-location">
+            {{ bookingDetails.listing.addressLine1 }}
+          </p>
+        </div>
+      </div>
+
+      <div class="summary-divider"></div>
+
+      <div class="trip-details">
+        <h3 class="details-title">Trip details</h3>
+        <div class="detail-item">
+          <svg viewBox="0 0 24 24" class="detail-icon">
+            <path
+              d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
+            />
+          </svg>
+          <div class="detail-content">
+            <span class="detail-label">Dates</span>
+            <span class="detail-value">
+              {{ bookingDetails.checkInDate | date : "MMM d" }} -
+              {{ bookingDetails.checkOutDate | date : "MMM d, y" }}
+            </span>
+          </div>
+        </div>
+        <div class="detail-item">
+          <svg viewBox="0 0 24 24" class="detail-icon">
+            <path
+              d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+            />
+          </svg>
+          <div class="detail-content">
+            <span class="detail-label">Guests</span>
+            <span class="detail-value">
+              {{ bookingDetails.guestsCount }} guest{{
+                bookingDetails.guestsCount > 1 ? "s" : ""
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="summary-divider"></div> -->
+
+      <!-- <div class="price-details">
+        <h3 class="details-title">Price details</h3>
+        <div class="price-row">
+          <span class="price-label">
+            ${{ bookingDetails.listing.pricePerNight | number : "1.2-2" }} ×
+            {{
+              calculateNights(
+                bookingDetails.checkInDate,
+                bookingDetails.checkOutDate
+              )
+            }}
+            night{{
+              calculateNights(
+                bookingDetails.checkInDate,
+                bookingDetails.checkOutDate
+              ) > 1
+                ? "s"
+                : ""
+            }}
+          </span>
+          <span class="price-value">
+            ${{
+              (bookingDetails.listing.pricePerNight || 0) *
+                calculateNights(
+                  bookingDetails.checkInDate,
+                  bookingDetails.checkOutDate
+                ) | number : "1.2-2"
+            }}
+          </span>
+        </div>
+        <div *ngIf="bookingDetails.listing.serviceFee" class="price-row">
+          <span class="price-label">Service fee</span>
+          <span class="price-value"
+            >${{ bookingDetails.listing.serviceFee | number : "1.2-2" }}</span
+          >
+        </div>
+      </div> -->
+
+      <div class="summary-divider"></div>
+
+      <div class="total-row">
+        <span>Total (USD)</span>
+        <span>${{ bookingDetails.totalPrice | number : "1.2-2" }}</span>
+      </div>
+    </div>
+
+    <div class="guarantee-card">
+      <svg viewBox="0 0 24 24" class="guarantee-icon">
+        <path
+          d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"
+        />
+      </svg>
+      <div class="guarantee-text">
+        <h4>Booking Protection Guarantee</h4>
+        <p>
+          Full refund if you can't check in or the listing isn't as described
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
