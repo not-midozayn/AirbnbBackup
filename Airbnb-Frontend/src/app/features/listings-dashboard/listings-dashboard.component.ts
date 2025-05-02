@@ -16,6 +16,7 @@ import { ImagesService } from '../../core/services/images.service';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-listings-dashboard',
@@ -31,7 +32,8 @@ import { InputTextModule } from 'primeng/inputtext';
     ConfirmDialogModule,
     IconFieldModule,
     InputIconModule,
-    InputTextModule
+    InputTextModule,
+    RouterModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './listings-dashboard.component.html',

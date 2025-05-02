@@ -57,6 +57,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         console.log('Registration successful:', response);
         this.closeRegisterModal();
         this.loginmodalServic.openLoginModal();
+        this.registerForm.reset();
         this.isLoading = false;
       },
       error: (error) => {

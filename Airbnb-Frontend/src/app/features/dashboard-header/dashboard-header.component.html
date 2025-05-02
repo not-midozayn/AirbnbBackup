@@ -1,8 +1,20 @@
-<header class="bg-blue-50 mb-5 shadow fixed top-0 left-0 right-0 z-10 flex items-center justify-between border-b border-gray-200">
-  <div class="logo flex items-center gap-4 p-5">
-    <button class="cursor-pointer" id="menu-toggle" (click)="onMenuToggle()">
-      <i class="fa-solid fa-bars text-xl"></i>
-    </button>
-    <h1 class="text-xl font-bold">Dashboard</h1>
+<header
+  class="bg-blue-50 mb-5 shadow fixed top-0 left-0 right-0 z-10 flex items-center justify-between border-b border-gray-200"
+>
+  <div class="flex items-center justify-between w-full max-w-7xl mx-auto">
+    <div class="logo flex items-center gap-4 p-5">
+      <button class="cursor-pointer" id="menu-toggle" (click)="onMenuToggle()">
+        <i class="fa-solid fa-bars text-xl"></i>
+      </button>
+      <h1 class="text-xl font-bold m-0!">Dashboard</h1>
+    </div>
+    <div class="flex items-center gap-6 p-5">
+      <button class="bg-blue-200 rounded-xl p-2 cursor-pointer hover:bg-blue-300 transition duration-200" routerLink="/home">
+        <i class="fa-solid fa-house fa-xl text-blue-500"></i>
+      </button>
+      <button class="bg-red-200 rounded-xl p-2 cursor-pointer hover:bg-red-300 transition duration-200" (click)="logout()">
+        <i class="fa-solid fa-arrow-right-from-bracket fa-xl text-[var(--primary-color)]"></i>
+      </button>
+    </div>
   </div>
 </header>

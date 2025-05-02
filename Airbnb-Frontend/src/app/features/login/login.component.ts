@@ -76,6 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             roles: this.authService.getAccessTokenClaim('roles')
           });
 
+          this.loginForm.reset();
           this.isLoading = false;
           this.closeModal();
 

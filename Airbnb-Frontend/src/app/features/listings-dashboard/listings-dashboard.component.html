@@ -51,7 +51,7 @@
         <th pSortableColumn="reviewCount">
           Reviews <p-sortIcon field="reviewCount" />
         </th>
-        <th pSortableColumn="status">Status</th>
+        <th pSortableColumn="status" class="min-w-40">Status</th>
         <th style="width: 5rem">Actions</th>
         <!-- <th pSortableColumn="inventoryStatus">
           Status <p-sortIcon field="inventoryStatus" />
@@ -112,7 +112,7 @@
             </button>
           </div>
           <div class="flex justify-between">
-            <button class="cursor-pointer w-6 h-6" [disabled]="isLoading">
+            <button class="cursor-pointer w-6 h-6" [disabled]="isLoading" routerLink="/listing-details/{{ listing.id }}">
               <i class="pi pi-eye transition-all text-indigo-400 hover:scale-125"></i>
             </button>
             <button class="cursor-pointer w-6 h-6" (click)="DeleteListing(listing.id)" [disabled]="isLoading">
