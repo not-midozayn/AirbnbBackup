@@ -89,7 +89,7 @@ export class HeaderComponent implements OnDestroy {
 
 
 
-  profilePictureUrl: string | null = null; 
+  profilePictureUrl: string | null = null;
   currentUser: User | ResponseUser | null | undefined = undefined
 
 
@@ -97,11 +97,11 @@ export class HeaderComponent implements OnDestroy {
   clearSearch() {
     if (this.SearchComponent) {
       this.SearchComponent.clearInputs();
-    } 
+    }
   }
 
   isProfilePictureAvailable() : any {
-    return localStorage.getItem("accessToken") 
+    return localStorage.getItem("accessToken")
   }
 
   isHomeUrl():boolean{

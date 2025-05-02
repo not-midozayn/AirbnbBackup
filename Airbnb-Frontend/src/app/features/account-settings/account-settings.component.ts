@@ -34,4 +34,8 @@ export class AccountComponent {
     description: 'MyReservations',
     routerLink: '/Account/MyReservtions'
   },];
+
+  getIconClass(icon: string): string {
+    return `icon-${icon}`;
+  }
 }

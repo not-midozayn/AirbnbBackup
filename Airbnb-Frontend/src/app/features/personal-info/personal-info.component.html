@@ -3,11 +3,11 @@
     <div class="spinner"></div>
   </div>
 
-  <div *ngIf="successMessage" class="message success">
+  <div *ngIf="successMessage" class="message success fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow z-50">
     {{ successMessage }}
   </div>
-  
-  <div *ngIf="errorMessage" class="message error">
+
+  <div *ngIf="errorMessage" class="message error fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded shadow z-50">
     {{ errorMessage }}
   </div>
 
@@ -54,21 +54,21 @@
       </div>
 
       <div class="actions">
-        <button 
-          *ngIf="!section.editMode && section.title !== 'Email address'" 
-          (click)="editSection(section)" 
+        <button
+          *ngIf="!section.editMode && section.title !== 'Email address'"
+          (click)="editSection(section)"
           class="primary-button">
           Edit
         </button>
-        
+
         <ng-container *ngIf="section.editMode">
-          <button 
-            (click)="saveSection(section)" 
+          <button
+            (click)="saveSection(section)"
             class="primary-button">
             Save
           </button>
-          <button 
-            (click)="cancelEdit(section)" 
+          <button
+            (click)="cancelEdit(section)"
             class="secondary-button">
             Cancel
           </button>

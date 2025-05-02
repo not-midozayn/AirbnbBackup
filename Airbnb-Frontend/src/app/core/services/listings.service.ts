@@ -23,7 +23,7 @@ export class ListingsService {
 
 
   getListings(queryParams : {[key:string]:any} = {}) {
- 
+
     let params = new HttpParams();
     Object.entries(queryParams).forEach(([key,value])=>{
       if(value){
@@ -42,7 +42,7 @@ export class ListingsService {
       map(suggestions => suggestions.map(s => s.value))
     );
   }
-  
+
 
   getPropertyTypes() {
     return this.http.get<PropertyType[]>(`${this.apiUrl}/PropertyTypes`);

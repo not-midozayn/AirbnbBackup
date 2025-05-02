@@ -1,4 +1,4 @@
 export const environment = {
-  stripePublishableKey: 'pk_test_51RIVBnQc1ZKe6l2eq7n4HKYMcMQFmS6jZF1MNzLORI9Fx752V7Uigt0qTwhOG9IAqGmp91koLY4QirmZCwgZyiSU00jghObnVo', // Replace with your actual Stripe publishable key
+  stripePublishableKey: 'pk_test_51P8rY109q7RacWjquX2Vj9kJvlvKO6dHIviuGETrqqoz9Izu5CDWdwp5N8w55JwhZRPtI2JLxtDGiKJg4vwUamNR00BNeXdCE9', // Replace with your actual Stripe publishable key
   apiUrl: 'https://localhost:7200/api'
 };
