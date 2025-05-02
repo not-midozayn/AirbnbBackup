@@ -142,8 +142,7 @@ namespace YourNamespace.Controllers
             if (principal == null)
                 return BadRequest("Invalid access token");
 
-            string username = principal.Identity.Name;
-            var user = await userManager.FindByNameAsync(username);
+            var user = await userManager.GetUserAsync(User);
 
 
             // Store refresh token using Identity's token system
@@ -334,8 +333,7 @@ namespace YourNamespace.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
-            var username = User.Identity.Name;
-            var user = await userManager.FindByNameAsync(username);
+            var user = await userManager.GetUserAsync(User);
 
             if (user == null)
                 return NotFound(new { Status = "Error", Message = "User not found" });

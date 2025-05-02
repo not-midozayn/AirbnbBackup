@@ -72,12 +72,12 @@ export class ChatBotComponent implements OnInit, OnDestroy {
             this.addSystemMessage("Hi! Please log in to start a conversation. You can still see how the chat interface works, but your messages won't be saved.");
             return;
           }
-          
+
           // Don't create a conversation immediately, just show the welcome message if there's no existing conversation
           if (!this.currentConversationId && this.messages.length === 0) {
             this.addSystemMessage("Hello! I'm your Airbnb assistant. How can I help you today?");
           }
-          
+
           if (this.chatInput) {
             this.chatInput.nativeElement.focus();
           }
@@ -105,12 +105,12 @@ export class ChatBotComponent implements OnInit, OnDestroy {
 
   private loadConversation() {
     if (!this.currentConversationId) return;
-    
+
     this.messages = [];
     this.authService.getCurrentUser().subscribe({
       next: (user) => {
         if (!this.validateUser(user)) return;
-        
+
         const convSub = this.chatService.getConversation(this.currentConversationId!, user.id).subscribe({
           next: (messages) => {
             if (!messages) {
@@ -135,7 +135,7 @@ export class ChatBotComponent implements OnInit, OnDestroy {
 
   sendMessage() {
     if (!this.newMessage.trim()) return;
-    
+
     this.authService.getCurrentUser().subscribe({
       next: (user) => {
         if (!user || !user.id) {
@@ -145,7 +145,7 @@ export class ChatBotComponent implements OnInit, OnDestroy {
           this.newMessage = '';
           return;
         }
-        
+
         // For logged in users, proceed with normal flow
         if (!this.currentConversationId) {
           this.createNewConversationAndSendMessage();
@@ -194,7 +194,7 @@ export class ChatBotComponent implements OnInit, OnDestroy {
           next: (response) => {
             response.content = this.messageFormatter.formatMessage(response.content);
             this.messages.push(response);
-            
+
             setTimeout(() => {
               const chatContainer = document.querySelector('.overflow-y-auto');
               if (chatContainer) {
@@ -233,14 +233,14 @@ export class ChatBotComponent implements OnInit, OnDestroy {
 
   async stopRecording() {
     if (!this.mediaRecorder) return;
-    
+
     return new Promise<void>((resolve) => {
       this.mediaRecorder!.onstop = () => {
         this.ngZone.run(async () => {
           const audioBlob = new Blob(this.audioChunks, { type: 'audio/mp3' });
           this.isProcessingAudio = true;
           this.cdr.detectChanges();
-          
+
           try {
             await this.sendAudioMessage(audioBlob);
           } finally {
@@ -251,7 +251,7 @@ export class ChatBotComponent implements OnInit, OnDestroy {
           }
         });
       };
-      
+
       this.mediaRecorder!.stop();
       this.isRecording = false;
       if (this.mediaRecorder!.stream) {
@@ -261,15 +261,27 @@ export class ChatBotComponent implements OnInit, OnDestroy {
   }
 
   private async sendAudioMessage(audioBlob: Blob): Promise<void> {
+    // Create a new conversation if one doesn't exist
     if (!this.currentConversationId) {
-      this.addSystemMessage('No active conversation. Please try again.');
+      const sub = this.chatService.createConversation().subscribe({
+        next: (conversationId) => {
+          this.currentConversationId = conversationId;
+          this.sendAudioToServer(audioBlob);
+        },
+        error: (error) => this.handleApiError('Error creating conversation:', error)
+      });
+      this.subscriptions.push(sub);
       return;
     }
-    
+
+    await this.sendAudioToServer(audioBlob);
+  }
+
+  private async sendAudioToServer(audioBlob: Blob): Promise<void> {
     const formData = new FormData();
     formData.append('audioFile', audioBlob, 'audio.mp3');
-    formData.append('conversationId', this.currentConversationId);
-    
+    formData.append('conversationId', this.currentConversationId!);
+
     return new Promise((resolve, reject) => {
       const sub = this.http.post<any>(`${this.chatService.baseUrl}/audio`, formData)
         .subscribe({

@@ -26,7 +26,7 @@ interface PersonalInfoSection {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './personal-info.component.html',
-  styleUrls: ['./personal-info.component.css']
+  styleUrls: ['./personal-info.component.css'],
 })
 export class PersonalInfoComponent {
   userData: User = {} as User;
@@ -35,11 +35,13 @@ export class PersonalInfoComponent {
   successMessage: string = '';
   errorMessage: string = '';
 
-
-
   personalInfoSections: PersonalInfoSection[] = [];
 
-  constructor(private _PersonalInfoService: PersonalInfoService , private _ToastrService:ToastrService , public _ImagesService:ImagesService) {}
+  constructor(
+    private _PersonalInfoService: PersonalInfoService,
+    private _ToastrService: ToastrService,
+    public _ImagesService: ImagesService
+  ) {}
 
   ngOnInit(): void {
     this.getMyPersonalInfo();
@@ -57,9 +59,10 @@ export class PersonalInfoComponent {
       },
       error: (err) => {
         console.log(err);
-        this.errorMessage = 'Failed to load personal information. Please try again.';
+        this.errorMessage =
+          'Failed to load personal information. Please try again.';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -67,62 +70,110 @@ export class PersonalInfoComponent {
     this.personalInfoSections = [
       {
         title: 'Legal name',
-        description: 'This is the name on your travel document, which could be a license or a passport.',
+        description:
+          'This is the name on your travel document, which could be a license or a passport.',
         editMode: false,
         fields: [
-          { name: 'firstName', label: 'First name', value: this.userData.firstName || '', placeholder: 'First name', type: 'text' },
-          { name: 'lastName', label: 'Last name', value: this.userData.lastName || '', placeholder: 'Last name', type: 'text' },
-        ]
+          {
+            name: 'firstName',
+            label: 'First name',
+            value: this.userData.firstName || '',
+            placeholder: 'First name',
+            type: 'text',
+          },
+          {
+            name: 'lastName',
+            label: 'Last name',
+            value: this.userData.lastName || '',
+            placeholder: 'Last name',
+            type: 'text',
+          },
+        ],
       },
       {
         title: 'Email address',
         description: 'Use an address you will always have access to.',
         editMode: false,
         fields: [
-          { name: 'email', label: 'Email', value: this.userData.email || '', placeholder: 'Email', type: 'email' }
-        ]
+          {
+            name: 'email',
+            label: 'Email',
+            value: this.userData.email || '',
+            placeholder: 'Email',
+            type: 'email',
+          },
+        ],
       },
       {
         title: 'Phone numbers',
         description: 'Add a number for verification purposes.',
         editMode: false,
         fields: [
-          { name: 'phoneNumber', label: 'Phone number', value: this.userData.phoneNumber || '', placeholder: this.userData.phoneNumber, type: 'tel' }
-        ]
+          {
+            name: 'phoneNumber',
+            label: 'Phone number',
+            value: this.userData.phoneNumber || '',
+            placeholder: this.userData.phoneNumber,
+            type: 'tel',
+          },
+        ],
       },
       {
         title: 'Password',
         description: 'Keep your account secure with a strong password.',
         editMode: false,
         fields: [
-          { name: 'currentPassword', label: 'Current password', value: '', placeholder: 'Current password', type: 'password' },
-          { name: 'newPassword', label: 'New password', value: '', placeholder: 'New password', type: 'password' },
-          { name: 'confirmPassword', label: 'Confirm new password', value: '', placeholder: 'Confirm new password', type: 'password' }
-        ]
+          {
+            name: 'currentPassword',
+            label: 'Current password',
+            value: '',
+            placeholder: 'Current password',
+            type: 'password',
+          },
+          {
+            name: 'newPassword',
+            label: 'New password',
+            value: '',
+            placeholder: 'New password',
+            type: 'password',
+          },
+          {
+            name: 'confirmPassword',
+            label: 'Confirm new password',
+            value: '',
+            placeholder: 'Confirm new password',
+            type: 'password',
+          },
+        ],
       },
       {
         title: 'Personal info',
         description: 'This information will be used to verify your identity.',
         editMode: false,
         fields: [
-          { name: 'dateOfBirth', label: 'Date of birth', value: this.userData.dateOfBirth || '', placeholder: 'Date of birth', type: 'date' }
-        ]
+          {
+            name: 'dateOfBirth',
+            label: 'Date of birth',
+            value: this.userData.dateOfBirth || '',
+            placeholder: 'Date of birth',
+            type: 'datetime-local',
+          },
+        ],
       },
-    //   {
-    //   title: 'Gender',
-    //   description: 'Tell Us about your Gender',
-    //   editMode: false,
-    //   fields: [
-    //     { name: 'Gender', label: 'Gender', value: this.userData.email || '', placeholder: 'Gender', type: 'Gender' }
-    //   ]
-    // }
-
+      //   {
+      //   title: 'Gender',
+      //   description: 'Tell Us about your Gender',
+      //   editMode: false,
+      //   fields: [
+      //     { name: 'Gender', label: 'Gender', value: this.userData.email || '', placeholder: 'Gender', type: 'Gender' }
+      //   ]
+      // }
     ];
   }
 
   editSection(section: PersonalInfoSection) {
     // Reset all other sections first
-    this.personalInfoSections.forEach(s => {
+    this.personalInfoSections.forEach((s) => {
       if (s !== section) s.editMode = false;
     });
     section.editMode = true;
@@ -141,9 +192,12 @@ export class PersonalInfoComponent {
     this.successMessage = '';
 
     if (section.title === 'Password') {
-      const oldPass = section.fields.find(f => f.name === 'currentPassword')?.value || '';
-      const newPass = section.fields.find(f => f.name === 'newPassword')?.value || '';
-      const confirmPass = section.fields.find(f => f.name === 'confirmPassword')?.value || '';
+      const oldPass =
+        section.fields.find((f) => f.name === 'currentPassword')?.value || '';
+      const newPass =
+        section.fields.find((f) => f.name === 'newPassword')?.value || '';
+      const confirmPass =
+        section.fields.find((f) => f.name === 'confirmPassword')?.value || '';
 
       if (newPass !== confirmPass) {
         this.errorMessage = 'New passwords do not match';
@@ -156,7 +210,7 @@ export class PersonalInfoComponent {
     }
 
     // Update userData from fields
-    section.fields.forEach(field => {
+    section.fields.forEach((field) => {
       (this.userData as any)[field.name] = field.value;
     });
 
@@ -167,7 +221,6 @@ export class PersonalInfoComponent {
   }
 
   changeMyPersonalData(user: User) {
-
     console.log('Sending to server:', user);
 
     this._PersonalInfoService.changeMyPersonalData(user).subscribe({
@@ -176,46 +229,56 @@ export class PersonalInfoComponent {
         this.originalUserData = { ...res };
         this.initPersonalInfoSections();
         this.successMessage = 'Your information has been updated successfully';
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 1000);
         this.loading = false;
 
         // Reset edit mode for all sections
-        this.personalInfoSections.forEach(s => s.editMode = false);
+        this.personalInfoSections.forEach((s) => (s.editMode = false));
       },
       error: (err) => {
         console.log(err);
-        this.errorMessage = 'Failed to update your information. Please try again.';
+        this.errorMessage =
+          'Failed to update your information. Please try again.';
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 1000);
         this.loading = false;
-      }
-    });
-  }
-
-  changepassword(oldPassword: string, newPassword: string, confirmPassword: string) {
-    this._PersonalInfoService.changeMyPassword(oldPassword, newPassword, confirmPassword).subscribe({
-      next: (res) => {
-        this.successMessage = 'Password updated successfully';
-        this.loading = false;
-
-        // Reset password fields
-        const passwordSection = this.personalInfoSections.find(s => s.title === 'Password');
-        if (passwordSection) {
-          passwordSection.editMode = false;
-          passwordSection.fields.forEach(field => field.value = '');
-        }
       },
-      error: (err) => {
-        console.log(err);
-        this.errorMessage = err?.error?.message || 'Failed to update password. Please try again.';
-        this.loading = false;
-      }
     });
   }
 
+  changepassword(
+    oldPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ) {
+    this._PersonalInfoService
+      .changeMyPassword(oldPassword, newPassword, confirmPassword)
+      .subscribe({
+        next: (res) => {
+          this.successMessage = 'Password updated successfully';
+          this.loading = false;
 
-
-
-
-
-
+          // Reset password fields
+          const passwordSection = this.personalInfoSections.find(
+            (s) => s.title === 'Password'
+          );
+          if (passwordSection) {
+            passwordSection.editMode = false;
+            passwordSection.fields.forEach((field) => (field.value = ''));
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          this.errorMessage =
+            err?.error?.message ||
+            'Failed to update password. Please try again.';
+          this.loading = false;
+        },
+      });
+  }
 
   selectedFile: File | null = null;
   previewImage: string | null = null;
@@ -231,15 +294,22 @@ export class PersonalInfoComponent {
     );
   }
 
-
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
       // Check if the file is an image
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+      const allowedTypes = [
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+        'image/webp',
+      ];
 
       if (!allowedTypes.includes(file.type)) {
-        this._ToastrService.error('Only images are allowed (JPG, JPEG, PNG, WEBP)', 'Invalid File');
+        this._ToastrService.error(
+          'Only images are allowed (JPG, JPEG, PNG, WEBP)',
+          'Invalid File'
+        );
         return;
       }
 
@@ -255,27 +325,31 @@ export class PersonalInfoComponent {
     }
   }
 
-
   onSubmit() {
-   if (this.selectedFile) {
-      this._PersonalInfoService.changeProfilePicture(this.selectedFile).subscribe(
-        (response) => {
-          console.log('Profile picture uploaded successfully', response);
+    if (this.selectedFile) {
+      this._PersonalInfoService
+        .changeProfilePicture(this.selectedFile)
+        .subscribe(
+          (response) => {
+            console.log('Profile picture uploaded successfully', response);
 
-          this._ToastrService.success("Profile Picture Uploaded ","Success");
-          this.previewImage = this._ImagesService.getImageUrl(response.profilePictureUrl);
-          // Notify about the profile picture update
-          this._PersonalInfoService.notifyProfilePictureUpdated(response.profilePictureUrl);
-
-        },
-        (error) => {
-          this._ToastrService.error("You Should Upload A Picture","Fail");
-          console.error('Error uploading profile picture', error);
-        }
-      );
+            this.successMessage =
+              'Your information has been updated successfully';
+            setTimeout(() => {
+              this.successMessage = '';
+            }, 1000);
+            this.previewImage = this._ImagesService.getImageUrl(
+              response.profilePictureUrl
+            );
+            // Notify about the profile picture update
+            this._PersonalInfoService.notifyProfilePictureUpdated(
+              response.profilePictureUrl
+            );
+          },
+          (error) => {
+            console.error('Error uploading profile picture', error);
+          }
+        );
     }
   }
-
-
-
 }
