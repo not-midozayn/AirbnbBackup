@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using WebApplication1.Interfaces;
 using WebApplication1.Models;
@@ -7,7 +8,7 @@ namespace WebApplication1.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IHttpContextAccessor _httpContextAccessor; 
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _environment;
         private readonly AirbnbDBContext _context;
         private readonly IRepository<ApplicationUser> irepo;
@@ -33,25 +34,8 @@ namespace WebApplication1.Repositories
 
         public async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            //var userId = GetCurrentUserId();
-            //var user = await irepo.GetByIDAsync(userId);
-            //return user;
-
-            var context = _httpContextAccessor.HttpContext;
-            if (context == null)
-            {
-                return null;
-            }
-
-            var identity = context.User.Identity as ClaimsIdentity;
-            var allClaims = identity?.Claims.ToList();
-            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return null;
-            }
-
-            var user = await irepo.GetByIDAsync(Guid.Parse(userId));
+            var userId = GetCurrentUserId();
+            var user = await irepo.GetByIDAsync(userId);
             return user;
         }
 

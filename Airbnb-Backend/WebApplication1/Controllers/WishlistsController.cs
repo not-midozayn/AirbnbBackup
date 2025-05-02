@@ -14,38 +14,36 @@ namespace WebApplication1.Controllers
 
         private readonly IWishListRepository wishlistRepo;
         private readonly IUserRepository irepo;
-        private IHttpContextAccessor _httpContextAccessor;
 
-        public WishlistsController(IWishListRepository _wishlistRepo, IUserRepository _irepo, IHttpContextAccessor httpContextAccessor)
+        public WishlistsController(IWishListRepository _wishlistRepo, IUserRepository _irepo)
         {
             wishlistRepo = _wishlistRepo;
             irepo = _irepo;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<WishlistDto>>> GetWishlist()
         {
-            if (!IsAuthenticated())
+            if (!irepo.IsAuthenticated())
             {
                 return Ok(new { message = "Not logged in" });
             }
-            var userId = GetCurrentUserId();
+            var userId = irepo.GetCurrentUserId();
             var wishlist = await wishlistRepo.GetUserWishlistsAsync(userId);
             return Ok(wishlist);
         }
-       
+
         [HttpDelete]
         public async Task<ActionResult> DeleteWishlist()
         {
             try
             {
-                if (!IsAuthenticated())
+                if (!irepo.IsAuthenticated())
                 {
-                    return Ok(new { message = "Not logged in"});
+                    return Ok(new { message = "Not logged in" });
                 }
 
-                var userId = GetCurrentUserId();
+                var userId = irepo.GetCurrentUserId();
                 await wishlistRepo.DeleteWishlistAsync(userId);
                 return NoContent();
             }
@@ -64,11 +62,11 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                if (!IsAuthenticated())
+                if (!irepo.IsAuthenticated())
                 {
                     return Ok(new { message = "Not logged in" });
                 }
-                var userId = GetCurrentUserId();
+                var userId = irepo.GetCurrentUserId();
                 var wishlistDto = await wishlistRepo.GetUserWishlistsAsync(userId);
                 var item = await wishlistRepo.AddItemToWishlistAsync(userId, dto.ListingId);
                 return CreatedAtAction(nameof(GetWishlist), item);
@@ -92,11 +90,11 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                if (!IsAuthenticated())
+                if (!irepo.IsAuthenticated())
                 {
                     return Ok(new { message = "Not logged in" });
                 }
-                var userId = GetCurrentUserId();
+                var userId = irepo.GetCurrentUserId();
                 await wishlistRepo.RemoveItemFromWishlistAsync(itemId, userId);
                 return NoContent();
             }
@@ -108,16 +106,6 @@ namespace WebApplication1.Controllers
             {
                 return Forbid();
             }
-        }
-        private Guid GetCurrentUserId()
-        {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Guid.TryParse(userId, out var guid) ? guid : Guid.Empty;
-        }
-
-        private bool IsAuthenticated()
-        {
-            return _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
         }
     }
 }

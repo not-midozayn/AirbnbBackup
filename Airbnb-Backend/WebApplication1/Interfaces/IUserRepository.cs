@@ -10,9 +10,9 @@ namespace WebApplication1.Interfaces
         // Returns the URL of the saved image
         string SaveProfilePicture(Stream imageStream, string fileName);
         public bool IsValidImageFile(IFormFile file);
+        public Guid GetCurrentUserId();
+        public bool IsAuthenticated();
         public Task<ApplicationUser> GetCurrentUserAsync();
         public Task<ApplicationUser> GetUserAsync(Guid userId);
-
-
     }
 }

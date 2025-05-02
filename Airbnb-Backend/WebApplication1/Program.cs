@@ -21,6 +21,7 @@ using WebApplication1.Repositories.Payment;
 using WebApplication1.Interfaces.ChatBot;
 using WebApplication1.Repositories.ChatBot;
 using System.Net.Http.Headers;
+using NETCore.MailKit.Core;
 
 namespace WebApplication1
 {

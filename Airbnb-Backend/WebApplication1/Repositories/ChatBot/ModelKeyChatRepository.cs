@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace WebApplication1.Repositories.ChatBot
 {
-    public class ModelKeyChatRepository : IChatRepository   
+    public class ModelKeyChatRepository : IChatRepository
     {
         private readonly IAiRepository _aiService;
         private readonly AirbnbDBContext _context;
@@ -26,14 +26,13 @@ namespace WebApplication1.Repositories.ChatBot
             _modelKey = configuration["LLM:ApiKey"];
         }
 
-        public async Task<string> CreateNewConversationAsync(string email)
+        public async Task<string> CreateNewConversationAsync(string userId)
         {
-            var user = await GetCurrentUser(email);
             var conversationId = Guid.NewGuid().ToString();
             var conversation = new Conversation
             {
                 Id = conversationId,
-                UserId = user.Id.ToString(),
+                UserId = userId,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -43,24 +42,21 @@ namespace WebApplication1.Repositories.ChatBot
             return conversationId;
         }
 
-        public async Task<List<ChatMessage>> GetConversationHistoryAsync(string email, string conversationId)
+        public async Task<List<ChatMessage>> GetConversationHistoryAsync(string userId, string conversationId)
         {
-            var user = await GetCurrentUser(email);
+            var user = await GetCurrentUser(userId);
             return await _context.ChatMessages
-                    .Where(m => m.UserId == user.Id.ToString() &&
+                    .Where(m => m.UserId == userId &&
                                 m.ConversationId == conversationId)
                     .OrderBy(m => m.Timestamp)
                     .ToListAsync();
         }
         public async Task<IEnumerable<Conversation>> GetAllConversationsAsync(string userId)
         {
-            // Parse userId early to fail fast if invalid
-            var userGuid = Guid.Parse(userId);
-
             // Fetch the user with their conversations
             var user = await _context.Users
                 .Include(u => u.Conversations) // Ensure conversations are loaded
-                .FirstOrDefaultAsync(u => u.Id == userGuid);
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
 
             // Return empty list if user or conversations not found
             if (user?.Conversations == null)
@@ -68,25 +64,25 @@ namespace WebApplication1.Repositories.ChatBot
                 return Enumerable.Empty<Conversation>();
             }
             var conversations = _context.Conversations
-                .Where(c => c.UserId == user.Id.ToString())
+                .Where(c => c.UserId == userId)
                 .OrderBy(c => c.CreatedAt)
                 .ToList();
             // Return ordered conversations
-            if(conversations == null)
+            if (conversations == null)
             {
-                return  Enumerable.Empty<Conversation>();
+                return Enumerable.Empty<Conversation>();
             }
             return conversations;
         }
 
-        public async Task<ChatMessage> ProcessMessageAsync(string email, string message, string conversationId)
+        public async Task<ChatMessage> ProcessMessageAsync(string userId, string message, string conversationId)
         {
-            var user = await GetCurrentUser(email);
+            var user = await GetCurrentUser(userId);
             var conversation = _context.Conversations
                 .Where(c => c.Id == conversationId).FirstOrDefault();
             // Check if this exact message already exists in the database
             var existingMessage = await _context.ChatMessages
-                .FirstOrDefaultAsync(m => m.UserId == user.Id.ToString()
+                .FirstOrDefaultAsync(m => m.UserId == userId
                                       && m.ConversationId == conversationId
                                       && m.Content == message
                                       && m.IsFromUser == true
@@ -98,7 +94,7 @@ namespace WebApplication1.Repositories.ChatBot
                 // Create and save the new user message if it doesn't exist
                 userMessage = new ChatMessage
                 {
-                    UserId = user.Id.ToString(),
+                    UserId = userId,
                     IsFromUser = true,
                     Content = message,
                     Timestamp = DateTime.UtcNow,
@@ -115,16 +111,27 @@ namespace WebApplication1.Repositories.ChatBot
 
             if (!IsAirbnbRelated(message))
             {
-                return await CreateRejectionMessage(email, conversationId);
+                return await CreateRejectionMessage(userId, conversationId);
             }
-            
-            var history = await GetConversationHistoryAsync(email, conversationId);
-            var conversationText = string.Join("\n", history.Select(m => $"{m.Content}"));
-            var responseContent = await _aiService.GenerateResponseAsync(message, conversationText);
+
+            var history = await GetConversationHistoryAsync(userId, conversationId);
+            var formattedHistory = new List<object>();
+            foreach (var msg in history)
+            {
+                formattedHistory.Add(new
+                {
+                    role = msg.IsFromUser ? "user" : "assistant",
+                    content = msg.Content
+                });
+            }
+
+            // Convert to JSON string
+            var conversationJson = System.Text.Json.JsonSerializer.Serialize(formattedHistory);
+            var responseContent = await _aiService.GenerateResponseAsync(message, conversationJson);
 
             // Check if this exact response already exists
             var existingResponse = await _context.ChatMessages
-                .FirstOrDefaultAsync(m => m.UserId == user.Id.ToString()
+                .FirstOrDefaultAsync(m => m.UserId == userId
                                       && m.ConversationId == conversationId
                                       && m.Content == responseContent
                                       && m.IsFromUser == false
@@ -139,7 +146,7 @@ namespace WebApplication1.Repositories.ChatBot
                 // Create and save the new assistant response if it doesn't exist
                 assistantResponse = new ChatMessage
                 {
-                    UserId = user.Id.ToString(),
+                    UserId = userId,
                     IsFromUser = false,
                     Content = responseContent,
                     Timestamp = DateTime.UtcNow,
@@ -166,7 +173,15 @@ namespace WebApplication1.Repositories.ChatBot
                 "property", "reservation", "check-in", "check-out", "amenities",
                 "cancellation policy", "security deposit", "cleaning fee",
                 "vacation rental", "hosting", "superhost", "experience",
-                "long-term stay", "short-term rental", "house rules"
+                "long-term stay", "short-term rental", "house rules",
+                "Recall previous prompts and responses from the same conversations and answer questions about them",
+                "questions about the whole current conversation prompts and responses"
+            };
+            var conversationKeywords = new[]
+            {
+                "previous", "history", "conversation", "earlier", "before", "last time",
+                "last message", "you said", "i asked", "remember", "recall", "mentioned",
+                "first question", "response", "answer", "said", "told", "chat", "prompt"
             };
 
             var forbiddenPatterns = new[]
@@ -175,6 +190,9 @@ namespace WebApplication1.Repositories.ChatBot
                 @"\b(how to make|create|build|invest in|buy|sell)\b",
                 @"\b(history of|biography|science|math|physics|chemistry)\b"
             };
+
+            if (conversationKeywords.Any(keyword => lowercaseMsg.Contains(keyword)))
+                return true;
 
             // Check for explicit Airbnb keywords
             if (airbnbKeywords.Any(keyword => lowercaseMsg.Contains(keyword)))
@@ -199,13 +217,12 @@ namespace WebApplication1.Repositories.ChatBot
             return response.Trim().Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
-        private async Task<ChatMessage> CreateRejectionMessage(string Email, string conversationId)
+        private async Task<ChatMessage> CreateRejectionMessage(string userId, string conversationId)
         {
-            var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == Email);
+            var user = await GetCurrentUser(userId);
             return new ChatMessage
             {
-                UserId = user.Id.ToString(),
+                UserId = userId,
                 IsFromUser = false,
                 Content = $"Hi {user.FirstName}, I specialize exclusively in Airbnb-related questions. " +
                          "Please ask about:\n" +
@@ -218,10 +235,10 @@ namespace WebApplication1.Repositories.ChatBot
                 ConversationId = conversationId
             };
         }
-        private async Task<ApplicationUser> GetCurrentUser(string email)
+        private async Task<ApplicationUser> GetCurrentUser(string id)
         {
             return await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Id == Guid.Parse(id));
         }
     }
 }

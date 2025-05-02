@@ -174,30 +174,40 @@ export class ChatBotComponent implements OnInit, OnDestroy {
   private sendMessageToApi() {
     if (!this.currentConversationId) return;
 
-    const request: SendMessageRequest = {
-      userId: '',
-      message: this.newMessage.trim(),
-      conversationId: this.currentConversationId
-    };
+    this.authService.getCurrentUser().subscribe({
+      next: (user) => {
+        if (!user || !user.id) {
+          this.handleAuthError(new Error('User not authenticated'));
+          return;
+        }
 
-    this.addUserMessage(request.message);
-    this.newMessage = '';
+        const request: SendMessageRequest = {
+          userId: user.id,
+          message: this.newMessage.trim(),
+          conversationId: this.currentConversationId! // Using non-null assertion since we checked above
+        };
 
-    const sub = this.chatService.sendMessage(request).subscribe({
-      next: (response) => {
-        response.content = this.messageFormatter.formatMessage(response.content);
-        this.messages.push(response);
-        
-        setTimeout(() => {
-          const chatContainer = document.querySelector('.overflow-y-auto');
-          if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }
+        this.addUserMessage(request.message);
+        this.newMessage = '';
+
+        const sub = this.chatService.sendMessage(request).subscribe({
+          next: (response) => {
+            response.content = this.messageFormatter.formatMessage(response.content);
+            this.messages.push(response);
+            
+            setTimeout(() => {
+              const chatContainer = document.querySelector('.overflow-y-auto');
+              if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+              }
+            });
+          },
+          error: (error) => this.handleMessageError(error)
         });
+        this.subscriptions.push(sub);
       },
-      error: (error) => this.handleMessageError(error)
+      error: (error) => this.handleAuthError(error)
     });
-    this.subscriptions.push(sub);
   }
 
   async startRecording() {

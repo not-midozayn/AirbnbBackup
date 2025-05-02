@@ -18,7 +18,8 @@ namespace WebApplication1.Interfaces
         Task<T> GetByIDAsync(Guid id, List<string> includeProperties = null);
         Task SaveChangesAsync();
         #endregion
-        bool IsAuthenticated();
+
         Guid GetCurrentUserId();
+        bool IsAuthenticated();
     }
 }

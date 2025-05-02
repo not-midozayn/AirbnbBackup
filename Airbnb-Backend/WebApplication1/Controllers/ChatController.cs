@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.DTOS.Authentication;
 using WebApplication1.DTOS.ChatBot;
+using WebApplication1.Interfaces;
 using WebApplication1.Interfaces.ChatBot;
 using WebApplication1.Models.ChatBot;
+using WebApplication1.Repositories;
 using WebApplication1.Repositories.ChatBot;
 
 namespace AirbnbClone.Controllers
@@ -18,24 +20,26 @@ namespace AirbnbClone.Controllers
     {
         private readonly IChatRepository _chatService;
         private readonly IAiRepository _aiRepository;
+        private readonly IUserRepository _userRepository;
 
-        public ChatController(IChatRepository chatService, IAiRepository aiRepository)
+        public ChatController(IChatRepository chatService, IAiRepository aiRepository, IUserRepository userRepository)
         {
             _chatService = chatService;
             _aiRepository = aiRepository;
+            _userRepository = userRepository;
         }
 
         [HttpPost("conversation")]
         public async Task<ActionResult<string>> CreateConversation()
         {
-            var userId = User.Identity.Name;
+            var userId = _userRepository.GetCurrentUserId().ToString();
             var conversationId = await _chatService.CreateNewConversationAsync(userId);
             return Ok(new { conversationId });
         }
         [HttpGet("conversations")]
         public async Task<ActionResult<IEnumerable<Conversation>>> GetMostRecentConversationAsync()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _userRepository.GetCurrentUserId().ToString();
             if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest("User ID not found in token");
@@ -47,15 +51,15 @@ namespace AirbnbClone.Controllers
         [HttpGet("conversation/{conversationId}")]
         public async Task<ActionResult<List<ChatMessage>>> GetConversation(string conversationId)
         {
-            var email = User.Identity.Name;
-            var messages = await _chatService.GetConversationHistoryAsync(email, conversationId);
+            var userId = _userRepository.GetCurrentUserId().ToString();
+            var messages = await _chatService.GetConversationHistoryAsync(userId, conversationId);
             return Ok(messages);
         }
 
         [HttpPost("send")]
         public async Task<ActionResult<ChatMessage>> SendMessage([FromBody] SendMessageRequest request)
         {
-            var userId = User.Identity.Name;
+            var userId = _userRepository.GetCurrentUserId().ToString();
             var response = await _chatService.ProcessMessageAsync(userId, request.Message, request.ConversationId);
             return Ok(response);
         }
@@ -63,7 +67,7 @@ namespace AirbnbClone.Controllers
 
 
         [HttpPost("audio")]
-        [ApiExplorerSettings(IgnoreApi = true)]  
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> ProcessAudioMessage([FromForm] IFormFile audioFile, [FromForm] string conversationId)
         {
             if (audioFile == null || audioFile.Length == 0)
@@ -71,7 +75,7 @@ namespace AirbnbClone.Controllers
 
             try
             {
-                var userId = User.Identity.Name;
+                var userId = _userRepository.GetCurrentUserId().ToString();
 
                 // Step 1: Transcribe the audio using Whisper API
                 string transcription = await _aiRepository.TranscribeAudioAsync(audioFile);

@@ -17,6 +17,7 @@ using WebApplication1.Repositories;
 using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.Globalization;
 
 namespace YourNamespace.Controllers
 {
@@ -91,17 +92,17 @@ namespace YourNamespace.Controllers
             return Ok(new { Status = "Success", Message = "User created successfully!" });
         }
 
-//{
-//  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//  "firstName": "mohamed",
-//  "lastName": "aboseif",
-//  "email": "aboseif@email.com",
-//  "userName": "aboseif1234A",
-//  "password": "aboseif1234A@",
-//  "confirmPassword": "aboseif1234A@",
-//  "dateOfBirth": "2025-04-14T10:41:31.864Z",
-//  "securityStamp": "string"
-//}
+        //{
+        //  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        //  "firstName": "mohamed",
+        //  "lastName": "aboseif",
+        //  "email": "aboseif@email.com",
+        //  "userName": "aboseif1234A",
+        //  "password": "aboseif1234A@",
+        //  "confirmPassword": "aboseif1234A@",
+        //  "dateOfBirth": "2025-04-14T10:41:31.864Z",
+        //  "securityStamp": "string"
+        //}
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
@@ -156,17 +157,25 @@ namespace YourNamespace.Controllers
                 "RefreshTokenExpiry"
             );
 
-            if (user == null || RefreshToken != Request_refreshToken || DateTime.Parse(RefreshTokenExpiryTime) <= DateTime.Now)
-                return BadRequest("Invalid/Expired Refresh Token");
+            //if (user == null || RefreshToken != Request_refreshToken || DateTime.Parse(RefreshTokenExpiryTime) <= DateTime.Now)
+            //    return BadRequest("Invalid/Expired Refresh Token");
 
+            if (user == null ||
+            !string.Equals(RefreshToken, Request_refreshToken, StringComparison.Ordinal) ||
+            string.IsNullOrEmpty(RefreshTokenExpiryTime) ||
+            !DateTime.TryParse(RefreshTokenExpiryTime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var expiryTime) ||
+            expiryTime <= DateTime.UtcNow)
+            {
+                return Unauthorized();
+            }
             var newAccessToken = CreateToken(principal.Claims.ToList());
-            var newRefreshToken = GenerateRefreshToken32bitCode();
+            var newRefreshTokenCode = GenerateRefreshToken32bitCode();
 
             var NewRefreshToken = await userManager.SetAuthenticationTokenAsync(
                 user,
                 "AirbnbClone",
                 "RefreshToken",
-                newRefreshToken
+                newRefreshTokenCode
             );
 
             // Replace the incorrect usage of DateTime.UtcNow with the correct string representation
@@ -174,14 +183,14 @@ namespace YourNamespace.Controllers
                 user,
                 "AirbnbClone",
                 "RefreshTokenExpiry",
-                DateTime.UtcNow.ToString("o") 
+                DateTime.UtcNow.ToString("o")
             );
             await userManager.UpdateAsync(user);
 
             return Ok(new
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
-                RefreshToken = newRefreshToken
+                RefreshToken = newRefreshTokenCode
             });
         }
 
@@ -195,8 +204,8 @@ namespace YourNamespace.Controllers
             try
             {
                 await userManager.RemoveAuthenticationTokenAsync(
-                    user, 
-                    "AirbnbClone", 
+                    user,
+                    "AirbnbClone",
                     "RefreshToken");
                 await userManager.RemoveAuthenticationTokenAsync(
                     user,
@@ -219,8 +228,8 @@ namespace YourNamespace.Controllers
             foreach (var user in users)
             {
                 await userManager.RemoveAuthenticationTokenAsync(
-                    user, 
-                    "AirbnbClone", 
+                    user,
+                    "AirbnbClone",
                     "RefreshToken");
                 await userManager.RemoveAuthenticationTokenAsync(
                     user,
@@ -306,7 +315,7 @@ namespace YourNamespace.Controllers
 
             string resetLink = $"http://localhost:YOUR_PORT/reset-password?email={user.Email}&token={WebUtility.UrlEncode(resetToken)}";
             await emailsender.SendEmailAsync(
-                resetPasswordDto.Email, 
+                resetPasswordDto.Email,
                 "Password Reset",
                 $"Click <a href='{resetUrl}'>here</a> to reset your password.");
 
@@ -339,13 +348,14 @@ namespace YourNamespace.Controllers
         [HttpPost("BecomeAHost")]
         public async Task<IActionResult> BecomeAHost()
         {
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return Ok("User not found");
 
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
-                return Ok("User not found");
+                return BadRequest("User not found");
 
             if (!await roleManager.RoleExistsAsync(UserRoles.Host))
                 await roleManager.CreateAsync(new IdentityRole<Guid>(UserRoles.Host));
@@ -429,7 +439,7 @@ namespace YourNamespace.Controllers
             var refreshToken32bitCode = GenerateRefreshToken32bitCode();
 
             _ = int.TryParse(configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-            var refreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+            var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(refreshTokenValidityInDays);
 
             // Store refresh token using Identity's token system
             await userManager.SetAuthenticationTokenAsync(

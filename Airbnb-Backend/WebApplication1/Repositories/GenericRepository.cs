@@ -167,25 +167,9 @@ namespace WebApplication1.Repositories
         #region Get Methods
         public Guid GetCurrentUserId()
         {
-            var authToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(authToken);
-            var userId = token.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            if (userId == null)
-            {
-                // Log the claims for debugging
-                var claims = _httpContextAccessor.HttpContext?.User?.Claims.ToList();
-                if (claims != null)
-                {
-                    foreach (var claim in claims)
-                    {
-                        Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
-                    }
-                }
-            }
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             return Guid.TryParse(userId, out var guid) ? guid : Guid.Empty;
         }
-
         public bool IsAuthenticated()
         {
             return _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;

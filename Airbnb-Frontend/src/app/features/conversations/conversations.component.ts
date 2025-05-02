@@ -121,20 +121,33 @@ export class ConversationsComponent implements OnInit {
           conversationId: this.selectedConversation!.id
         };
 
+        // Send message to API and handle response
         this.chatService.sendMessage(request).subscribe({
           next: (message) => {
             if (this.selectedConversation?.messages) {
+              // Format the message content
               message.content = this.messageFormatter.formatMessage(message.content);
+              
+              // Add the bot's message to the conversation
               this.selectedConversation.messages.push(message);
+              
+              // Update last message timestamp
               this.selectedConversation.lastMessageAt = message.timestamp;
-            }
-            // Scroll to bottom after receiving response
-            setTimeout(() => {
-              const messageContainer = document.querySelector('#messageContainer');
-              if (messageContainer) {
-                messageContainer.scrollTop = messageContainer.scrollHeight;
+
+              // Update the conversation in the list to reflect changes
+              const index = this.conversations.findIndex(c => c.id === this.selectedConversation!.id);
+              if (index !== -1) {
+                this.conversations[index] = this.selectedConversation;
               }
-            });
+
+              // Scroll to bottom after adding bot message
+              setTimeout(() => {
+                const messageContainer = document.querySelector('#messageContainer');
+                if (messageContainer) {
+                  messageContainer.scrollTop = messageContainer.scrollHeight;
+                }
+              });
+            }
           },
           error: (error) => {
             console.error('Error sending message:', error);
@@ -143,8 +156,8 @@ export class ConversationsComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Error getting current user:', error);
-        this.error = 'Error authenticating. Please try logging in again.';
+        console.error('Auth error:', error);
+        this.error = 'Authentication error. Please try logging in again.';
       }
     });
   }
