@@ -193,7 +193,7 @@ namespace WebApplication1.Repositories
             {
                 throw new KeyNotFoundException("Listing not found");
             }
-            var existingItem = await context.WishlistItems.FirstOrDefaultAsync(wi => wi.ListingId == listingId);
+            var existingItem = await context.WishlistItems.FirstOrDefaultAsync(wi => wi.ListingId == listingId && wishlist.Id == wi.WishlistId);
             if (existingItem != null)
             {
                 throw new InvalidOperationException("This item is already in your wishlist");
