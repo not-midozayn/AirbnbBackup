@@ -105,7 +105,7 @@ export class PersonalInfoComponent {
         description: 'This information will be used to verify your identity.',
         editMode: false,
         fields: [
-          { name: 'dateOfBirth', label: 'Date of birth', value: this.userData.dateOfBirth || '', placeholder: 'Date of birth', type: 'date' }
+          { name: 'dateOfBirth', label: 'Date of birth', value: this.userData.dateOfBirth || '', placeholder: 'Date of birth', type: 'datetime-local' }
         ]
       },
     //   {
@@ -176,6 +176,9 @@ export class PersonalInfoComponent {
         this.originalUserData = { ...res };
         this.initPersonalInfoSections();
         this.successMessage = 'Your information has been updated successfully';
+        setTimeout(() => {
+          this.successMessage = "";
+        }, 1000); 
         this.loading = false;
 
         // Reset edit mode for all sections
@@ -184,6 +187,9 @@ export class PersonalInfoComponent {
       error: (err) => {
         console.log(err);
         this.errorMessage = 'Failed to update your information. Please try again.';
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 1000); 
         this.loading = false;
       }
     });
@@ -262,14 +268,18 @@ export class PersonalInfoComponent {
         (response) => {
           console.log('Profile picture uploaded successfully', response);
 
-          this._ToastrService.success("Profile Picture Uploaded ","Success");
+          // this._ToastrService.success("Profile Picture Uploaded ","Success");
+          this.successMessage = 'Your information has been updated successfully';
+          setTimeout(() => {
+            this.successMessage = "";
+          }, 1000); 
           this.previewImage = this._ImagesService.getImageUrl(response.profilePictureUrl);
           // Notify about the profile picture update
           this._PersonalInfoService.notifyProfilePictureUpdated(response.profilePictureUrl);
 
         },
         (error) => {
-          this._ToastrService.error("You Should Upload A Picture","Fail");
+          // this._ToastrService.error("You Should Upload A Picture","Fail");
           console.error('Error uploading profile picture', error);
         }
       );

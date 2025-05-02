@@ -3,11 +3,11 @@
     <div class="spinner"></div>
   </div>
 
-  <div *ngIf="successMessage" class="message success">
+  <div *ngIf="successMessage" class="message success fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow z-50">
     {{ successMessage }}
   </div>
   
-  <div *ngIf="errorMessage" class="message error">
+  <div *ngIf="errorMessage" class="message error fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded shadow z-50">
     {{ errorMessage }}
   </div>
 

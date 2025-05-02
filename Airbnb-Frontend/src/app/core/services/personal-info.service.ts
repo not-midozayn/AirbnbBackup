@@ -29,6 +29,7 @@ export class PersonalInfoService {
 
 
   changeMyPersonalData(user:User):Observable<any>{
+    console.log(user.dateOfBirth);
     return this._HttpClient.put('https://localhost:7200/api/users/me',user)
   }
 

@@ -118,7 +118,7 @@
         <div class="highlight-item">
           <i class="pi pi-check-circle"></i>
           <div>
-            <p>{{ listing.description }}</p>
+            <p  class=" w-80 sm:w-auto ">{{ listing.description }}</p>
           </div>
         </div>
       </div>
@@ -126,9 +126,9 @@
       <p-divider></p-divider>
 
       <!-- Description -->
-      <div class="listing-description">
+      <div class="listing-description w-80 sm:w-auto ">
         <h3>About this place</h3>
-        <p>{{ listing.description }}</p>
+        <p >{{ listing.description }}</p>
       </div>
 
       <p-divider></p-divider>
@@ -227,7 +227,7 @@
       <p-divider></p-divider>
 
       <!-- Location -->
-      <div class="listing-location">
+      <div class="listing-location  ">
         <h3>Where you'll be</h3>
         <p>{{ listing.city }} , {{ listing.country }}</p>
         <app-leaflet-map
