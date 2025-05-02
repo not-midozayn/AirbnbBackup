@@ -78,6 +78,9 @@ namespace YourNamespace.Controllers
             user.SecurityStamp = Guid.NewGuid().ToString();
             user.Id = Guid.NewGuid();
             user.EmailConfirmed = true;
+            user.ProfilePictureUrl = "uploads/profile Picture.jpg";
+            user.CurrencyId = 1;
+            user.CreatedAt = DateTime.UtcNow;
 
             var result = await userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded)

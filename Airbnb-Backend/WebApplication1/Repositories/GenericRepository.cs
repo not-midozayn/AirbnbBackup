@@ -189,7 +189,7 @@ namespace WebApplication1.Repositories
             if (queryParams.TryGetValue("pageNumber", out string pageNumberValue))
             {
                 int pageNumber = int.Parse(pageNumberValue);
-                query = query.Skip((pageNumber - 1) * 3).Take(3);
+                query = query.Skip((pageNumber - 1) * 8).Take(8);
             }
             return await query.ToListAsync();
 

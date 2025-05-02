@@ -17,6 +17,7 @@ import { AuthStatusService } from '../../core/services/auth-status-service.servi
 import { AvailabilityCalendarService } from '../../core/services/availability-calendar.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-listing-card',
@@ -33,7 +34,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
     private _ToastrService: ToastrService,
     private authStatusService: AuthStatusService,
     public _AvailabilityCalendarService: AvailabilityCalendarService,
-    public _AuthService: AuthService
+    public _AuthService: AuthService,
+    private _loginModalService: ModalService
   ) {
     // effect(() => {
     //   const isLoggedIn = this.authStatusService.isLoggedInSignal();
@@ -97,7 +99,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
       console.log('Favorite status:', this.isFavorite); // للتأكد من أن الدالة تعمل
     } else {
       this.isFavorite = this.isFavorite;
-      this._ToastrService.info('you should LogIn First', 'Attention');
+      // this._ToastrService.info('you should LogIn First', 'Attention');
+      this._loginModalService.openLoginModal();
       console.log('you must login');
       event.preventDefault();
       event.stopPropagation();

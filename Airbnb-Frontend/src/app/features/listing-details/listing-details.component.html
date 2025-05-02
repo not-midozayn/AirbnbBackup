@@ -89,12 +89,12 @@
     ></button>
   </div>
 
-  <div class="listing-content">
+  <div class="listing-content" >
     <!-- Left column with details -->
     <div class="listing-details">
       <!-- Host info -->
-      <div class="host-info">
-        <div class="host-header">
+      <div class="host-info w-64">
+        <div class="host-header w-64">
           <h2>
             {{ listing.capacity }} guests · {{ listing.bedrooms }} bedrooms ·
             {{ listing.bathrooms }} bathrooms
@@ -126,7 +126,7 @@
       <p-divider></p-divider>
 
       <!-- Description -->
-      <div class="listing-description">
+      <div class="listing-description w-80 sm-w-[600px]">
         <h3>About this place</h3>
         <p>{{ listing.description }}</p>
       </div>
