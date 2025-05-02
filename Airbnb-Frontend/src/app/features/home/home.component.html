@@ -6,6 +6,16 @@
   </carousel-basic-demo>
 </div>
 
+@if(loading) {
+<div class="flex items-center justify-center gap-3 mt-20">
+  <span
+    class="inline-block h-7 w-7 animate-spin rounded-full border-2 border-[var(--primary-color)] border-t-transparent"
+    aria-hidden="true"
+  ></span>
+  <span role="status" class="text-lg text-gray-400 ">Loading...</span>
+</div>
+}
+
 <div
   class="search-results"
   infinite-scroll

@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         takeUntil(this.destroyed)
       )
       .subscribe(() => {
-        // this.display = false;
+        this.loading = false;
       });
 
     // Load property types

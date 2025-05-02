@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { ImagesService } from '../../core/services/images.service';
 
 @Component({
   selector: 'app-users-dashboard',
@@ -39,7 +40,7 @@ export class UsersDashboardComponent implements OnInit, OnDestroy {
   searchValue: string | undefined;
   subscription: Subscription = new Subscription();
 
-  constructor(private userService: UserService, private confirmationService: ConfirmationService) {}
+  constructor(private userService: UserService, private confirmationService: ConfirmationService, public imgService: ImagesService) {}
 
   ngOnInit() {
     this.GetUsers();

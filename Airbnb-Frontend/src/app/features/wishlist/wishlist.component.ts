@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './wishlist.component.css'
 })
 export class WishlistComponent implements OnInit {
-
+isLoading = false;
 wishlistIds:string[]=[];
 wishlistListings:Listing[]=[];
 
@@ -27,6 +27,7 @@ private readonly _ToastrService = inject(ToastrService);
   }
 
   fetchWishlist(){
+    this.isLoading = true;
     this._WishlistService.getAllWishlists().subscribe({
       next:(ids:any)=>{
         this.wishlistIds=ids.wishlistItems.map((item: any) => item.listingId);
@@ -39,15 +40,18 @@ private readonly _ToastrService = inject(ToastrService);
 
             this.wishlistListings=listings.filter(l => this.wishlistIds.includes(l.id));
             console.log( "wishlistings" ,this.wishlistListings);
+            this.isLoading = false;
           }
           ,
           error:()=>{
             console.log("failed to load listings")
+            this.isLoading = false;
           }
         })
       },
       error:()=>{
         console.log("failed to load wishlist")
+        this.isLoading = false;
       }
     })
   }
