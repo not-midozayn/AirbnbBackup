@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 })
 export class DashboardSideMenuComponent {
   isVisible: boolean = true;
-  activeTab: string = 'users';
+  activeTab: string = 'statistics';
 
   toggleMenu() {
     this.isVisible = !this.isVisible;

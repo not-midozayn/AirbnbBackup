@@ -204,7 +204,7 @@ namespace WebApplication1.Controllers
 
         #region Publish Method
 
-        [HttpPut("{id}/publish")]
+        [HttpPut("{id}/delete")]
         [Authorize(Roles = $"{UserRoles.Host}")]
         public async Task<IActionResult> SetListingAsActive(Guid id)
         {

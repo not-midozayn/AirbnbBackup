@@ -357,6 +357,7 @@ namespace YourNamespace.Controllers
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
                 return BadRequest("User not found");
+            user.IsHost = true;
 
             if (!await roleManager.RoleExistsAsync(UserRoles.Host))
                 await roleManager.CreateAsync(new IdentityRole<Guid>(UserRoles.Host));

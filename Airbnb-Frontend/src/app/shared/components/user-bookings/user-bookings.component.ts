@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
@@ -25,6 +25,7 @@ export class UserBookingsComponent implements OnInit {
   @Input() AllowPagination: boolean = true;
   @Input() paginationEnabled: boolean = true;
   @Input() showGuestData: boolean = true;
+  @Input() showReceiptButton:boolean = true
   // Add these properties to your component class
   currentPage: number = 1;
   itemsPerPage: number = 5; // You can adjust this number
@@ -261,9 +262,6 @@ export class UserBookingsComponent implements OnInit {
 
     return pages;
   }
-  viewBookingDetails(bookingId: string) {
-    // Implement view details logic
-  }
   onPageChange(page: number|string): void {
     if (page === '...' || page === this.currentPage) return;
     this.currentPage = Number(page);
@@ -285,5 +283,11 @@ export class UserBookingsComponent implements OnInit {
   }
   isComingCheckInDate(checkInDate: string): boolean {
     return new Date(checkInDate) > this.today;
+  }
+  showReciept(bookingId:string){
+    this.userBookingService.getReceipt(bookingId).subscribe(response => {
+      const url = response.receiptUrl;
+      window.open(url, '_blank'); // or however you want to use it
+    });
   }
 }

@@ -47,6 +47,8 @@ export class UserBookingService {
   }
   calculateRefundAmount(bookingId: string): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/${bookingId}/refund-amount`);
-
+  }
+  getReceipt(bookingId: string): Observable<{ receiptUrl: string }> {
+    return this.http.get<{ receiptUrl: string }>(`https://localhost:7200/api/payment/${bookingId}/receipt`);
   }
 }

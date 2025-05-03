@@ -99,13 +99,12 @@ namespace WebApplication1.Repositories.Payment
             var payment = await GetLatestSuccessfulPaymentWithPolicyAsync(booking.Id);
 
             var refundPercentage = CalculateRefundPercentage(booking, policy);
-            if (refundPercentage == 0)
-                throw new InvalidOperationException("Refund not allowed based on the policy.");
-
-            var refundAmount = (long)(payment.Amount * refundPercentage * 100);
-
-            await _stripeRepository.RefundAsync(payment.TransactionId, refundAmount);
-            await MarkPaymentAsRefundedAsync(payment);
+            if (refundPercentage != 0)
+            {
+                var refundAmount = (long)(payment.Amount * refundPercentage * 100);
+                await _stripeRepository.RefundAsync(payment.TransactionId, refundAmount);
+                await MarkPaymentAsRefundedAsync(payment);
+            }
         }
         public async Task MarkPaymentAsRefundedAsync(Models.Payment payment)
         {
@@ -122,6 +121,18 @@ namespace WebApplication1.Repositories.Payment
             var policy = payment.Booking.Listing.CancellationPolicy;
             var refundPercentage = CalculateRefundPercentage(payment.Booking, policy);
             return (long)(payment.Amount * refundPercentage);
+        }
+        #endregion
+
+        #region Get Receipt url
+        public async Task<string> GetReceiptUrlAsync(Guid bookingId)
+        {
+            var payment = await _context.Payments
+                .Where(p => p.BookingId == bookingId)
+                .OrderByDescending(p => p.PaymentDate)
+                .FirstOrDefaultAsync();
+
+            return payment.ReceiptUrl;
         }
         #endregion
 

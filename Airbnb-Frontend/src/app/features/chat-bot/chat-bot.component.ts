@@ -288,10 +288,33 @@ export class ChatBotComponent implements OnInit, OnDestroy {
           next: (response) => {
             this.ngZone.run(() => {
               if (response && response.transcription) {
-                this.newMessage = response.transcription;
-                this.sendMessage();
+                // Add the transcription as a user message
+                this.addUserMessage(response.transcription);
+                // Send it for processing
+                const request: SendMessageRequest = {
+                  userId: 'user',  // Will be replaced with actual user ID in the service
+                  message: response.transcription,
+                  conversationId: this.currentConversationId!
+                };
+
+                this.chatService.sendMessage(request).subscribe({
+                  next: (response) => {
+                    response.content = this.messageFormatter.formatMessage(response.content);
+                    this.messages.push(response);
+                    setTimeout(() => {
+                      const chatContainer = document.querySelector('.overflow-y-auto');
+                      if (chatContainer) {
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                      }
+                    });
+                    resolve();
+                  },
+                  error: (error) => {
+                    this.handleMessageError(error);
+                    reject(error);
+                  }
+                });
               }
-              resolve();
             });
           },
           error: (error) => {

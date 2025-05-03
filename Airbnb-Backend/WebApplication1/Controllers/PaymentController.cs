@@ -100,7 +100,7 @@ namespace WebApplication1.Controllers
             return Ok(payments);
         }
         [HttpGet("me")]
-        [Authorize(Roles = $"{UserRoles.Guest}")]
+        [Authorize(Roles = $"{UserRoles.Guest},{UserRoles.Admin}")]
         public async Task<IActionResult> GetUserPayments()
         {
             var userId = _paymentRepository.GetCurrentUserId();
@@ -116,12 +116,26 @@ namespace WebApplication1.Controllers
                 return NotFound();
             return Ok(payment);
         }
+        [HttpGet("{bookingId}/receipt")]
+        [Authorize]
+        public async Task<IActionResult> GetReceiptUrl(Guid bookingId)
+        {
+            try
+            {
+                var url = await _paymentRepository.GetReceiptUrlAsync(bookingId);
+                return Ok(new { ReceiptUrl = url });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
         #endregion
 
         #region Sessions
 
         [HttpPost("checkout-session/{bookingId}")]
-        [Authorize(Roles = $"{UserRoles.Guest}")]
+        [Authorize(Roles = $"{UserRoles.Guest},{UserRoles.Admin}")]
         public async Task<IActionResult> CreateCheckoutSession(Guid bookingId, [FromBody] PaymentSessionRequestDTO dto)
         {
             try

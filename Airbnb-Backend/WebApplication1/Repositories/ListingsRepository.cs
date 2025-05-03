@@ -80,7 +80,6 @@ namespace WebApplication1.Repositories
 
             return listings;
         }
-
         #endregion
 
         #region Add Amenities to Listing

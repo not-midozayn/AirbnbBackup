@@ -7,6 +7,17 @@
   <!-- Menu Content -->
   <nav class="p-4">
     <ul class="space-y-2">
+      <!-- Statistics Tab -->
+      <li>
+        <button
+          (click)="setActiveTab('statistics')"
+          [class.bg-blue-200]="activeTab === 'statistics'"
+          class="w-full px-4 py-2 text-left rounded-lg hover:bg-blue-100 transition-colors flex items-center gap-2"
+        >
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Statistics</span>
+        </button>
+      </li>
       <!-- Users Tab -->
       <li>
         <button
@@ -31,17 +42,6 @@
         </button>
       </li>
 
-      <!-- Statistics Tab -->
-      <li>
-        <button
-          (click)="setActiveTab('statistics')"
-          [class.bg-blue-200]="activeTab === 'statistics'"
-          class="w-full px-4 py-2 text-left rounded-lg hover:bg-blue-100 transition-colors flex items-center gap-2"
-        >
-          <i class="fa-solid fa-chart-line"></i>
-          <span>Statistics</span>
-        </button>
-      </li>
       <li>
         <button
           (click)="setActiveTab('bookings')"

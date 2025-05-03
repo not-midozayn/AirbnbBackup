@@ -213,7 +213,7 @@ namespace WebApplication1.Repositories.Payment
                         Quantity = 1
                     }],
                 Mode = "payment",
-                SuccessUrl = $"{domain}/payment-success?session_id={{CHECKOUT_SESSION_ID}}",
+                SuccessUrl = $"{domain}/Account/MyReservtions",
                 CancelUrl = $"{domain}/payment-cancelled",
                 PaymentIntentData = new SessionPaymentIntentDataOptions
                 {

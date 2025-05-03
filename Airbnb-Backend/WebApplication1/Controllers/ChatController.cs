@@ -81,12 +81,12 @@ namespace AirbnbClone.Controllers
                 string transcription = await _aiRepository.TranscribeAudioAsync(audioFile);
 
                 // Step 2: Process the transcription using existing chat service
-                var response = await _chatService.ProcessMessageAsync(userId, transcription, conversationId);
+                //var response = await _chatService.ProcessMessageAsync(userId, transcription, conversationId);
 
                 return Ok(new
                 {
                     transcription = transcription,
-                    response = response
+                    //response = response
                 });
             }
             catch (Exception ex)
