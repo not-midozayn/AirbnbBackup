@@ -20,12 +20,12 @@
           label="Share"
           class="p-button-text"
         ></button>
-        <button
+        <!-- <button
           pButton
           icon="pi pi-heart"
           label="Save"
           class="p-button-text"
-        ></button>
+        ></button> -->
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@
     ></button>
   </div>
 
-  <div class="listing-content" >
+  <div class="listing-content">
     <!-- Left column with details -->
     <div class="listing-details">
       <!-- Host info -->
@@ -103,7 +103,10 @@
       </div>
       <p-divider></p-divider>
       <div class="host-avatar">
-        <img [src]="imgsService.getImageUrl(listing.host.profilePictureUrl)" alt="Host" />
+        <img
+          [src]="imgsService.getImageUrl(listing.host.profilePictureUrl)"
+          alt="Host"
+        />
         <div>
           <h3>
             Hosted by {{ listing.host.firstName }} {{ listing.host.lastName }}

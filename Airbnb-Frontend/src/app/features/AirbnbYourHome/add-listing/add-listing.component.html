@@ -3,10 +3,14 @@
   <!-- Progress bar -->
   <div class="mb-8">
     <div class="h-2 bg-gray-200 rounded-full">
-      <div class="h-full bg-rose-500 rounded-full transition-all duration-300"
-        [style.width.%]="(currentStep / totalSteps) * 100"></div>
+      <div
+        class="h-full bg-rose-500 rounded-full transition-all duration-300"
+        [style.width.%]="(currentStep / totalSteps) * 100"
+      ></div>
     </div>
-    <div class="mt-2 text-sm text-gray-600">Step {{ currentStep }} of {{ totalSteps }}</div>
+    <div class="mt-2 text-sm text-gray-600">
+      Step {{ currentStep }} of {{ totalSteps }}
+    </div>
   </div>
 
   <!-- Form content -->
@@ -17,23 +21,41 @@
       <div [class.hidden]="currentStep !== 1" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">What kind of place will you host?</h2>
-            <p class="text-lg text-gray-600">Choose the option that best describes your place.</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              What kind of place will you host?
+            </h2>
+            <p class="text-lg text-gray-600">
+              Choose the option that best describes your place.
+            </p>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div *ngFor="let type of PropertyTypes"
-              (click)="listingForm.patchValue({propertyType: type.id})"
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          >
+            <div
+              *ngFor="let type of PropertyTypes"
+              (click)="listingForm.patchValue({ propertyType: type.id })"
               class="p-4 border rounded-lg hover:border-gray-400 transition-colors cursor-pointer flex flex-col items-center space-y-2"
-              [class.border-rose-500]="listingForm.get('propertyType')?.value === type.id">
+              [class.border-rose-500]="
+                listingForm.get('propertyType')?.value === type.id
+              "
+            >
               <div class="text-2xl text-gray-700">
                 <i class="fa-solid fa-house"></i>
               </div>
-              <div class="text-sm font-medium text-gray-900">{{ type.propertyTypeName }}</div>
+              <div class="text-sm font-medium text-gray-900">
+                {{ type.propertyTypeName }}
+              </div>
             </div>
           </div>
 
-          <div *ngIf="listingForm.get('propertyType')?.touched && listingForm.get('propertyType')?.invalid" class="text-sm text-red-600">
+          <div
+            *ngIf="
+              listingForm.get('propertyType')?.touched &&
+              listingForm.get('propertyType')?.invalid
+            "
+            class="text-sm text-red-600"
+          >
             Please select a property type.
           </div>
         </div>
@@ -43,23 +65,41 @@
       <div [class.hidden]="currentStep !== 2" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">What kind of Rooms?</h2>
-            <p class="text-lg text-gray-600">Choose the option that best describes your place.</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              What kind of Rooms?
+            </h2>
+            <p class="text-lg text-gray-600">
+              Choose the option that best describes your place.
+            </p>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div *ngFor="let type of RoomTypes"
-              (click)="listingForm.patchValue({roomType: type.id})"
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          >
+            <div
+              *ngFor="let type of RoomTypes"
+              (click)="listingForm.patchValue({ roomType: type.id })"
               class="p-4 border rounded-lg hover:border-gray-400 transition-colors cursor-pointer flex flex-col items-center space-y-2"
-              [class.border-rose-500]="listingForm.get('roomType')?.value === type.id">
+              [class.border-rose-500]="
+                listingForm.get('roomType')?.value === type.id
+              "
+            >
               <div class="text-2xl text-gray-700">
                 <i class="fa-solid fa-door-open"></i>
               </div>
-              <div class="text-sm font-medium text-gray-900">{{ type.roomTypeName }}</div>
+              <div class="text-sm font-medium text-gray-900">
+                {{ type.roomTypeName }}
+              </div>
             </div>
           </div>
 
-          <div *ngIf="listingForm.get('roomType')?.touched && listingForm.get('roomType')?.invalid" class="text-sm text-red-600">
+          <div
+            *ngIf="
+              listingForm.get('roomType')?.touched &&
+              listingForm.get('roomType')?.invalid
+            "
+            class="text-sm text-red-600"
+          >
             Please select a room type.
           </div>
         </div>
@@ -69,26 +109,42 @@
       <div [class.hidden]="currentStep !== 3" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">Tell guests what your place has to offer</h2>
-            <p class="text-lg text-gray-600">Select all the amenities available at your place.</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              Tell guests what your place has to offer
+            </h2>
+            <p class="text-lg text-gray-600">
+              Select all the amenities available at your place.
+            </p>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div *ngFor="let amenity of Amenities"
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          >
+            <div
+              *ngFor="let amenity of Amenities"
               (click)="toggleAmenity(amenity.id)"
               class="p-4 border rounded-lg hover:border-gray-400 transition-colors cursor-pointer flex flex-col items-center space-y-2 relative"
-              [class.border-rose-500]="isAmenitySelected(amenity.id)">
-              <div class="absolute top-2 right-2 text-rose-500" *ngIf="isAmenitySelected(amenity.id)">
+              [class.border-rose-500]="isAmenitySelected(amenity.id)"
+            >
+              <div
+                class="absolute top-2 right-2 text-rose-500"
+                *ngIf="isAmenitySelected(amenity.id)"
+              >
                 <i class="fa-solid fa-check"></i>
               </div>
               <div class="text-2xl text-gray-700">
                 <i [class]="amenity.icon"></i>
               </div>
-              <div class="text-sm font-medium text-gray-900 text-center">{{ amenity.name }}</div>
+              <div class="text-sm font-medium text-gray-900 text-center">
+                {{ amenity.name }}
+              </div>
             </div>
           </div>
 
-          <div *ngIf="amenityTypeArray.touched && amenityTypeArray.invalid" class="text-sm text-red-600">
+          <div
+            *ngIf="amenityTypeArray.touched && amenityTypeArray.invalid"
+            class="text-sm text-red-600"
+          >
             Please select at least one amenity.
           </div>
         </div>
@@ -98,62 +154,128 @@
       <div [class.hidden]="currentStep !== 4" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">Where's your place located?</h2>
-            <p class="text-lg text-gray-600">Your address is only shared with guests after they've made a reservation.</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              Where's your place located?
+            </h2>
+            <p class="text-lg text-gray-600">
+              Your address is only shared with guests after they've made a
+              reservation.
+            </p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-              <label for="country" class="block text-sm font-medium text-gray-700">Country/Region</label>
-              <input type="text" id="country" formControlName="country"
+              <label
+                for="country"
+                class="block text-sm font-medium text-gray-700"
+                >Country/Region</label
+              >
+              <input
+                type="text"
+                id="country"
+                formControlName="country"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                placeholder="Enter your country" />
-              <div *ngIf="listingForm.get('country')?.touched && listingForm.get('country')?.invalid"
-                class="text-sm text-red-600">
+                placeholder="Enter your country"
+              />
+              <div
+                *ngIf="
+                  listingForm.get('country')?.touched &&
+                  listingForm.get('country')?.invalid
+                "
+                class="text-sm text-red-600"
+              >
                 Please enter your country.
               </div>
             </div>
 
             <div class="space-y-2">
-              <label for="streetAddress" class="block text-sm font-medium text-gray-700">Street address</label>
-              <input type="text" id="streetAddress" formControlName="streetAddress"
+              <label
+                for="streetAddress"
+                class="block text-sm font-medium text-gray-700"
+                >Street address</label
+              >
+              <input
+                type="text"
+                id="streetAddress"
+                formControlName="streetAddress"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                placeholder="Enter your street address" />
-              <div *ngIf="listingForm.get('streetAddress')?.touched && listingForm.get('streetAddress')?.invalid"
-                class="text-sm text-red-600">
+                placeholder="Enter your street address"
+              />
+              <div
+                *ngIf="
+                  listingForm.get('streetAddress')?.touched &&
+                  listingForm.get('streetAddress')?.invalid
+                "
+                class="text-sm text-red-600"
+              >
                 Please enter your street address.
               </div>
             </div>
 
             <div class="space-y-2">
-              <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-              <input type="text" id="city" formControlName="city"
+              <label for="city" class="block text-sm font-medium text-gray-700"
+                >City</label
+              >
+              <input
+                type="text"
+                id="city"
+                formControlName="city"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                placeholder="Enter your city" />
-              <div *ngIf="listingForm.get('city')?.touched && listingForm.get('city')?.invalid"
-                class="text-sm text-red-600">
+                placeholder="Enter your city"
+              />
+              <div
+                *ngIf="
+                  listingForm.get('city')?.touched &&
+                  listingForm.get('city')?.invalid
+                "
+                class="text-sm text-red-600"
+              >
                 Please enter your city.
               </div>
             </div>
 
             <div class="space-y-2">
-              <label for="state" class="block text-sm font-medium text-gray-700">State</label>
-              <input type="text" id="state" formControlName="state"
+              <label for="state" class="block text-sm font-medium text-gray-700"
+                >State</label
+              >
+              <input
+                type="text"
+                id="state"
+                formControlName="state"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                placeholder="Enter your state" />
-              <div *ngIf="listingForm.get('state')?.touched && listingForm.get('state')?.invalid"
-                class="text-sm text-red-600">
+                placeholder="Enter your state"
+              />
+              <div
+                *ngIf="
+                  listingForm.get('state')?.touched &&
+                  listingForm.get('state')?.invalid
+                "
+                class="text-sm text-red-600"
+              >
                 Please enter your state.
               </div>
             </div>
 
             <div class="space-y-2">
-              <label for="postalCode" class="block text-sm font-medium text-gray-700">Postal code</label>
-              <input type="text" id="postalCode" formControlName="postalCode"
+              <label
+                for="postalCode"
+                class="block text-sm font-medium text-gray-700"
+                >Postal code</label
+              >
+              <input
+                type="text"
+                id="postalCode"
+                formControlName="postalCode"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                placeholder="Enter your postal code" />
-              <div *ngIf="listingForm.get('postalCode')?.touched && listingForm.get('postalCode')?.invalid"
-                class="text-sm text-red-600">
+                placeholder="Enter your postal code"
+              />
+              <div
+                *ngIf="
+                  listingForm.get('postalCode')?.touched &&
+                  listingForm.get('postalCode')?.invalid
+                "
+                class="text-sm text-red-600"
+              >
                 Please enter your postal code.
               </div>
             </div>
@@ -165,38 +287,90 @@
       <div [class.hidden]="currentStep !== 5" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">Now, let's give your house a title</h2>
-            <p class="text-lg text-gray-600">Short titles work best. Have fun with it—you can always change it later.</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              Now, let's give your house a title
+            </h2>
+            <p class="text-lg text-gray-600">
+              Short titles work best. Have fun with it—you can always change it
+              later.
+            </p>
           </div>
 
           <div class="space-y-4">
             <div class="space-y-2">
-              <input type="text" id="title" formControlName="title" maxlength="32"
+              <input
+                type="text"
+                id="title"
+                formControlName="title"
+                maxlength="32"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                placeholder="Enter your listing title" />
+                placeholder="Enter your listing title"
+              />
               <div class="flex justify-end text-sm text-gray-500">
-                <span>{{ listingForm.get('title')?.value?.length || 0 }}/32</span>
+                <span
+                  >{{ listingForm.get("title")?.value?.length || 0 }}/32</span
+                >
               </div>
-              <div *ngIf="listingForm.get('title')?.touched && listingForm.get('title')?.errors" class="text-sm text-red-600">
-                <span *ngIf="listingForm.get('title')?.errors?.['required']">Title is required.</span>
-                <span *ngIf="listingForm.get('title')?.errors?.['minlength']">Title must be at least 10 characters.</span>
-                <span *ngIf="listingForm.get('title')?.errors?.['maxlength']">Title cannot exceed 32 characters.</span>
+              <div
+                *ngIf="
+                  listingForm.get('title')?.touched &&
+                  listingForm.get('title')?.errors
+                "
+                class="text-sm text-red-600"
+              >
+                <span *ngIf="listingForm.get('title')?.errors?.['required']"
+                  >Title is required.</span
+                >
+                <span *ngIf="listingForm.get('title')?.errors?.['minlength']"
+                  >Title must be at least 10 characters.</span
+                >
+                <span *ngIf="listingForm.get('title')?.errors?.['maxlength']"
+                  >Title cannot exceed 32 characters.</span
+                >
               </div>
             </div>
 
             <div class="space-y-2">
-              <h3 class="text-xl font-semibold text-gray-900">Create your description</h3>
-              <p class="text-lg text-gray-600">Share what makes your place special.</p>
-              <textarea id="description" formControlName="description" rows="5" maxlength="500"
+              <h3 class="text-xl font-semibold text-gray-900">
+                Create your description
+              </h3>
+              <p class="text-lg text-gray-600">
+                Share what makes your place special.
+              </p>
+              <textarea
+                id="description"
+                formControlName="description"
+                rows="5"
+                maxlength="500"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                placeholder="You'll have a great time at this comfortable place to stay."></textarea>
+                placeholder="You'll have a great time at this comfortable place to stay."
+              ></textarea>
               <div class="flex justify-end text-sm text-gray-500">
-                <span>{{ listingForm.get('description')?.value?.length || 0 }}/500</span>
+                <span
+                  >{{
+                    listingForm.get("description")?.value?.length || 0
+                  }}/500</span
+                >
               </div>
-              <div *ngIf="listingForm.get('description')?.touched && listingForm.get('description')?.errors" class="text-sm text-red-600">
-                <span *ngIf="listingForm.get('description')?.errors?.['required']">Description is required.</span>
-                <span *ngIf="listingForm.get('description')?.errors?.['minlength']">Description must be at least 50 characters.</span>
-                <span *ngIf="listingForm.get('description')?.errors?.['maxlength']">Description cannot exceed 500 characters.</span>
+              <div
+                *ngIf="
+                  listingForm.get('description')?.touched &&
+                  listingForm.get('description')?.errors
+                "
+                class="text-sm text-red-600"
+              >
+                <span
+                  *ngIf="listingForm.get('description')?.errors?.['required']"
+                  >Description is required.</span
+                >
+                <span
+                  *ngIf="listingForm.get('description')?.errors?.['minlength']"
+                  >Description must be at least 50 characters.</span
+                >
+                <span
+                  *ngIf="listingForm.get('description')?.errors?.['maxlength']"
+                  >Description cannot exceed 500 characters.</span
+                >
               </div>
             </div>
           </div>
@@ -213,44 +387,94 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-              <label for="pricePerNight" class="block text-sm font-medium text-gray-700">Price per night</label>
+              <label
+                for="pricePerNight"
+                class="block text-sm font-medium text-gray-700"
+                >Price per night</label
+              >
               <div class="relative">
                 <span class="absolute left-3 top-2 text-gray-500">$</span>
-                <input type="number" id="pricePerNight" formControlName="pricePerNight" min="1"
+                <input
+                  type="number"
+                  id="pricePerNight"
+                  formControlName="pricePerNight"
+                  min="1"
                   class="w-full pl-8 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                  placeholder="0" />
+                  placeholder="0"
+                />
               </div>
-              <div *ngIf="listingForm.get('pricePerNight')?.touched && listingForm.get('pricePerNight')?.errors" class="text-sm text-red-600">
-                <span *ngIf="listingForm.get('pricePerNight')?.errors?.['required']">Price per night is required.</span>
-                <span *ngIf="listingForm.get('pricePerNight')?.errors?.['min']">Price must be at least $1.</span>
-                <span *ngIf="listingForm.get('pricePerNight')?.errors?.['max']">Price cannot exceed $10,000.</span>
+              <div
+                *ngIf="
+                  listingForm.get('pricePerNight')?.touched &&
+                  listingForm.get('pricePerNight')?.errors
+                "
+                class="text-sm text-red-600"
+              >
+                <span
+                  *ngIf="listingForm.get('pricePerNight')?.errors?.['required']"
+                  >Price per night is required.</span
+                >
+                <span *ngIf="listingForm.get('pricePerNight')?.errors?.['min']"
+                  >Price must be at least $1.</span
+                >
+                <span *ngIf="listingForm.get('pricePerNight')?.errors?.['max']"
+                  >Price cannot exceed $10,000.</span
+                >
               </div>
             </div>
 
             <div class="space-y-2">
-              <label for="serviceFee" class="block text-sm font-medium text-gray-700">Service fee</label>
+              <label
+                for="serviceFee"
+                class="block text-sm font-medium text-gray-700"
+                >Service fee</label
+              >
               <div class="relative">
                 <span class="absolute left-3 top-2 text-gray-500">$</span>
-                <input type="number" id="serviceFee" formControlName="serviceFee" min="0"
+                <input
+                  type="number"
+                  id="serviceFee"
+                  formControlName="serviceFee"
+                  min="0"
                   class="w-full pl-8 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                  placeholder="0" />
+                  placeholder="0"
+                />
               </div>
-              <div *ngIf="listingForm.get('serviceFee')?.touched && listingForm.get('serviceFee')?.invalid"
-                class="text-sm text-red-600">
+              <div
+                *ngIf="
+                  listingForm.get('serviceFee')?.touched &&
+                  listingForm.get('serviceFee')?.invalid
+                "
+                class="text-sm text-red-600"
+              >
                 Please enter a valid service fee (minimum $0).
               </div>
             </div>
 
             <div class="space-y-2">
-              <label for="securityDeposit" class="block text-sm font-medium text-gray-700">Security deposit</label>
+              <label
+                for="securityDeposit"
+                class="block text-sm font-medium text-gray-700"
+                >Security deposit</label
+              >
               <div class="relative">
                 <span class="absolute left-3 top-2 text-gray-500">$</span>
-                <input type="number" id="securityDeposit" formControlName="securityDeposit" min="0"
+                <input
+                  type="number"
+                  id="securityDeposit"
+                  formControlName="securityDeposit"
+                  min="0"
                   class="w-full pl-8 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                  placeholder="0" />
+                  placeholder="0"
+                />
               </div>
-              <div *ngIf="listingForm.get('securityDeposit')?.touched && listingForm.get('securityDeposit')?.invalid"
-                class="text-sm text-red-600">
+              <div
+                *ngIf="
+                  listingForm.get('securityDeposit')?.touched &&
+                  listingForm.get('securityDeposit')?.invalid
+                "
+                class="text-sm text-red-600"
+              >
                 Please enter a valid security deposit (minimum $0).
               </div>
             </div>
@@ -262,50 +486,113 @@
       <div [class.hidden]="currentStep !== 7" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">How long can guests stay?</h2>
-            <p class="text-lg text-gray-600">Set your minimum and maximum stay duration and availability</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              How long can guests stay?
+            </h2>
+            <p class="text-lg text-gray-600">
+              Set your minimum and maximum stay duration and availability
+            </p>
           </div>
 
           <div class="space-y-4">
-            <h2 class="text-2xl font-semibold mb-4">Set Minimum and Maximum Stay Duration</h2>
+            <h2 class="text-2xl font-semibold mb-4">
+              Set Minimum and Maximum Stay Duration
+            </h2>
 
             <!-- Duration Inputs -->
             <div class="grid grid-cols-2 gap-4 mb-6">
               <div class="space-y-2">
-                <label for="minNights" class="block text-sm font-medium text-gray-700">Minimum Nights</label>
+                <label
+                  for="minNights"
+                  class="block text-sm font-medium text-gray-700"
+                  >Minimum Nights</label
+                >
                 <div class="relative">
-                  <input type="number" id="minNights" formControlName="minNights"
+                  <input
+                    type="number"
+                    id="minNights"
+                    formControlName="minNights"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                    [class.border-red-500]="listingForm.get('minNights')?.touched && listingForm.get('minNights')?.invalid"
-                    min="1" max="365" placeholder="1">
+                    [class.border-red-500]="
+                      listingForm.get('minNights')?.touched &&
+                      listingForm.get('minNights')?.invalid
+                    "
+                    min="1"
+                    max="365"
+                    placeholder="1"
+                  />
                 </div>
-                <div *ngIf="listingForm.get('minNights')?.touched && listingForm.get('minNights')?.errors" class="text-sm text-red-600">
-                  <span *ngIf="listingForm.get('minNights')?.errors?.['required']">Minimum nights is required.</span>
-                  <span *ngIf="listingForm.get('minNights')?.errors?.['min']">Must be at least 1 night.</span>
-                  <span *ngIf="listingForm.get('minNights')?.errors?.['max']">Cannot exceed 365 nights.</span>
+                <div
+                  *ngIf="
+                    listingForm.get('minNights')?.touched &&
+                    listingForm.get('minNights')?.errors
+                  "
+                  class="text-sm text-red-600"
+                >
+                  <span
+                    *ngIf="listingForm.get('minNights')?.errors?.['required']"
+                    >Minimum nights is required.</span
+                  >
+                  <span *ngIf="listingForm.get('minNights')?.errors?.['min']"
+                    >Must be at least 1 night.</span
+                  >
+                  <span *ngIf="listingForm.get('minNights')?.errors?.['max']"
+                    >Cannot exceed 365 nights.</span
+                  >
                 </div>
               </div>
 
               <div class="space-y-2">
-                <label for="maxNights" class="block text-sm font-medium text-gray-700">Maximum Nights</label>
+                <label
+                  for="maxNights"
+                  class="block text-sm font-medium text-gray-700"
+                  >Maximum Nights</label
+                >
                 <div class="relative">
-                  <input type="number" id="maxNights" formControlName="maxNights"
+                  <input
+                    type="number"
+                    id="maxNights"
+                    formControlName="maxNights"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                    [class.border-red-500]="listingForm.get('maxNights')?.touched && listingForm.get('maxNights')?.invalid"
-                    min="1" max="365" placeholder="30">
+                    [class.border-red-500]="
+                      listingForm.get('maxNights')?.touched &&
+                      listingForm.get('maxNights')?.invalid
+                    "
+                    min="1"
+                    max="365"
+                    placeholder="30"
+                  />
                 </div>
-                <div *ngIf="listingForm.get('maxNights')?.touched && listingForm.get('maxNights')?.errors" class="text-sm text-red-600">
-                  <span *ngIf="listingForm.get('maxNights')?.errors?.['required']">Maximum nights is required.</span>
-                  <span *ngIf="listingForm.get('maxNights')?.errors?.['min']">Must be at least 1 night.</span>
-                  <span *ngIf="listingForm.get('maxNights')?.errors?.['max']">Cannot exceed 365 nights.</span>
+                <div
+                  *ngIf="
+                    listingForm.get('maxNights')?.touched &&
+                    listingForm.get('maxNights')?.errors
+                  "
+                  class="text-sm text-red-600"
+                >
+                  <span
+                    *ngIf="listingForm.get('maxNights')?.errors?.['required']"
+                    >Maximum nights is required.</span
+                  >
+                  <span *ngIf="listingForm.get('maxNights')?.errors?.['min']"
+                    >Must be at least 1 night.</span
+                  >
+                  <span *ngIf="listingForm.get('maxNights')?.errors?.['max']"
+                    >Cannot exceed 365 nights.</span
+                  >
                 </div>
               </div>
             </div>
 
             <!-- Date Range Picker -->
             <div class="mt-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-2">Set Available Dates</h3>
-              <p class="text-gray-600 mb-4">Select a date range when your property will be available for booking.</p>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">
+                Set Available Dates
+              </h3>
+              <p class="text-gray-600 mb-4">
+                Select a date range when your property will be available for
+                booking.
+              </p>
 
               <div class="bg-white p-4 rounded-lg shadow">
                 <app-date-range-picker
@@ -319,27 +606,36 @@
               </div>
 
               <div class="mt-4">
-                <div *ngIf="selectedDateRange.startDate" class="text-sm text-gray-600">
+                <div
+                  *ngIf="selectedDateRange.startDate"
+                  class="text-sm text-gray-600"
+                >
                   Selected availability period:
                   <span class="font-medium">
                     {{ selectedDateRange.startDate | date }} -
                     {{ selectedDateRange.endDate | date }}
                   </span>
                 </div>
-                <div *ngIf="formErrors['dateRange']" class="text-sm text-red-600 mt-1">
-                  {{ formErrors['dateRange'] }}
+                <div
+                  *ngIf="formErrors['dateRange']"
+                  class="text-sm text-red-600 mt-1"
+                >
+                  {{ formErrors["dateRange"] }}
                 </div>
               </div>
 
               <!-- Date Range Validation Error -->
-              <div *ngIf="formErrors['submit']" class="text-sm text-red-600 mt-2">
-                {{ formErrors['submit'] }}
+              <div
+                *ngIf="formErrors['submit']"
+                class="text-sm text-red-600 mt-2"
+              >
+                {{ formErrors["submit"] }}
               </div>
             </div>
 
             <!-- Validation Errors -->
             <div *ngIf="formErrors['submit']" class="text-red-500 text-sm mt-2">
-              {{ formErrors['submit'] }}
+              {{ formErrors["submit"] }}
             </div>
           </div>
         </div>
@@ -349,21 +645,36 @@
       <div [class.hidden]="currentStep !== 8" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">Choose your cancellation policy</h2>
-            <p class="text-lg text-gray-600">Select a policy that works best for you</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              Choose your cancellation policy
+            </h2>
+            <p class="text-lg text-gray-600">
+              Select a policy that works best for you
+            </p>
           </div>
 
           <div class="grid grid-cols-1 gap-4">
-            <div *ngFor="let policy of CancellationPolicies"
+            <div
+              *ngFor="let policy of CancellationPolicies"
               class="p-4 border rounded-lg hover:border-gray-400 transition-colors cursor-pointer"
-              [class.border-rose-500]="listingForm.get('cancellationPolicyId')?.value === policy.id"
-              (click)="listingForm.patchValue({cancellationPolicyId: policy.id})">
+              [class.border-rose-500]="
+                listingForm.get('cancellationPolicyId')?.value === policy.id
+              "
+              (click)="
+                listingForm.patchValue({ cancellationPolicyId: policy.id })
+              "
+            >
               <div class="font-medium text-gray-900">{{ policy.name }}</div>
             </div>
           </div>
 
-          <div *ngIf="listingForm.get('cancellationPolicyId')?.touched && listingForm.get('cancellationPolicyId')?.invalid"
-            class="text-sm text-red-600">
+          <div
+            *ngIf="
+              listingForm.get('cancellationPolicyId')?.touched &&
+              listingForm.get('cancellationPolicyId')?.invalid
+            "
+            class="text-sm text-red-600"
+          >
             Please select a cancellation policy.
           </div>
         </div>
@@ -373,7 +684,9 @@
       <div [class.hidden]="currentStep !== 9" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">Let's start with the basics</h2>
+            <h2 class="text-3xl font-bold text-gray-900">
+              Let's start with the basics
+            </h2>
             <p class="text-lg text-gray-600">How many people can stay here?</p>
           </div>
 
@@ -381,70 +694,139 @@
             <div class="flex items-center justify-between py-4 border-b">
               <div>
                 <h3 class="text-lg font-medium text-gray-900">Guests</h3>
-                <p class="text-sm text-gray-500">Maximum number of guests allowed</p>
+                <p class="text-sm text-gray-500">
+                  Maximum number of guests allowed
+                </p>
               </div>
               <div class="flex items-center space-x-4">
-                <button type="button" (click)="decrementGuests()" [disabled]="listingForm.get('guests')?.value <= 0"
-                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button
+                  type="button"
+                  (click)="decrementGuests()"
+                  [disabled]="listingForm.get('guests')?.value <= 0"
+                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <i class="fa-solid fa-minus text-lg"></i>
                 </button>
-                <span class="text-lg font-medium w-8 text-center">{{ listingForm.get('guests')?.value || 0 }}</span>
-                <button type="button" (click)="incrementGuests()"
-                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span class="text-lg font-medium w-8 text-center">{{
+                  listingForm.get("guests")?.value || 0
+                }}</span>
+                <button
+                  type="button"
+                  (click)="incrementGuests()"
+                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <i class="fa-solid fa-plus text-lg"></i>
                 </button>
               </div>
             </div>
-            <div *ngIf="listingForm.get('guests')?.touched && listingForm.get('guests')?.errors" class="text-sm text-red-600">
-              <span *ngIf="listingForm.get('guests')?.errors?.['required']">Number of guests is required.</span>
-              <span *ngIf="listingForm.get('guests')?.errors?.['min']">Number of guests must be 1 or more.</span>
-              <span *ngIf="listingForm.get('guests')?.errors?.['max']">Cannot accommodate more than 50 guests.</span>
+            <div
+              *ngIf="
+                listingForm.get('guests')?.touched &&
+                listingForm.get('guests')?.errors
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="listingForm.get('guests')?.errors?.['required']"
+                >Number of guests is required.</span
+              >
+              <span *ngIf="listingForm.get('guests')?.errors?.['min']"
+                >Number of guests must be 1 or more.</span
+              >
+              <span *ngIf="listingForm.get('guests')?.errors?.['max']"
+                >Cannot accommodate more than 50 guests.</span
+              >
             </div>
 
             <div class="flex items-center justify-between py-4 border-b">
               <div>
                 <h3 class="text-lg font-medium text-gray-900">Bedrooms</h3>
-                <p class="text-sm text-gray-500">Number of bedrooms available</p>
+                <p class="text-sm text-gray-500">
+                  Number of bedrooms available
+                </p>
               </div>
               <div class="flex items-center space-x-4">
-                <button type="button" (click)="decrementBedrooms()" [disabled]="listingForm.get('bedrooms')?.value <= 0"
-                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button
+                  type="button"
+                  (click)="decrementBedrooms()"
+                  [disabled]="listingForm.get('bedrooms')?.value <= 0"
+                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <i class="fa-solid fa-minus text-lg"></i>
                 </button>
-                <span class="text-lg font-medium w-8 text-center">{{ listingForm.get('bedrooms')?.value || 0 }}</span>
-                <button type="button" (click)="incrementBedrooms()"
-                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span class="text-lg font-medium w-8 text-center">{{
+                  listingForm.get("bedrooms")?.value || 0
+                }}</span>
+                <button
+                  type="button"
+                  (click)="incrementBedrooms()"
+                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <i class="fa-solid fa-plus text-lg"></i>
                 </button>
               </div>
             </div>
-            <div *ngIf="listingForm.get('bedrooms')?.touched && listingForm.get('bedrooms')?.errors" class="text-sm text-red-600">
-              <span *ngIf="listingForm.get('bedrooms')?.errors?.['required']">Number of bedrooms is required.</span>
-              <span *ngIf="listingForm.get('bedrooms')?.errors?.['min']">Number of bedrooms must be 1 or more.</span>
-              <span *ngIf="listingForm.get('bedrooms')?.errors?.['max']">Cannot have more than 20 bedrooms.</span>
+            <div
+              *ngIf="
+                listingForm.get('bedrooms')?.touched &&
+                listingForm.get('bedrooms')?.errors
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="listingForm.get('bedrooms')?.errors?.['required']"
+                >Number of bedrooms is required.</span
+              >
+              <span *ngIf="listingForm.get('bedrooms')?.errors?.['min']"
+                >Number of bedrooms must be 1 or more.</span
+              >
+              <span *ngIf="listingForm.get('bedrooms')?.errors?.['max']"
+                >Cannot have more than 20 bedrooms.</span
+              >
             </div>
 
             <div class="flex items-center justify-between py-4 border-b">
               <div>
                 <h3 class="text-lg font-medium text-gray-900">Bathrooms</h3>
-                <p class="text-sm text-gray-500">Total number of bathrooms available</p>
+                <p class="text-sm text-gray-500">
+                  Total number of bathrooms available
+                </p>
               </div>
               <div class="flex items-center space-x-4">
-                <button type="button" (click)="decrementBathrooms()" [disabled]="listingForm.get('bathrooms')?.value <= 0"
-                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button
+                  type="button"
+                  (click)="decrementBathrooms()"
+                  [disabled]="listingForm.get('bathrooms')?.value <= 0"
+                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <i class="fa-solid fa-minus text-lg"></i>
                 </button>
-                <span class="text-lg font-medium w-8 text-center">{{ listingForm.get('bathrooms')?.value || 0 }}</span>
-                <button type="button" (click)="incrementBathrooms()"
-                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span class="text-lg font-medium w-8 text-center">{{
+                  listingForm.get("bathrooms")?.value || 0
+                }}</span>
+                <button
+                  type="button"
+                  (click)="incrementBathrooms()"
+                  class="p-2 rounded-full border hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <i class="fa-solid fa-plus text-lg"></i>
                 </button>
               </div>
             </div>
-            <div *ngIf="listingForm.get('bathrooms')?.touched && listingForm.get('bathrooms')?.errors" class="text-sm text-red-600">
-              <span *ngIf="listingForm.get('bathrooms')?.errors?.['required']">Number of bathrooms is required.</span>
-              <span *ngIf="listingForm.get('bathrooms')?.errors?.['min']">Number of bathrooms must be 1 or more.</span>
-              <span *ngIf="listingForm.get('bathrooms')?.errors?.['max']">Cannot have more than 20 bathrooms.</span>
+            <div
+              *ngIf="
+                listingForm.get('bathrooms')?.touched &&
+                listingForm.get('bathrooms')?.errors
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="listingForm.get('bathrooms')?.errors?.['required']"
+                >Number of bathrooms is required.</span
+              >
+              <span *ngIf="listingForm.get('bathrooms')?.errors?.['min']"
+                >Number of bathrooms must be 1 or more.</span
+              >
+              <span *ngIf="listingForm.get('bathrooms')?.errors?.['max']"
+                >Cannot have more than 20 bathrooms.</span
+              >
             </div>
           </div>
         </div>
@@ -454,28 +836,57 @@
       <div [class.hidden]="currentStep !== 10" class="p-3">
         <div class="space-y-6">
           <div class="space-y-2">
-            <h2 class="text-3xl font-bold text-gray-900">Add photos of your place</h2>
-            <p class="text-lg text-gray-600">You'll need at least 4 photos to get started. You can add more or make changes later.</p>
+            <h2 class="text-3xl font-bold text-gray-900">
+              Add photos of your place
+            </h2>
+            <p class="text-lg text-gray-600">
+              You'll need at least 4 photos to get started. You can add more or
+              make changes later.
+            </p>
           </div>
 
           <div class="space-y-6">
             <!-- Upload Section -->
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-rose-500 transition-colors"
-              (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" (click)="fileInput.click()">
-              <input #fileInput type="file" class="hidden" multiple accept="image/*" (change)="onFileSelected($event)">
+            <div
+              class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-rose-500 transition-colors"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+              (click)="fileInput.click()"
+            >
+              <input
+                #fileInput
+                type="file"
+                class="hidden"
+                multiple
+                accept="image/*"
+                (change)="onFileSelected($event)"
+              />
               <div class="space-y-4">
                 <div class="text-4xl text-gray-400">
                   <i class="fa-solid fa-camera"></i>
                 </div>
-                <div class="text-lg font-medium text-gray-900">Drag your photos here</div>
-                <div class="text-sm text-gray-500">or click to upload from your device</div>
-                <div class="text-xs text-gray-400">Supported formats: JPG, JPEG, PNG, GIF. Max size: 10MB per image</div>
+                <div class="text-lg font-medium text-gray-900">
+                  Drag your photos here
+                </div>
+                <div class="text-sm text-gray-500">
+                  or click to upload from your device
+                </div>
+                <div class="text-xs text-gray-400">
+                  Supported formats: JPG, JPEG, PNG, GIF. Max size: 10MB per
+                  image
+                </div>
               </div>
             </div>
 
             <!-- Error Messages -->
-            <div *ngIf="fileErrors.length > 0" class="mt-4 p-4 bg-red-50 rounded-lg">
-              <div class="text-sm font-medium text-red-800 mb-2">The following files could not be uploaded:</div>
+            <div
+              *ngIf="fileErrors.length > 0"
+              class="mt-4 p-4 bg-red-50 rounded-lg"
+            >
+              <div class="text-sm font-medium text-red-800 mb-2">
+                The following files could not be uploaded:
+              </div>
               <ul class="list-disc list-inside text-sm text-red-600 space-y-1">
                 <li *ngFor="let error of fileErrors">{{ error }}</li>
               </ul>
@@ -486,41 +897,78 @@
               <!-- Preview Photos Section -->
               <div *ngIf="uploadedImages.length > 0">
                 <h3 class="text-xl font-semibold mb-4">Preview Photos</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" cdkDropList (cdkDropListDropped)="drop($event)">
-                  <div *ngFor="let image of uploadedImages | filterImages:true; let i = index" class="relative group" cdkDrag>
-                <img [src]="image.preview" alt="Preview" class="w-full h-48 object-cover rounded-lg">
-                <!-- <input
+                <div
+                  class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                  cdkDropList
+                  (cdkDropListDropped)="drop($event)"
+                >
+                  <div
+                    *ngFor="
+                      let image of uploadedImages | filterImages : true;
+                      let i = index
+                    "
+                    class="relative group"
+                    cdkDrag
+                  >
+                    <img
+                      [src]="image.preview"
+                      alt="Preview"
+                      class="w-full h-48 object-cover rounded-lg"
+                    />
+                    <!-- <input
                   type="text"
                   [(ngModel)]="image.caption"
                   [ngModelOptions]="{standalone: true}"
                   placeholder="Add a caption..."
                   class="caption-input"> -->
-                <!-- <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:backdrop-opacity-90transition-opacity rounded-lg flex items-center justify-center space-x-4"> -->
-                  <!-- <button type="button" (click)="removeImage(i)" class="text-white hover:text-rose-500 transition-colors">
+                    <!-- <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:backdrop-opacity-90transition-opacity rounded-lg flex items-center justify-center space-x-4"> -->
+                    <!-- <button type="button" (click)="removeImage(i)" class="text-white hover:text-rose-500 transition-colors">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                   <div cdkDragHandle class="text-white cursor-move">
                     <i class="fa-solid fa-grip"></i>
                   </div> -->
-                <!-- </div> -->
-              </div>
-            </div>
+                    <!-- </div> -->
+                  </div>
+                </div>
               </div>
 
               <!-- Existing Photos Section -->
-              <div *ngIf="(uploadedImages | filterImages:false).length > 0" class="mt-8">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700">Existing Photos</h3>
-                <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
-                  <div *ngFor="let image of uploadedImages | filterImages:false" class="relative group">
-                    <img [src]="image.preview" alt="Preview" class="w-full h-24 object-cover rounded-md">
-                    <div class="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity rounded-md"></div>
+              <div
+                *ngIf="(uploadedImages | filterImages : false).length > 0"
+                class="mt-8"
+              >
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">
+                  Existing Photos
+                </h3>
+                <div
+                  class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2"
+                >
+                  <div
+                    *ngFor="let image of uploadedImages | filterImages : false"
+                    class="relative group"
+                  >
+                    <img
+                      [src]="image.preview"
+                      alt="Preview"
+                      class="w-full h-24 object-cover rounded-md"
+                    />
+                    <div
+                      class="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-100 transition-opacity rounded-md"
+                    ></div>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Validation Message -->
-            <div *ngIf="listingForm.get('images')?.touched && listingForm.get('images')?.invalid" class="text-sm text-red-600">
+            <div
+              *ngIf="
+                listingForm.get('images')?.touched &&
+                listingForm.get('images')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
               Please upload at least 4 photos of your place.
             </div>
           </div>
@@ -530,27 +978,35 @@
 
     <!-- Navigation Buttons -->
     <div class="mt-8 flex justify-between">
-      <button type="button" (click)="previousStep()"
+      <button
+        type="button"
+        (click)="previousStep()"
         *ngIf="currentStep > 1"
-        class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+        class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+      >
         Back
       </button>
       <div class="flex gap-4 ml-auto">
-        <button type="button" (click)="saveDraft()"
+        <!-- <button type="button" (click)="saveDraft()"
           class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
           Save as draft
-        </button>
-        <button type="button" (click)="nextStep()"
+        </button> -->
+        <button
+          type="button"
+          (click)="nextStep()"
           *ngIf="currentStep < totalSteps"
           [disabled]="!isCurrentStepValid()"
-          class="px-6 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          class="px-6 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           Continue
         </button>
-        <button type="submit"
+        <button
+          type="submit"
           *ngIf="currentStep === totalSteps"
           [disabled]="!listingForm.valid || isLoading"
-          class="px-6 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-          {{ isLoading ? 'Publishing...' : 'Publish listing' }}
+          class="px-6 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ isLoading ? "Publishing..." : "Publish listing" }}
         </button>
       </div>
     </div>

@@ -78,7 +78,7 @@ namespace YourNamespace.Controllers
             user.SecurityStamp = Guid.NewGuid().ToString();
             user.Id = Guid.NewGuid();
             user.EmailConfirmed = true;
-            user.ProfilePictureUrl = "uploads/profile Picture.jpg";
+            user.ProfilePictureUrl = "/uploads/profiles/profile Picture.jpg";
             user.CurrencyId = 1;
             user.CreatedAt = DateTime.UtcNow;
 
@@ -143,6 +143,10 @@ namespace YourNamespace.Controllers
                 return BadRequest("Invalid access token");
 
             var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound(user);
+            }
 
 
             // Store refresh token using Identity's token system

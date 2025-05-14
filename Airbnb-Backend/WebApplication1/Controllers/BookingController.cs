@@ -67,7 +67,7 @@ namespace WebApplication1.Controllers
             return Ok(bookingsDTOs);
         }
         [HttpGet("me")]
-        [Authorize(Roles = $"{UserRoles.Guest}")]
+        [Authorize(Roles = $"{UserRoles.Guest},{UserRoles.Admin}")]
         public async Task<ActionResult<IEnumerable<GetBookingDTO>>> GetUserBookings([FromQuery] Dictionary<string, string> queryParams)
         {
             if (!_bookingRepository.IsAuthenticated())
@@ -142,7 +142,7 @@ namespace WebApplication1.Controllers
 
         #region Cancel Bookings
         [HttpPost("{bookingId}/cancel")]
-        [Authorize(Roles = $"{UserRoles.Guest}")]
+        [Authorize(Roles = $"{UserRoles.Guest},{UserRoles.Admin}")]
         public async Task<IActionResult> CancelBooking(Guid bookingId, CancelBookingDTO request)
         {
             try
