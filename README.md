@@ -274,9 +274,13 @@ Airbnb_Clone/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
+## 👨‍💻 Contributers
 
 **not-midozayn**
+- GitHub: [@Ahmed-Reda-elshahawy](https://github.com/Ahmed-Reda-elshahawy)
+- GitHub: [@FatmaAlghonaimy](https://github.com/FatmaAlghonaimy)
+- GitHub: [@johnhany10](https://github.com/johnhany10)
+- GitHub: [@Alaagalalradwan](https://github.com/Alaagalalradwan)
 - GitHub: [@not-midozayn](https://github.com/not-midozayn)
 
 ## 🙏 Acknowledgments
