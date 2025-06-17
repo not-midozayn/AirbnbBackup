@@ -84,7 +84,7 @@ Before running this application, make sure you have the following installed:
    ### install these 2 nugget packages
    - Entity Framework Core
    - Entity Framework Power Tools
-   - Delete the migrations Folder in this directory Airbnb-Backend\WebApplication1\Migrations
+   ### Delete the migrations Folder in this directory Airbnb-Backend\WebApplication1\Migrations
    
    ### run these 2 commands in the package manager console
    - add-migration M1 -context AirbnbDBContext
