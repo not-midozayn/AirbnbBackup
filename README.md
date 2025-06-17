@@ -45,8 +45,8 @@ A full-stack web application that replicates the core functionality of Airbnb, a
   **Authentication:** [JWT]
 
 ### Additional Services
-- **Maps:** Google Maps API / Mapbox
-- **Payments:** Stripe / PayPal
+- **Maps:** Google Maps API
+- **Payments:** Stripe
 - **Email:** MailHog
 
 ## 📋 Prerequisites
