@@ -279,7 +279,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - GitHub: [@FatmaAlghonaimy](https://github.com/FatmaAlghonaimy)
 - GitHub: [@johnhany10](https://github.com/johnhany10)
 - GitHub: [@Alaagalalradwan](https://github.com/Alaagalalradwan)
-- GitHub: [@not-midozayn](https://github.com/not-midozayn)
+- GitHub: [@Mohamed Aboseif](https://github.com/not-midozayn)
 
 ## 🙏 Acknowledgments
 
