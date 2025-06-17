@@ -268,8 +268,6 @@ Airbnb_Clone/
 
 
 ## 👨‍💻 Contributers
-
-**not-midozayn**
 - GitHub: [@Ahmed-Reda-elshahawy](https://github.com/Ahmed-Reda-elshahawy)
 - GitHub: [@FatmaAlghonaimy](https://github.com/FatmaAlghonaimy)
 - GitHub: [@johnhany10](https://github.com/johnhany10)
