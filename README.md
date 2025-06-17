@@ -37,10 +37,9 @@ A full-stack web application that replicates the core functionality of Airbnb, a
 - **Framework:** [Angular/HTML]
 - **Styling:** [CSS/Tailwind]
 - **State Management:** [ٍSignals]
-- **HTTP Client:** [Axios/Fetch API - specify]
 
 ### Backend
-  **Runtime:**  [ASP.NET Core 9.0]
+  **Runtime:** ASP.NET Core 9.0]
   **Framework:** [Entity Framework Core/ASP.NET Core 9.0]
   **Database:** [MS SQL Server]
   **Authentication:** [JWT]
