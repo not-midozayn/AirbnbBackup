@@ -1,7 +1,5 @@
 # Airbnb-Clone-Project
 
-# Airbnb Clone
-
 A full-stack web application that replicates the core functionality of Airbnb, allowing users to list properties, search for accommodations, and make bookings.
 
 ## 🚀 Features
