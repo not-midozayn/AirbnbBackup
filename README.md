@@ -144,8 +144,6 @@ The application will be available at:
 
 ## 📚 API Documentation
 
-## 📚 API Documentation
-
 ### Authentication Endpoints
 - `POST /api/Account/Register` - Register a new user account
 - `POST /api/Account/Login` - Authenticate and login existing user
