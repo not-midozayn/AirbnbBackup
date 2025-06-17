@@ -107,7 +107,7 @@ Before running this application, make sure you have the following installed:
    - go to this file Airbnb-Frontend\src\environments\environment.ts and also edit the publishable key
    
    # Email Configuration
-   the hash in the database is the same and it represents the following password "Password@1"
+   all the accounts that will populate after the running the sql script will have a hashed password in the database, it is the same and it represents the following password "Password@1"
    
    # File Storage
    - profile pictures are stored in Airbnb-Backend\WebApplication1\wwwroot\uploads\profiles
