@@ -144,60 +144,62 @@ The application will be available at:
 
 ## 📚 API Documentation
 
+## 📚 API Documentation
+
 ### Authentication Endpoints
-POST /api/Account/Register               # Register new user
-POST /api/Account/Login                 # User login 
-POST /api/Account/Logout                # User logout
-POST /api/Account/ChangePassword        # Change password
-POST /api/Account/ForgotPassword        # Request password reset
-POST /api/Account/ResetPassword         # Reset password
-GET  /api/Account/CurrentUser           # Get current user info
+- `POST /api/Account/Register` - Register a new user account
+- `POST /api/Account/Login` - Authenticate and login existing user
+- `POST /api/Account/Logout` - End current user session
+- `POST /api/Account/ChangePassword` - Update user's password
+- `POST /api/Account/ForgotPassword` - Initiate password recovery process
+- `POST /api/Account/ResetPassword` - Complete password reset
+- `GET /api/Account/CurrentUser` - Retrieve current user information
 
 ### Property Endpoints
-GET    /api/Property                    # Get all properties
-GET    /api/Property/{id}              # Get property by ID
-POST   /api/Property                    # Create new property
-PUT    /api/Property/{id}              # Update property
-DELETE /api/Property/{id}              # Delete property
-GET    /api/Property/Search            # Search properties
-GET    /api/Property/Categories        # Get property categories
-GET    /api/Property/Types             # Get property types
-GET    /api/Property/Amenities         # Get available amenities
-GET    /api/Property/MyListings        # Get host's properties
+- `GET /api/Property` - Retrieve all available properties
+- `GET /api/Property/{id}` - Get detailed information for specific property
+- `POST /api/Property` - Create a new property listing
+- `PUT /api/Property/{id}` - Update existing property details
+- `DELETE /api/Property/{id}` - Remove property listing
+- `GET /api/Property/Search` - Search properties with filters
+- `GET /api/Property/Categories` - List all property categories
+- `GET /api/Property/Types` - Get available property types
+- `GET /api/Property/Amenities` - List all possible amenities
+- `GET /api/Property/MyListings` - Get properties owned by current host
 
 ### Booking Endpoints
-GET    /api/Booking                    # Get all bookings
-GET    /api/Booking/{id}              # Get booking by ID
-POST   /api/Booking                    # Create new booking
-PUT    /api/Booking/{id}              # Update booking
-DELETE /api/Booking/{id}              # Cancel booking
-GET    /api/Booking/MyBookings        # Get user's bookings
-GET    /api/Booking/HostBookings      # Get host's property bookings
+- `GET /api/Booking` - Retrieve all bookings in system
+- `GET /api/Booking/{id}` - Get specific booking details
+- `POST /api/Booking` - Create new property booking
+- `PUT /api/Booking/{id}` - Modify existing booking
+- `DELETE /api/Booking/{id}` - Cancel a booking
+- `GET /api/Booking/MyBookings` - Get current user's bookings
+- `GET /api/Booking/HostBookings` - Get bookings for host's properties
 
 ### User Endpoints
-GET    /api/User/Profile              # Get user profile
-PUT    /api/User/Profile              # Update user profile
-GET    /api/User/{id}                 # Get user by ID
-GET    /api/User/Hosts                # Get all hosts
-PUT    /api/User/BecomeHost           # Update user to host status
+- `GET /api/User/Profile` - Retrieve current user's profile
+- `PUT /api/User/Profile` - Update user profile information
+- `GET /api/User/{id}` - Get specific user's public information
+- `GET /api/User/Hosts` - List all registered hosts
+- `PUT /api/User/BecomeHost` - Upgrade user account to host status
 
 ### Wishlist Endpoints
-GET    /api/Wishlist                 # Get user's wishlists
-POST   /api/Wishlist                 # Create new wishlist
-PUT    /api/Wishlist/{id}           # Update wishlist
-DELETE /api/Wishlist/{id}           # Delete wishlist
-POST   /api/Wishlist/AddProperty    # Add property to wishlist
-DELETE /api/Wishlist/RemoveProperty # Remove property from wishlist
+- `GET /api/Wishlist` - Get user's saved wishlists
+- `POST /api/Wishlist` - Create new wishlist
+- `PUT /api/Wishlist/{id}` - Update wishlist details
+- `DELETE /api/Wishlist/{id}` - Remove wishlist
+- `POST /api/Wishlist/AddProperty` - Add property to wishlist
+- `DELETE /api/Wishlist/RemoveProperty` - Remove property from wishlist
 
 ### Payment Endpoints
-POST   /api/Payment/Create           # Create payment intent
-POST   /api/Payment/Confirm         # Confirm payment
-GET    /api/Payment/History         # Get payment history
+- `POST /api/Payment/Create` - Initialize payment process
+- `POST /api/Payment/Confirm` - Complete payment transaction
+- `GET /api/Payment/History` - View payment history
 
 ### Media Endpoints
-POST   /api/Media/Upload            # Upload media files
-DELETE /api/Media/{id}             # Delete media file
-GET    /api/Media/Property/{id}    # Get property media
+- `POST /api/Media/Upload` - Upload property images/media
+- `DELETE /api/Media/{id}` - Remove uploaded media
+- `GET /api/Media/Property/{id}` - Get all media for specific property
 
 ## 📁 Project Structure
 
