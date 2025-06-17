@@ -98,6 +98,13 @@ Before running this application, make sure you have the following installed:
    ### in the Airbnb-Backend\WebApplication1\appsettings.json you will need to adjust some values
    - connection string
    - EmailSettings
+   - add the stripe values similar to the ext file at Additional Files\Stripe Secrets.txt
+     you can get the secret key and the publishable key from your stripe account, and you can get the webhook secret after you set up payment Gateway   
+   # Payment Gateway
+   - open cmd
+   - Type stripe listen --forward-to https://localhost:7200/api/payment/webhook
+   - copy the webhook code and paste it in the appsettings.json file
+   - go to this file Airbnb-Frontend\src\environments\environment.ts and also edit the publishable key
    
    # Email Configuration
    the hash in the database is the same and it represents the following password "Password@1"
@@ -106,11 +113,6 @@ Before running this application, make sure you have the following installed:
    - profile pictures are stored in Airbnb-Backend\WebApplication1\wwwroot\uploads\profiles
    - listings pictures are stored in Airbnb-Backend\WebApplication1\wwwroot\uploads
    - the database only stores the bath to the pictures
-   
-   # Payment Gateway
-   - add the stripe values similar to the ext file at Additional Files\Stripe Secrets.txt
-   - open cmd
-   - Type stripe listen --forward-to https://localhost:7200/api/payment/webhook
    
    # Maps API
    GOOGLE_MAPS_API
