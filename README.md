@@ -2,6 +2,14 @@
 
 A full-stack web application that replicates the core functionality of Airbnb, allowing users to list properties, search for accommodations, and make bookings.
 
+
+## 👨‍💻 Contributers
+- GitHub: [@Ahmed-Reda-elshahawy](https://github.com/Ahmed-Reda-elshahawy)
+- GitHub: [@FatmaAlghonaimy](https://github.com/FatmaAlghonaimy)
+- GitHub: [@johnhany10](https://github.com/johnhany10)
+- GitHub: [@Alaagalalradwan](https://github.com/Alaagalalradwan)
+- GitHub: [@Mohamed Aboseif](https://github.com/not-midozayn)
+  
 ## 🚀 Features
 
 ### User Management
@@ -266,13 +274,6 @@ Airbnb_Clone/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-
-## 👨‍💻 Contributers
-- GitHub: [@Ahmed-Reda-elshahawy](https://github.com/Ahmed-Reda-elshahawy)
-- GitHub: [@FatmaAlghonaimy](https://github.com/FatmaAlghonaimy)
-- GitHub: [@johnhany10](https://github.com/johnhany10)
-- GitHub: [@Alaagalalradwan](https://github.com/Alaagalalradwan)
-- GitHub: [@Mohamed Aboseif](https://github.com/not-midozayn)
 
 ## 🙏 Acknowledgments
 
