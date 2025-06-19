@@ -296,7 +296,7 @@ If you have any questions or need help with the project, please:
 - [ ] Real-time notifications
 - [ ] Video property tours
 - [ ] Social media integration
-- ✅ Advanced analytics dashboard *(green checkmark emoji)*
+ ✅ Advanced analytics dashboard
 - [ ] AI-powered pricing suggestions
 
 ---
