@@ -290,7 +290,7 @@ If you have any questions or need help with the project, please:
 
 ## 🔮 Future Enhancements
 
-- [ ] Mobile app development (React Native/Flutter)
+-- [ ] Mobile app development (React Native/Flutter)
 - [ ] Advanced recommendation system
 - [ ] Multi-language support
 - [ ] Real-time notifications
